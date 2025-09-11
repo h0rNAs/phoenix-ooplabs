@@ -1,0 +1,3 @@
+Manifest-Version: 1.0
+Created-By: rogov
+Main-Class: rogov.Task5.MyFirstClass
