@@ -9,17 +9,15 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class IdentityFunctionTest {
+    IdentityFunction f = new IdentityFunction();
 
     @Test
-    void apply() {
-        List<Double> actual = Arrays.asList(0., .1, Double.MAX_VALUE+1.);
+    void apply_overflow() {
+        assertEquals(Double.MAX_VALUE*1.1, f.apply(Double.MAX_VALUE*1.1));
+    }
 
-        IdentityFunction f = new IdentityFunction();
-        List<Double> expected = new ArrayList<>();
-        expected.add(f.apply(0.));
-        expected.add(f.apply(.1));
-        expected.add(f.apply(Double.MAX_VALUE+1.));
-
-        assertEquals(expected, actual);
+    @Test
+    void apply_NaN() {
+        assertEquals(Double.NaN, f.apply(Double.NaN));
     }
 }
