@@ -1,5 +1,7 @@
 package ru.ssau.tk.phoenix.ooplabs.functions;
 
+import org.junit.jupiter.api.Test;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -8,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class IdentityFunctionTest {
 
-    @org.junit.jupiter.api.Test
+    @Test
     void apply() {
         List<Double> actual = Arrays.asList(0., .1, Double.MAX_VALUE+1.);
 
