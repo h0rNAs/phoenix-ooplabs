@@ -14,11 +14,11 @@ class DeBoorFunctionTest {
         double[] controlPoints = {1.0, 3.0, 2.0};
         DeBoorFunction deBoor = new DeBoorFunction(knots, controlPoints, 1);
 
-        assertEquals(1.0, deBoor.apply(0.0), 1e-10);
-        assertEquals(2.0, deBoor.apply(0.5), 1e-10);
-        assertEquals(3.0, deBoor.apply(1.0), 1e-10);
-        assertEquals(2.5, deBoor.apply(1.5), 1e-10);
-        assertEquals(2.0, deBoor.apply(2.0), 1e-10);
+        assertEquals(1.0, deBoor.apply(0.0));
+        assertEquals(2.0, deBoor.apply(0.5));
+        assertEquals(3.0, deBoor.apply(1.0));
+        assertEquals(2.5, deBoor.apply(1.5));
+        assertEquals(2.0, deBoor.apply(2.0));
     }
 
     @Test
@@ -28,11 +28,11 @@ class DeBoorFunctionTest {
         double[] controlPoints = {1.0, 2.0, 4.0, 3.0};
         DeBoorFunction deBoor = new DeBoorFunction(knots, controlPoints, 2);
 
-        assertEquals(1.0, deBoor.apply(0.0), 1e-10);
-        assertEquals(2.0, deBoor.apply(0.5), 1e-10);
-        assertEquals(3.0, deBoor.apply(1.0), 1e-10);
-        assertEquals(3.5, deBoor.apply(1.5), 1e-10);
-        assertEquals(3.0, deBoor.apply(2.0), 1e-10);
+        assertEquals(1.0, deBoor.apply(0.0));
+        assertEquals(2.0, deBoor.apply(0.5));
+        assertEquals(3.5, deBoor.apply(1.5));
+        assertEquals(3.0, deBoor.apply(2.0));
+        assertEquals(3.0, deBoor.apply(1.0));
     }
 
     @Test
@@ -42,8 +42,8 @@ class DeBoorFunctionTest {
         double[] controlPoints = {0.0, 1.0, 3.0, 2.0, 4.0, 5.0, 6.0};
         DeBoorFunction deBoor = new DeBoorFunction(knots, controlPoints, 3);
 
-        assertEquals(0.0, deBoor.apply(0.0), 1e-10);
-        assertEquals(6.0, deBoor.apply(4.0), 1e-10);
+        assertEquals(0.0, deBoor.apply(0.0));
+        assertEquals(6.0, deBoor.apply(4.0));
     }
 
     @Test
@@ -53,9 +53,9 @@ class DeBoorFunctionTest {
         double[] controlPoints = {5.0};
         DeBoorFunction deBoor = new DeBoorFunction(knots, controlPoints, 1);
 
-        assertEquals(5.0, deBoor.apply(0.0), 1e-10);
-        assertEquals(5.0, deBoor.apply(0.5), 1e-10);
-        assertEquals(5.0, deBoor.apply(1.0), 1e-10);
+        assertEquals(5.0, deBoor.apply(0.0));
+        assertEquals(5.0, deBoor.apply(0.5));
+        assertEquals(5.0, deBoor.apply(1.0));
     }
 
     @Test
@@ -66,8 +66,8 @@ class DeBoorFunctionTest {
         DeBoorFunction deBoor = new DeBoorFunction(knots, controlPoints, 1);
 
         // Вне области определения должен возвращать крайние значения
-        assertEquals(1.0, deBoor.apply(-12.0), 1e-10);
-        assertEquals(2.0, deBoor.apply(50.0), 1e-10);
+        assertEquals(1.0, deBoor.apply(-12.0));
+        assertEquals(2.0, deBoor.apply(50.0));
     }
 
     @Test
@@ -90,11 +90,11 @@ class DeBoorFunctionTest {
         double[] controlPoints = {1.0, 2.0, 3.0};
         DeBoorFunction deBoor = new DeBoorFunction(knots, controlPoints, 0);
 
-        assertEquals(1.0, deBoor.apply(0.0), 1e-10);
-        assertEquals(1.0, deBoor.apply(0.5), 1e-10);
-        assertEquals(2.0, deBoor.apply(1.0), 1e-10);
-        assertEquals(2.0, deBoor.apply(1.5), 1e-10);
-        assertEquals(3.0, deBoor.apply(2.0), 1e-10);
-        assertEquals(3.0, deBoor.apply(2.5), 1e-10);
+        assertEquals(1.0, deBoor.apply(0.0));
+        assertEquals(1.0, deBoor.apply(0.5));
+        assertEquals(2.0, deBoor.apply(1.0));
+        assertEquals(2.0, deBoor.apply(1.5));
+        assertEquals(3.0, deBoor.apply(2.0));
+        assertEquals(3.0, deBoor.apply(2.5));
     }
 }
