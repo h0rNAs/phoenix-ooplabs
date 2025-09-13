@@ -52,3 +52,4 @@ class RKFunctionTest {
         assertTrue(result > 1.5 && result < 2.5); // грубая проверка
     }
 }
+//
