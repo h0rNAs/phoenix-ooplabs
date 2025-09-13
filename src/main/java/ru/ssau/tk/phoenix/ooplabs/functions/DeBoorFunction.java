@@ -12,13 +12,32 @@ public class DeBoorFunction implements MathFunction{
      * @param degree степень B-сплайна
      */
     public DeBoorFunction(double[] knots, double[] controlPoints, int degree) {
-        if (knots.length != controlPoints.length + degree + 1) {
-            throw new IllegalArgumentException("Неверная размерность: knots.length должно быть равно controlPoints.length + degree + 1");
-        }
+        validateParameters(knots, controlPoints, degree);
 
         this.knots = knots.clone();
         this.controlPoints = controlPoints.clone();
         this.degree = degree;
+    }
+
+    private void validateParameters(double[] knots, double[] controlPoints, int degree) {
+        if (knots.length != controlPoints.length + degree + 1) {
+            throw new IllegalArgumentException(
+                    "Неверная размерность: knots.length должно быть равно controlPoints.length + degree + 1");
+        }
+
+        if (degree < 0) {
+            throw new IllegalArgumentException("Степень не может быть отрицательной: " + degree);
+        }
+
+        if (controlPoints.length == 0) {
+            throw new IllegalArgumentException("Массив контрольных точек не может быть пустым");
+        }
+
+        for (int i = 1; i < knots.length; i++) {
+            if (knots[i] < knots[i - 1]) {
+                throw new IllegalArgumentException("Узловой вектор должен быть отсортирован по возрастанию");
+            }
+        }
     }
 
     /**
@@ -37,15 +56,16 @@ public class DeBoorFunction implements MathFunction{
      * @return значение B-сплайна в точке x
      */
     private double deBoor(double x) {
+        // Обработка точек вне области определения
+        if (x <= knots[degree]) {
+            return controlPoints[0];
+        }
+        if (x >= knots[knots.length - degree - 1]) {
+            return controlPoints[controlPoints.length - 1];
+        }
+
         // Находим интервал, в который попадает x
         int k = findKnotInterval(x);
-
-        if (k < degree) {
-            return controlPoints[0]; // Левая граница
-        }
-        if (k >= controlPoints.length) {
-            return controlPoints[controlPoints.length - 1]; // Правая граница
-        }
 
         // Инициализируем массив для алгоритма де Бура
         double[] d = new double[degree + 1];
@@ -57,7 +77,14 @@ public class DeBoorFunction implements MathFunction{
         for (int r = 1; r <= degree; r++) {
             for (int j = degree; j >= r; j--) {
                 int i = k - degree + j;
-                double alpha = (x - knots[i]) / (knots[i + degree - r + 1] - knots[i]);
+                double denominator = knots[i + degree - r + 1] - knots[i];
+
+                // Избегаем деления на ноль
+                if (Math.abs(denominator) < 1e-10) {
+                    continue;
+                }
+
+                double alpha = (x - knots[i]) / denominator;
                 d[j] = (1 - alpha) * d[j - 1] + alpha * d[j];
             }
         }
@@ -71,15 +98,6 @@ public class DeBoorFunction implements MathFunction{
      * @return индекс k такой, что knots[k] <= x < knots[k+1]
      */
     private int findKnotInterval(double x) {
-        // Проверка границ
-        if (x <= knots[degree]) {
-            return degree;
-        }
-        if (x >= knots[knots.length - degree - 1]) {
-            return knots.length - degree - 2;
-        }
-
-        // Бинарный поиск интервала
         int low = degree;
         int high = knots.length - degree - 1;
 
@@ -94,37 +112,6 @@ public class DeBoorFunction implements MathFunction{
             }
         }
 
-        return degree; // fallback
-    }
-
-    /**
-     * Вспомогательный метод для создания равномерного узлового вектора
-     * @param n количество контрольных точек
-     * @param degree степень сплайна
-     * @param a левая граница
-     * @param b правая граница
-     * @return равномерный узловой вектор
-     */
-    public static double[] createUniformKnots(int n, int degree, double a, double b) {
-        int totalKnots = n + degree + 1;
-        double[] knots = new double[totalKnots];
-
-        // Левые повторяющиеся узлы
-        for (int i = 0; i <= degree; i++) {
-            knots[i] = a;
-        }
-
-        // Внутренние равномерные узлы
-        for (int i = degree + 1; i < n; i++) {
-            double t = (double) (i - degree) / (n - degree);
-            knots[i] = a + t * (b - a);
-        }
-
-        // Правые повторяющиеся узлы
-        for (int i = n; i < totalKnots; i++) {
-            knots[i] = b;
-        }
-
-        return knots;
+        return degree;
     }
 }
