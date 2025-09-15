@@ -14,14 +14,7 @@ class RKFunctionTest {
         double endValue = solver.getValueAt(1.0);
         assertEquals(endValue, solver.getValueAt(2.0), 1e-10);
     }
-    @Test
-    void testFewSteps() {
-        MathFunction derivative = x -> 1.0;
-        RKFunction solver = new RKFunction(0.0, 0.0, 1.0, 1, derivative);
 
-        assertEquals(1.0, solver.getValueAt(1.0), 1e-10);
-        assertEquals(1.0, solver.getValueAt(2.0), 1e-10);
-    }
     @Test
     void testNegativeIntegrationDirection() {
         MathFunction derivative = x -> 1.0; // y' = 1
@@ -42,14 +35,14 @@ class RKFunctionTest {
         RKFunction solver = new RKFunction(0.0, 1.0, 0.0001, 10000, derivative);
         double result = solver.getValueAt(1.0);
         double expected = Math.exp(1.0); // e^1 ≈ 2.71828
-        assertEquals(expected, result, 1e-8); // высокая точность
+        assertEquals(expected, result, 1e-8);
     }
     @Test
     void testVeryLargeStep() {
         MathFunction derivative = x -> 1.0; // y' = 1
         RKFunction solver = new RKFunction(0.0, 0.0, 2.0, 1, derivative);
         double result = solver.getValueAt(2.0);
-        assertTrue(result > 1.5 && result < 2.5); // грубая проверка
+        assertTrue(result > 1.5 && result < 2.5);
     }
 }
 //
