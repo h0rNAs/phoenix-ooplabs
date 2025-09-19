@@ -34,4 +34,10 @@ class CompositeFunctionTest {
         assertEquals(9.0, deBoor.apply(9.0));
         assertEquals(5.0, deBoor.apply(3.0));
     }
+
+    @Test
+    void apply_sqrToSK(){
+        RKFunction rk = new RKFunction(0.0, 5.0, 0.5);
+        assertEquals(4, rk.apply(2));
+    }
 }
