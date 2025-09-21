@@ -1,8 +1,6 @@
 package ru.ssau.tk.phoenix.ooplabs.functions;
 
 public abstract class AbstractTabulatedFunction implements TabulatedFunction {
-    double[] xValues;
-    double[] yValues;
 
     protected abstract int floorIndexOfX(double x);
     protected abstract double extrapolateLeft(double x);
