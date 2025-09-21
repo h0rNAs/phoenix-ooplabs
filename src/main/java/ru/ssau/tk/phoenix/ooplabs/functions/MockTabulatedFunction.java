@@ -1,6 +1,10 @@
 package ru.ssau.tk.phoenix.ooplabs.functions;
 
 public class MockTabulatedFunction extends AbstractTabulatedFunction{
+    double[] xValues;
+    double[] yValues;
+
+
     public MockTabulatedFunction(double[] xValues, double[] yValues) {
         this.xValues = xValues;
         this.yValues = yValues;
