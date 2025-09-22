@@ -16,6 +16,6 @@ public class MyFirstPackage {
     public void setB(int b) {this.b = b;}
 
     public int task(){
-        return a & b;
+        return a ^ b;
     }
 }

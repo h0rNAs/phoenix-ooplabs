@@ -9,7 +9,7 @@ class MyFirstClass {
             for (int j = 1; j <= 8; j++) {
                 o.setB(j);
                 System.out.print(o.task());
-                System.out.print(" ");
+                System.out.print("\t");
             }
             System.out.println();
         }
@@ -33,6 +33,6 @@ class MySecondClass{
     public void setB(int b) {this.b = b;}
 
     public int task(){
-        return a & b;
+        return a ^ b;
     }
 }
