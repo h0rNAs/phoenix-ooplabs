@@ -1,6 +1,6 @@
 package ru.ssau.tk.phoenix.ooplabs.functions;
 import java.util.Arrays;
-public class ArrayTabulatedFunction extends AbstractTabulatedFunction {
+public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements Insertable {
     private double[] xValues;
     private double[] yValues;
     private int count;
@@ -129,6 +129,28 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction {
         }
         return interpolate(x, xValues[floorIndex], xValues[floorIndex + 1],
                 yValues[floorIndex], yValues[floorIndex + 1]);
+    }
+
+    @Override
+    public void insert(double x, double y) {
+        int index = indexOfX(x);
+        if (index != -1) setY(index, y);
+        else{
+            index = floorIndexOfX(x) + 1;
+
+            double[] newXArray = new double[count <= xValues.length ? count + 1 : count];
+            double[] newYArray = new double[count <= xValues.length ? count + 1 : count];
+
+            System.arraycopy(xValues, 0, newXArray, 0, index);
+            System.arraycopy(xValues, 0, newXArray, 0, index);
+            newXArray[index] = x;
+            newYArray[index] = y;
+            System.arraycopy(xValues, index, newXArray, index + 1, count - index);
+            System.arraycopy(yValues, index, newYArray, index + 1, count - index);
+
+            xValues = newYArray;
+            yValues = newYArray;
+        }
     }
 }
 

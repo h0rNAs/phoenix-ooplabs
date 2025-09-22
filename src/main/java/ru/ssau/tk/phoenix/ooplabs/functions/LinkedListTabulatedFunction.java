@@ -2,7 +2,7 @@ package ru.ssau.tk.phoenix.ooplabs.functions;
 
 import java.util.Arrays;
 
-public class LinkedListTabulatedFunction extends AbstractTabulatedFunction{
+public class LinkedListTabulatedFunction extends AbstractTabulatedFunction implements Removable{
     Node head;
     int count;
 
@@ -39,6 +39,22 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction{
             for (int i = 0; i < count; i++) {
                 double x = xFrom + i * step;
                 addNode(x, source.apply(x));
+            }
+        }
+    }
+
+    @Override
+    public double apply(double x) {
+        if (x < leftBound()) {
+            return extrapolateLeft(x);
+        } else if (x > rightBound()) {
+            return extrapolateRight(x);
+        } else {
+            int index = indexOfX(x);
+            if (index != -1) {
+                return getY(index);
+            } else {
+                return interpolate(x, floorNodeOfX(x));
             }
         }
     }
@@ -114,6 +130,18 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction{
         return count - 1;
     }
 
+    private Node floorNodeOfX(double x){
+        if (x < head.x) return head;
+        if (x > head.prev.x) return head.prev;
+        for (int i = 1; i < count; i++) {
+            Node iNode = getNode(i);
+            if (x < iNode.x) {
+                return iNode.prev;
+            }
+        }
+        return head.prev;
+    }
+
     @Override
     protected double extrapolateLeft(double x) {
         if (count == 1) {
@@ -140,6 +168,13 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction{
         }
         return interpolate(x, getNode(floorIndex).x, getNode(floorIndex + 1).x,
                 getNode(floorIndex).y, getNode(floorIndex + 1).y);
+    }
+
+    private double interpolate(double x, Node floorNode){
+        if (count == 1) {
+            return floorNode.y;
+        }
+        return interpolate(x, floorNode.x, floorNode.next.x, floorNode.y, floorNode.next.y);
     }
 
     void addNode(double x, double y){
@@ -170,6 +205,29 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction{
             }
         }
         return currentNode;
+    }
+
+    @Override
+    public void remove(int index) {
+        if (index < 0 || index >= count) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + count);
+        }
+
+        Node currentNode = head;
+        if (index / count > 0.5) {
+            while (index > 0){
+                currentNode = currentNode.prev;
+                index--;
+            }
+            currentNode.prev = currentNode.next;
+        }
+        else {
+            while (index > 0){
+                currentNode = currentNode.next;
+                index--;
+            }
+            currentNode.prev = currentNode.next;
+        }
     }
 }
 

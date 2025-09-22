@@ -61,10 +61,63 @@ class LinkedListTabulatedFunctionTest {
 
     @Test
     void apply() {
-        LinkedListTabulatedFunction func = new LinkedListTabulatedFunction(new SqrFunction(), 0, 4, 5);
-        assertEquals(4, func.apply(2));
-        assertEquals(23, func.apply(5));
-        assertEquals(2.5, func.apply(1.5));
-        assertEquals(-1, func.apply(-1));
+        double[] xValues = new double[]{0, 1, 2};
+        double[] yValues = new double[]{5, 4, 2};
+        LinkedListTabulatedFunction func = new LinkedListTabulatedFunction(xValues, yValues);
+        assertEquals(2, func.apply(2));
+        assertEquals(-4, func.apply(5));
+        assertEquals(3, func.apply(1.5));
+        assertEquals(6, func.apply(-1));
+    }
+
+    @Test
+    void apply_linkedListAndArray(){
+        double[] xValues1 = {1.0, 2.0, 3.0};
+        double[] yValues1 = {10.0, 20.0, 30.0};
+        LinkedListTabulatedFunction listFunc = new LinkedListTabulatedFunction(xValues1, yValues1);
+
+        double[] xValues2 = {5.0, 15.0, 25.0};
+        double[] yValues2 = {0.5, 1.5, 2.5};
+        ArrayTabulatedFunction arrayFunc = new ArrayTabulatedFunction(xValues2, yValues2);
+
+        CompositeFunction func = listFunc.andThen(arrayFunc);
+        assertEquals(2, func.apply(2));
+        assertEquals(4, func.apply(4));
+    }
+
+    @Test
+    void apply_linkedListAndSqrt(){
+        double[] xValues = {1.0, 2.0, 3.0};
+        double[] yValues = {10.0, 20.0, 30.0};
+        LinkedListTabulatedFunction listFunc = new LinkedListTabulatedFunction(xValues, yValues);
+        CompositeFunction func = listFunc.andThen(new SqrFunction());
+        assertEquals(100, func.apply(1));
+        assertEquals(100, func.apply(-1));
+    }
+
+    @Test
+    void apply_linkedListAndDeBoor(){
+        double[] xValues1 = {1.0, 2.0, 3.0};
+        double[] yValues1 = {0.5, 1, 2};
+        LinkedListTabulatedFunction listFunc = new LinkedListTabulatedFunction(xValues1, yValues1);
+
+        double[] knots = {0, 0, 1, 2, 2};
+        double[] controlPoints = {1.0, 3.0, 2.0};
+        DeBoorFunction deBoor = new DeBoorFunction(knots, controlPoints, 1);
+
+        CompositeFunction func = listFunc.andThen(deBoor);
+        assertEquals(3, func.apply(2));
+        assertEquals(1, func.apply(0));
+    }
+
+    @Test
+    void apply_linkedListAndConstant(){
+        double[] xValues = {1.0, 2.0, 3.0};
+        double[] yValues = {10.0, 20.0, 30.0};
+        LinkedListTabulatedFunction listFunc = new LinkedListTabulatedFunction(xValues, yValues);
+        CompositeFunction func = listFunc.andThen(new ConstantFunction(5));
+        assertEquals(5, func.apply(1));
+        assertEquals(5, func.apply(324324));
+        assertEquals(5, func.apply(-2));
     }
 }
