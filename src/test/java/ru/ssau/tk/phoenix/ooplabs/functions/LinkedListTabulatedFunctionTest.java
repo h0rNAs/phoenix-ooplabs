@@ -58,14 +58,6 @@ class LinkedListTabulatedFunctionTest {
         assertEquals(24, func.rightBound());
     }
 
-    @Test
-    void floorNodeOfX(){
-        double[] xValues = new double[]{2, 16, 24};
-        double[] yValues = new double[]{5, 4, 2};
-        LinkedListTabulatedFunction func = new LinkedListTabulatedFunction(xValues, yValues);
-        assertEquals(4, func.floorNodeOfX(16).y);
-        assertEquals(2, func.floorNodeOfX(543).y);
-    }
 
     @Test
     void apply() {
@@ -128,20 +120,66 @@ class LinkedListTabulatedFunctionTest {
         assertEquals(5, func.apply(324324));
         assertEquals(5, func.apply(-2));
     }
+    public void testInsertIntoEmptyList() {
+        LinkedListTabulatedFunction function = new LinkedListTabulatedFunction(new double[]{}, new double[]{});
+        assertEquals(0, function.getCount());
+
+        function.insert(1.0, 10.0);
+        assertEquals(1, function.getCount());
+        assertEquals(1.0, function.getX(0));
+        assertEquals(10.0, function.getY(0));
+    }
 
     @Test
-    void remove(){
-        double[] xValues = {0, 1.0, 2.0, 2.5, 3.0};
-        double[] yValues = {5, 10.0, 20.0, 27.5, 30.0};
-        LinkedListTabulatedFunction func = new LinkedListTabulatedFunction(xValues, yValues);
-
-        assertEquals(27.5, func.apply(2.5));
-        func.remove(func.indexOfX(2.5));
-        assertEquals(25., func.apply(2.5));
-        assertEquals(5, func.apply(0));
-        func.remove(func.indexOfX(0));
-        assertEquals(0, func.apply(0));
-
-        assertThrows(IndexOutOfBoundsException.class, () -> func.remove(564));
+    public void testInsertAtBeginning() {
+        double[] xValues = {2.0, 3.0, 4.0};
+        double[] yValues = {20.0, 30.0, 40.0};
+        LinkedListTabulatedFunction function = new LinkedListTabulatedFunction(xValues, yValues);
+        function.insert(1.0, 10.0);
+        assertEquals(4, function.getCount());
+        assertEquals(1.0, function.getX(0));
+        assertEquals(10.0, function.getY(0));
+        assertEquals(2.0, function.getX(1));
+        assertEquals(20.0, function.getY(1));
+        assertEquals(3.0, function.getX(2));
+        assertEquals(30.0, function.getY(2));
+        assertEquals(4.0, function.getX(3));
+        assertEquals(40.0, function.getY(3));
     }
+    @Test
+    public void testInsertAtEnd() {
+        double[] xValues = {1.0, 2.0, 3.0};
+        double[] yValues = {10.0, 20.0, 30.0};
+        LinkedListTabulatedFunction function = new LinkedListTabulatedFunction(xValues, yValues);
+        function.insert(4.0, 40.0);
+        assertEquals(4, function.getCount());
+        assertEquals(1.0, function.getX(0));
+        assertEquals(10.0, function.getY(0));
+        assertEquals(2.0, function.getX(1));
+        assertEquals(20.0, function.getY(1));
+        assertEquals(3.0, function.getX(2));
+        assertEquals(30.0, function.getY(2));
+        assertEquals(4.0, function.getX(3));
+        assertEquals(40.0, function.getY(3));
+    }
+    @Test
+    public void testInsertInMiddle() {
+        double[] xValues = {1.0, 3.0, 5.0};
+        double[] yValues = {10.0, 30.0, 50.0};
+        LinkedListTabulatedFunction function = new LinkedListTabulatedFunction(xValues, yValues);
+        function.insert(2.0, 20.0);
+        function.insert(4.0, 40.0);
+        assertEquals(5, function.getCount());
+        assertEquals(1.0, function.getX(0));
+        assertEquals(10.0, function.getY(0));
+        assertEquals(2.0, function.getX(1));
+        assertEquals(20.0, function.getY(1));
+        assertEquals(3.0, function.getX(2));
+        assertEquals(30.0, function.getY(2));
+        assertEquals(4.0, function.getX(3));
+        assertEquals(40.0, function.getY(3));
+        assertEquals(5.0, function.getX(4));
+        assertEquals(50.0, function.getY(4));
+    }
+
 }

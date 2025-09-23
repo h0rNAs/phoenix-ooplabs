@@ -2,7 +2,7 @@ package ru.ssau.tk.phoenix.ooplabs.functions;
 
 import java.util.Arrays;
 
-public class LinkedListTabulatedFunction extends AbstractTabulatedFunction implements Removable{
+public class LinkedListTabulatedFunction extends AbstractTabulatedFunction implements Insertable, Removable{
     Node head;
     int count;
 
@@ -206,7 +206,40 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
         }
         return currentNode;
     }
-
+    @Override
+    public void insert(double x, double y){
+        if (count == 0) {
+            addNode(x,y);
+            return;
+        }
+        int ifexistIndex = indexOfX(x);
+        if (ifexistIndex != -1) {
+            setY(ifexistIndex, y);
+            return;
+        }
+        Node newNode = new Node(x, y); // Вставка в начало.
+        if (x < head.x){
+            newNode.next = head;
+            newNode.prev = head.prev;
+            head.prev.next = newNode;
+            head.prev = newNode;
+            head = newNode;
+            count++;
+            return;
+        }
+        Node current = head;
+        do {
+            if (x > current.x && (current.next == head || x < current.next.x)) {
+                break;
+            }
+            current = current.next;
+        } while (current != head);
+        newNode.next = current.next;
+        newNode.prev = current;
+        current.next.prev = newNode;
+        current.next = newNode;
+        count++;
+    }
     @Override
     public void remove(int index) {
         if (index < 0 || index >= count) {
