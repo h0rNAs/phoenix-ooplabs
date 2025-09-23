@@ -1,6 +1,6 @@
 package ru.ssau.tk.phoenix.ooplabs.functions;
 import java.util.Arrays;
-public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements Insertable {
+public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements Insertable, Removable {
     private double[] xValues;
     private double[] yValues;
     private int count;
@@ -152,5 +152,24 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements
             yValues = newYArray;
         }
     }
-}
+        @Override
+        public void remove(int index) {
+            if (index < 0 || index >= count) {
+                throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + count);
+            }
+            if (count == 1) {
+                throw new IllegalStateException("Cannot remove the last point from the function");
+            }
+            double[] newXArray = new double[count - 1];
+            double[] newYArray = new double[count - 1];
+            System.arraycopy(xValues, 0, newXArray, 0, index);
+            System.arraycopy(yValues, 0, newYArray, 0, index);
+            System.arraycopy(xValues, index + 1, newXArray, index, count - index - 1);
+            System.arraycopy(yValues, index + 1, newYArray, index, count - index - 1);
+            xValues = newXArray;
+            yValues = newYArray;
+            count--;
+        }
+    }
+
 

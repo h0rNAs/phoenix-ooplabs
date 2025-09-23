@@ -131,4 +131,52 @@ public class ArrayTabulatedFunctionTest {
         func.insert(0, 5);
         assertEquals(5, func.apply(0));
     }
+    @Test
+    public void testRemoveFromBeginning() {
+        double[] xValues = {1.0, 2.0, 3.0, 4.0};
+        double[] yValues = {10.0, 20.0, 30.0, 40.0};
+        ArrayTabulatedFunction function = new ArrayTabulatedFunction(xValues, yValues);
+        function.remove(0);
+        assertEquals(3, function.getCount());
+        assertEquals(2.0, function.getX(0));
+        assertEquals(20.0, function.getY(0));
+        assertEquals(3.0, function.getX(1));
+        assertEquals(30.0, function.getY(1));
+        assertEquals(4.0, function.getX(2));
+        assertEquals(40.0, function.getY(2));
+    }
+    @Test
+    public void testRemoveFromEnd() {
+        double[] xValues = {1.0, 2.0, 3.0, 4.0};
+        double[] yValues = {10.0, 20.0, 30.0, 40.0};
+        ArrayTabulatedFunction function = new ArrayTabulatedFunction(xValues, yValues);
+        function.remove(3);
+        assertEquals(3, function.getCount());
+        assertEquals(1.0, function.getX(0));
+        assertEquals(10.0, function.getY(0));
+        assertEquals(2.0, function.getX(1));
+        assertEquals(20.0, function.getY(1));
+        assertEquals(3.0, function.getX(2));
+        assertEquals(30.0, function.getY(2));
+    }
+    @Test
+    public void testRemoveFromMiddle() {
+        double[] xValues = {1.0, 2.0, 3.0, 4.0};
+        double[] yValues = {10.0, 20.0, 30.0, 40.0};
+        ArrayTabulatedFunction function = new ArrayTabulatedFunction(xValues, yValues);
+        function.remove(1);
+        assertEquals(3, function.getCount());
+        assertEquals(1.0, function.getX(0));
+        assertEquals(10.0, function.getY(0));
+        assertEquals(3.0, function.getX(1));
+        assertEquals(30.0, function.getY(1));
+        assertEquals(4.0, function.getX(2));
+        assertEquals(40.0, function.getY(2));
+        function.remove(1);
+        assertEquals(2, function.getCount());
+        assertEquals(1.0, function.getX(0));
+        assertEquals(10.0, function.getY(0));
+        assertEquals(4.0, function.getX(1));
+        assertEquals(40.0, function.getY(1));
+    }
 }
