@@ -7,58 +7,59 @@ public class ArrayTabulatedFunctionTest {
         MathFunction source = new SqrFunction();
         ArrayTabulatedFunction function = new ArrayTabulatedFunction(source, 0.0, 4.0, 5);
         assertEquals(function.getCount(), 5);
-        assertEquals(function.getX(0), 0.0);
-        assertEquals(function.getY(0), 0.0);
-        assertEquals(function.getX(1), 1.0);
-        assertEquals(function.getY(1), 1.0);
-        assertEquals(function.getX(2), 2.0);
-        assertEquals(function.getY(2), 4.0);
-        assertEquals(function.getX(3), 3.0);
-        assertEquals(function.getY(3), 9.0);
-        assertEquals(function.getX(4), 4.0);
-        assertEquals(function.getY(4), 16.0);
+        assertEquals(0.0, function.getY(0));
+        assertEquals(0.0, function.getY(0));
+        assertEquals(1.0, function.getY(1));
+        assertEquals(1.0, function.getY(1));
+        assertEquals(2.0, function.getX(2));
+        assertEquals(4.0, function.getY(2));
+        assertEquals(3.0, function.getX(3));
+        assertEquals(9.0, function.getY(3));
+        assertEquals(4.0, function.getX(4));
+        assertEquals(16.0, function.getY(4));
     }
+
     @Test
     public void testApply() {
         double[] xValues = {1.0, 2.0, 3.0};
         double[] yValues = {10.0, 20.0, 30.0};
         ArrayTabulatedFunction function = new ArrayTabulatedFunction(xValues, yValues);
-        assertEquals(function.apply(1.0), 10.0);
-        assertEquals(function.apply(2.0), 20.0);
-        assertEquals(function.apply(3.0), 30.0);//Интерполяция
-        assertEquals(function.apply(1.5), 15.0);
-        assertEquals(function.apply(2.5), 25.0);//Экстраполяция слева
-        assertEquals(function.apply(0.5), 5.0);//Экстраполяция справа
-        assertEquals(function.apply(3.5), 35.0);
+        assertEquals(10.0, function.apply(1.0));
+        assertEquals(20.0, function.apply(2.0));
+        assertEquals(15.0, function.apply(1.5));
+        assertEquals(30.0, function.apply(3.0));//Интерполяция
+        assertEquals(25.0, function.apply(2.5));//Экстраполяция слева
+        assertEquals(5.0, function.apply(0.5));//Экстраполяция справа
+        assertEquals(35.0, function.apply(3.5));
     }
     @Test
     public void testApplyWithOnePoint() {
         double[] xValues = {5.0};
         double[] yValues = {10.0};
         ArrayTabulatedFunction function = new ArrayTabulatedFunction(xValues, yValues);// Всегда возвращает yValues[0]
-        assertEquals(function.apply(0.0), 10.0);
-        assertEquals(function.apply(5.0), 10.0);
-        assertEquals(function.apply(10.0), 10.0);
+        assertEquals(10.0, function.apply(0.0));
+        assertEquals(10.0, function.apply(5.0) );
+        assertEquals(10.0, function.apply(10.0));
     }
     @Test
     public void testIndexOfX() {
         double[] xValues = {1.0, 2.0, 3.0};
         double[] yValues = {10.0, 20.0, 30.0};
         ArrayTabulatedFunction function = new ArrayTabulatedFunction(xValues, yValues);
-        assertEquals(function.indexOfX(1.0), 0);
-        assertEquals(function.indexOfX(2.0), 1);
-        assertEquals(function.indexOfX(3.0), 2);
-        assertEquals(function.indexOfX(4.0), -1);
+        assertEquals(0, function.indexOfX(1.0));
+        assertEquals(1, function.indexOfX(2.0));
+        assertEquals(2, function.indexOfX(3.0));
+        assertEquals(-1, function.indexOfX(4.0));
     }
     @Test
     public void testIndexOfY() {
         double[] xValues = {1.0, 2.0, 3.0};
         double[] yValues = {10.0, 20.0, 30.0};
         ArrayTabulatedFunction function = new ArrayTabulatedFunction(xValues, yValues);
-        assertEquals(function.indexOfY(10.0), 0);
-        assertEquals(function.indexOfY(20.0), 1);
-        assertEquals(function.indexOfY(30.0), 2);
-        assertEquals(function.indexOfY(40.0), -1);
+        assertEquals(0, function.indexOfY(10.0));
+        assertEquals(1, function.indexOfY(20.0));
+        assertEquals(2, function.indexOfY(30.0));
+        assertEquals(-1, function.indexOfY(40.0));
     }
     @Test
     public void testSetY() {
@@ -66,15 +67,15 @@ public class ArrayTabulatedFunctionTest {
         double[] yValues = {10.0, 20.0, 30.0};
         ArrayTabulatedFunction function = new ArrayTabulatedFunction(xValues, yValues);
         function.setY(1, 25.0);
-        assertEquals(function.getY(1), 25.0);
+        assertEquals(25.0, function.getY(1));
     }
     @Test
     public void testLeftAndRightBound() {
         double[] xValues = {1.0, 2.0, 3.0};
         double[] yValues = {10.0, 20.0, 30.0};
         ArrayTabulatedFunction function = new ArrayTabulatedFunction(xValues, yValues);
-        assertEquals(function.leftBound(), 1.0);
-        assertEquals(function.rightBound(), 3.0);
+        assertEquals(1.0, function.leftBound());
+        assertEquals(3.0, function.rightBound());
     }
     @Test
     public void testInvalidArrays() {// Не упорядочены
@@ -93,5 +94,27 @@ public class ArrayTabulatedFunctionTest {
             new ArrayTabulatedFunction(xValues, yValues);
         });
         assertEquals("Arrays must have the same length", exception.getMessage());
+    }
+    @Test
+    public void testArrayAndListTabulatedFunctionCombination() {
+        double[] xValues1 = {1.0, 2.0, 3.0};
+        double[] yValues1 = {10.0, 20.0, 30.0};
+        ArrayTabulatedFunction arrayFunc = new ArrayTabulatedFunction(xValues1, yValues1);
+        double[] xValues2 = {0.5, 1.5, 2.5};
+        double[] yValues2 = {5.0, 15.0, 25.0};
+        LinkedListTabulatedFunction listFunc = new LinkedListTabulatedFunction(xValues2, yValues2);
+        MathFunction composite = arrayFunc.andThen(listFunc);
+        assertEquals(100.0, composite.apply(1.0), 1e-9);
+    }
+    @Test
+    public void testTabulatedFunctionWithIdentityFunction() {
+        double[] xValues = {1.0, 2.0, 3.0};
+        double[] yValues = {10.0, 20.0, 30.0};
+        LinkedListTabulatedFunction tabulatedFunc = new LinkedListTabulatedFunction(xValues, yValues);
+        MathFunction identityFunc = new IdentityFunction();
+        MathFunction composite = tabulatedFunc.andThen(identityFunc);
+        assertEquals(10.0, composite.apply(1.0), 1e-9);
+        assertEquals(20.0, composite.apply(2.0), 1e-9);
+        assertEquals(30.0, composite.apply(3.0), 1e-9);
     }
 }
