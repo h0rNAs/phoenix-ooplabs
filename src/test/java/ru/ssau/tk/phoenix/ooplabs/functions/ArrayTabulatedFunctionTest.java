@@ -94,4 +94,18 @@ public class ArrayTabulatedFunctionTest {
         });
         assertEquals("Arrays must have the same length", exception.getMessage());
     }
+
+    @Test
+    void testInsertable(){
+        double[] xValues = {1.0, 2.0, 3.0};
+        double[] yValues = {10.0, 20.0, 30.0};
+        ArrayTabulatedFunction func = new ArrayTabulatedFunction(xValues, yValues);
+
+        assertEquals(25, func.apply(2.5));
+        func.insert(2.5, 27.5);
+        assertEquals(27.5, func.apply(2.5));
+        assertEquals(0, func.apply(0));
+        func.insert(0, 5);
+        assertEquals(5, func.apply(0));
+    }
 }

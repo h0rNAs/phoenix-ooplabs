@@ -130,7 +130,7 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
         return count - 1;
     }
 
-    private Node floorNodeOfX(double x){
+    protected Node floorNodeOfX(double x){
         if (x < head.x) return head;
         if (x > head.prev.x) return head.prev;
         for (int i = 1; i < count; i++) {
@@ -192,10 +192,10 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
 
     Node getNode(int index){
         Node currentNode = head;
-        if (index / count > 0.5) {
-            while (index > 0){
-                currentNode = head.prev;
-                index--;
+        if ((double)index / count > 0.5) {
+            while (index < count){
+                currentNode = currentNode.prev;
+                index++;
             }
         }
         else {
@@ -213,21 +213,10 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
             throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + count);
         }
 
-        Node currentNode = head;
-        if (index / count > 0.5) {
-            while (index > 0){
-                currentNode = currentNode.prev;
-                index--;
-            }
-            currentNode.prev = currentNode.next;
-        }
-        else {
-            while (index > 0){
-                currentNode = currentNode.next;
-                index--;
-            }
-            currentNode.prev = currentNode.next;
-        }
+        Node currentNode = getNode(index);
+        if (currentNode == head) head = currentNode.next;
+        currentNode.prev.next = currentNode.next;
+        currentNode.next.prev = currentNode.prev;
     }
 }
 

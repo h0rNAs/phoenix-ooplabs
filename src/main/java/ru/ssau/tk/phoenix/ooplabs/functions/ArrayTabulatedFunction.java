@@ -142,13 +142,13 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements
             double[] newYArray = new double[count <= xValues.length ? count + 1 : count];
 
             System.arraycopy(xValues, 0, newXArray, 0, index);
-            System.arraycopy(xValues, 0, newXArray, 0, index);
+            System.arraycopy(yValues, 0, newYArray, 0, index);
             newXArray[index] = x;
             newYArray[index] = y;
             System.arraycopy(xValues, index, newXArray, index + 1, count - index);
             System.arraycopy(yValues, index, newYArray, index + 1, count - index);
 
-            xValues = newYArray;
+            xValues = newXArray;
             yValues = newYArray;
         }
     }

@@ -58,6 +58,14 @@ class LinkedListTabulatedFunctionTest {
         assertEquals(24, func.rightBound());
     }
 
+    @Test
+    void floorNodeOfX(){
+        double[] xValues = new double[]{2, 16, 24};
+        double[] yValues = new double[]{5, 4, 2};
+        LinkedListTabulatedFunction func = new LinkedListTabulatedFunction(xValues, yValues);
+        assertEquals(4, func.floorNodeOfX(16).y);
+        assertEquals(2, func.floorNodeOfX(543).y);
+    }
 
     @Test
     void apply() {
@@ -119,5 +127,21 @@ class LinkedListTabulatedFunctionTest {
         assertEquals(5, func.apply(1));
         assertEquals(5, func.apply(324324));
         assertEquals(5, func.apply(-2));
+    }
+
+    @Test
+    void remove(){
+        double[] xValues = {0, 1.0, 2.0, 2.5, 3.0};
+        double[] yValues = {5, 10.0, 20.0, 27.5, 30.0};
+        LinkedListTabulatedFunction func = new LinkedListTabulatedFunction(xValues, yValues);
+
+        assertEquals(27.5, func.apply(2.5));
+        func.remove(func.indexOfX(2.5));
+        assertEquals(25., func.apply(2.5));
+        assertEquals(5, func.apply(0));
+        func.remove(func.indexOfX(0));
+        assertEquals(0, func.apply(0));
+
+        assertThrows(IndexOutOfBoundsException.class, () -> func.remove(564));
     }
 }
