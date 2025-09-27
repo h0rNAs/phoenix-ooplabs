@@ -36,10 +36,7 @@ public class ArrayTabulatedFunctionTest {
     public void testApplyWithOnePoint() {
         double[] xValues = {5.0};
         double[] yValues = {10.0};
-        ArrayTabulatedFunction function = new ArrayTabulatedFunction(xValues, yValues);// Всегда возвращает yValues[0]
-        assertEquals(10.0, function.apply(0.0));
-        assertEquals(10.0, function.apply(5.0) );
-        assertEquals(10.0, function.apply(10.0));
+        assertThrows(IllegalArgumentException.class, () -> new LinkedListTabulatedFunction(xValues, yValues));
     }
     @Test
     public void testIndexOfX() {
@@ -68,6 +65,26 @@ public class ArrayTabulatedFunctionTest {
         ArrayTabulatedFunction function = new ArrayTabulatedFunction(xValues, yValues);
         function.setY(1, 25.0);
         assertEquals(25.0, function.getY(1));
+        assertThrows(IllegalArgumentException.class, () -> function.setY(-2, 1));
+    }
+    @Test
+    void testGetXAndY() {
+        double[] xValues = new double[]{0, 1, 2};
+        double[] yValues = new double[]{5, 4, 2};
+        LinkedListTabulatedFunction func = new LinkedListTabulatedFunction(xValues, yValues);
+
+        assertThrows(IllegalArgumentException.class, () -> func.getY(-2));
+        assertThrows(IllegalArgumentException.class, () -> func.getX(3424));
+    }
+    @Test
+    void testFloorIndexOfX(){
+        double[] xValues = new double[]{0, 1, 2};
+        double[] yValues = new double[]{5, 4, 2};
+        LinkedListTabulatedFunction func = new LinkedListTabulatedFunction(xValues, yValues);
+
+        assertEquals(1, func.floorIndexOfX(1.5));
+        assertEquals(1, func.floorIndexOfX(1));
+        assertThrows(IllegalArgumentException.class, () -> func.floorIndexOfX(-868));
     }
     @Test
     public void testLeftAndRightBound() {
@@ -136,6 +153,10 @@ public class ArrayTabulatedFunctionTest {
         double[] xValues = {1.0, 2.0, 3.0, 4.0};
         double[] yValues = {10.0, 20.0, 30.0, 40.0};
         ArrayTabulatedFunction function = new ArrayTabulatedFunction(xValues, yValues);
+
+        assertThrows(IllegalArgumentException.class, () -> function.remove(-1));
+        assertThrows(IllegalArgumentException.class, () -> function.remove(42332));
+
         function.remove(0);
         assertEquals(3, function.getCount());
         assertEquals(2.0, function.getX(0));
