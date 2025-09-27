@@ -153,6 +153,10 @@ public class ArrayTabulatedFunctionTest {
         double[] xValues = {1.0, 2.0, 3.0, 4.0};
         double[] yValues = {10.0, 20.0, 30.0, 40.0};
         ArrayTabulatedFunction function = new ArrayTabulatedFunction(xValues, yValues);
+
+        assertThrows(IllegalArgumentException.class, () -> function.remove(-1));
+        assertThrows(IllegalArgumentException.class, () -> function.remove(42332));
+
         function.remove(0);
         assertEquals(3, function.getCount());
         assertEquals(2.0, function.getX(0));

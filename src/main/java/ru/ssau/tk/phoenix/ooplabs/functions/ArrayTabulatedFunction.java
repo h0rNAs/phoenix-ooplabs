@@ -150,7 +150,7 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements
         @Override
         public void remove(int index) {
             if (index < 0 || index >= count) {
-                throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + count);
+                throw new IllegalArgumentException("Invalid index");
             }
             if (count == 1) {
                 throw new IllegalStateException("Cannot remove the last point from the function");
