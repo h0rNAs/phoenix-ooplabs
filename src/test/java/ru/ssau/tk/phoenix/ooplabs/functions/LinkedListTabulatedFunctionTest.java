@@ -21,6 +21,13 @@ class LinkedListTabulatedFunctionTest {
     }
 
     @Test
+    void constructor_smallArray(){
+        double[] xValues = new double[]{0};
+        double[] yValues = new double[]{5};
+        assertThrows(IllegalArgumentException.class, () -> new LinkedListTabulatedFunction(xValues, yValues));
+    }
+
+    @Test
     void setY() {
         double[] xValues = new double[]{0, 1, 2};
         double[] yValues = new double[]{5, 4, 2};
@@ -28,7 +35,39 @@ class LinkedListTabulatedFunctionTest {
 
         f.setY(1, 1);
         assertEquals(1, f.getY(1));
-        assertThrows(IndexOutOfBoundsException.class, () -> f.setY(-2, 1));
+        assertThrows(IllegalArgumentException.class, () -> f.setY(-2, 1));
+    }
+
+    @Test
+    void getXAndY() {
+        double[] xValues = new double[]{0, 1, 2};
+        double[] yValues = new double[]{5, 4, 2};
+        LinkedListTabulatedFunction func = new LinkedListTabulatedFunction(xValues, yValues);
+
+        assertThrows(IllegalArgumentException.class, () -> func.getY(-2));
+        assertThrows(IllegalArgumentException.class, () -> func.getX(3424));
+    }
+
+    @Test
+    void floorIndexOfX(){
+        double[] xValues = new double[]{0, 1, 2};
+        double[] yValues = new double[]{5, 4, 2};
+        LinkedListTabulatedFunction func = new LinkedListTabulatedFunction(xValues, yValues);
+
+        assertEquals(1, func.floorIndexOfX(1.5));
+        assertEquals(1, func.floorIndexOfX(1));
+        assertThrows(IllegalArgumentException.class, () -> func.floorIndexOfX(-868));
+    }
+
+    @Test
+    void floorNodeOfX(){
+        double[] xValues = new double[]{0, 1, 2};
+        double[] yValues = new double[]{5, 4, 2};
+        LinkedListTabulatedFunction func = new LinkedListTabulatedFunction(xValues, yValues);
+
+        assertEquals(1, func.floorNodeOfX(1.5).x);
+        assertEquals(1, func.floorNodeOfX(1).x);
+        assertThrows(IllegalArgumentException.class, () -> func.floorIndexOfX(-868));
     }
 
     @Test
@@ -119,15 +158,6 @@ class LinkedListTabulatedFunctionTest {
         assertEquals(5, func.apply(1));
         assertEquals(5, func.apply(324324));
         assertEquals(5, func.apply(-2));
-    }
-    public void testInsertIntoEmptyList() {
-        LinkedListTabulatedFunction function = new LinkedListTabulatedFunction(new double[]{}, new double[]{});
-        assertEquals(0, function.getCount());
-
-        function.insert(1.0, 10.0);
-        assertEquals(1, function.getCount());
-        assertEquals(1.0, function.getX(0));
-        assertEquals(10.0, function.getY(0));
     }
 
     @Test
