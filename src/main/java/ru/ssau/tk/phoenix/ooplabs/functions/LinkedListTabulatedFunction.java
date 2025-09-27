@@ -1,5 +1,8 @@
 package ru.ssau.tk.phoenix.ooplabs.functions;
 
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+
 public class LinkedListTabulatedFunction extends AbstractTabulatedFunction implements Insertable, Removable{
     Node head;
     int count;
@@ -243,6 +246,28 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
         if (currentNode == head) head = currentNode.next;
         currentNode.prev.next = currentNode.next;
         currentNode.next.prev = currentNode.prev;
+    }
+
+    @Override
+    public Iterator<Point> iterator() {
+        return new Iterator<Point>() {
+            private Node currentNode = head;
+
+            @Override
+            public boolean hasNext() {
+                return currentNode != null;
+            }
+
+            @Override
+            public Point next() {
+                if (!hasNext()) {
+                    throw new NoSuchElementException();
+                }
+                Point point = new Point(currentNode.x, currentNode.y);
+                currentNode = currentNode == head.prev ? null : currentNode.next;
+                return point;
+            }
+        };
     }
 
 
