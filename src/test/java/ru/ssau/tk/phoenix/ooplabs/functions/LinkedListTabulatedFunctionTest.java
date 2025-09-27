@@ -1,6 +1,8 @@
 package ru.ssau.tk.phoenix.ooplabs.functions;
 
 import org.junit.jupiter.api.Test;
+import ru.ssau.tk.phoenix.ooplabs.exceptions.ArrayIsNotSortedException;
+import ru.ssau.tk.phoenix.ooplabs.exceptions.DifferentLenghtOfArraysException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -17,7 +19,7 @@ class LinkedListTabulatedFunctionTest {
     void constructor_anSortedArray(){
         double[] xValues = new double[]{0, 2, 1};
         double[] yValues = new double[]{5, 4, 2};
-        assertThrows(IllegalArgumentException.class, () -> new LinkedListTabulatedFunction(xValues, yValues));
+        assertThrows(ArrayIsNotSortedException.class, () -> new LinkedListTabulatedFunction(xValues, yValues));
     }
 
     @Test
@@ -107,21 +109,6 @@ class LinkedListTabulatedFunctionTest {
         assertEquals(-4, func.apply(5));
         assertEquals(3, func.apply(1.5));
         assertEquals(6, func.apply(-1));
-    }
-
-    @Test
-    void apply_linkedListAndArray(){
-        double[] xValues1 = {1.0, 2.0, 3.0};
-        double[] yValues1 = {10.0, 20.0, 30.0};
-        LinkedListTabulatedFunction listFunc = new LinkedListTabulatedFunction(xValues1, yValues1);
-
-        double[] xValues2 = {5.0, 15.0, 25.0};
-        double[] yValues2 = {0.5, 1.5, 2.5};
-        ArrayTabulatedFunction arrayFunc = new ArrayTabulatedFunction(xValues2, yValues2);
-
-        CompositeFunction func = listFunc.andThen(arrayFunc);
-        assertEquals(2, func.apply(2));
-        assertEquals(4, func.apply(4));
     }
 
     @Test

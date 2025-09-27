@@ -1,4 +1,6 @@
 package ru.ssau.tk.phoenix.ooplabs.functions;
+import ru.ssau.tk.phoenix.ooplabs.exceptions.InterpolationException;
+
 import java.util.Arrays;
 public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements Insertable, Removable {
     private double[] xValues;
@@ -6,20 +8,14 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements
     private int count;
 
     public ArrayTabulatedFunction(double[] xValues, double[] yValues) {
+        checkLengthIsTheSame(xValues, yValues);  // ← НОВОЕ
         if (xValues.length < 2) {
             throw new IllegalArgumentException("At least 2 point is required");
         }
-        if (xValues.length != yValues.length) {
-            throw new IllegalArgumentException("Arrays must have the same length");
-        }
+        checkSorted(xValues);
         this.count = xValues.length;
         this.xValues = Arrays.copyOf(xValues, count);
         this.yValues = Arrays.copyOf(yValues, count);
-        for (int i = 1; i < count; i++) {
-            if (xValues[i] <= xValues[i - 1]) {
-                throw new IllegalArgumentException("Values must be ordered");
-            }
-        }
     }
     public ArrayTabulatedFunction(MathFunction source, double xFrom, double xTo, int count) {
         if (count < 2) {
@@ -121,8 +117,12 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements
         if (floorIndex < 0 || floorIndex >= count - 1) {
             throw new IllegalArgumentException("Invalid floor index");
         }
-        return interpolate(x, xValues[floorIndex], xValues[floorIndex + 1],
-                yValues[floorIndex], yValues[floorIndex + 1]);
+        double leftX = xValues[floorIndex];
+        double rightX = xValues[floorIndex + 1];
+        if (x < leftX || x > rightX) {
+            throw new InterpolationException("X value is outside the interpolation interval");
+        }
+        return interpolate(x, leftX, rightX, yValues[floorIndex], yValues[floorIndex + 1]);
     }
 
     @Override
