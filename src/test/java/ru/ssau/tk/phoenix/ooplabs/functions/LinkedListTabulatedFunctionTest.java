@@ -4,6 +4,9 @@ import org.junit.jupiter.api.Test;
 import ru.ssau.tk.phoenix.ooplabs.exceptions.ArrayIsNotSortedException;
 import ru.ssau.tk.phoenix.ooplabs.exceptions.DifferentLenghtOfArraysException;
 
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class LinkedListTabulatedFunctionTest {
@@ -199,4 +202,29 @@ class LinkedListTabulatedFunctionTest {
         assertEquals(50.0, function.getY(4));
     }
 
+    @Test
+    void iterator() {
+        double[] xValues = new double[]{0, 1, 2, 4, 7, 12};
+        double[] yValues = new double[]{5, 4, 2, 5, 5.5, 234};
+        LinkedListTabulatedFunction func = new LinkedListTabulatedFunction(xValues, yValues);
+        Iterator<Point> iterator = func.iterator();
+
+        int i = 0;
+        while(iterator.hasNext()) {
+            Point point = iterator.next();
+            assertEquals(xValues[i], point.x);
+            assertEquals(yValues[i], point.y);
+            i++;
+        }
+        assertThrows(NoSuchElementException.class, () -> iterator.next());
+
+        i = 0;
+        for (Point point : func){
+            assertEquals(xValues[i], point.x);
+            assertEquals(yValues[i], point.y);
+            i++;
+        }
+
+
+    }
 }

@@ -1,7 +1,5 @@
 package ru.ssau.tk.phoenix.ooplabs.functions;
 
-import ru.ssau.tk.phoenix.ooplabs.exceptions.InterpolationException;
-
 public class LinkedListTabulatedFunction extends AbstractTabulatedFunction implements Insertable, Removable{
     Node head;
     int count;
@@ -13,9 +11,13 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
         if (xValues.length != yValues.length) {
             throw new IllegalArgumentException("Arrays must have the same length");
         }
-        checkSorted(xValues);
         for (int i = 0; i < xValues.length; i++) {
             addNode(xValues[i], yValues[i]);
+        }
+        for (int i = 1; i < count; i++) {
+            if (xValues[i] <= xValues[i - 1]) {
+                throw new IllegalArgumentException("Values must be ordered");
+            }
         }
     }
 
@@ -143,37 +145,18 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
 
     @Override
     protected double extrapolateLeft(double x) {
-        if (count == 1) {
-            return head.y;
-        }
-        // Для экстраполяции слева используем первые две точки
-        Node first = head;
-        Node second = head.next;
-        // Используем защищенный метод interpolate без проверки границ
-        return interpolate(x, first.x, second.x, first.y, second.y);
+        return interpolate(x, 0);
     }
 
     @Override
     protected double extrapolateRight(double x) {
-        if (count == 1) {
-            return head.y;
-        }
-        // Для экстраполяции справа используем последние две точки
-        Node last = head.prev;
-        Node secondLast = last.prev;
-        // Используем защищенный метод interpolate без проверки границ
-        return interpolate(x, secondLast.x, last.x, secondLast.y, last.y);
+        return interpolate(x, count - 2);
     }
 
     @Override
     protected double interpolate(double x, int floorIndex) {
         if (floorIndex < 0 || floorIndex >= count - 1) {
             throw new IllegalArgumentException("Invalid index");
-        }
-        Node leftNode = getNode(floorIndex);
-        Node rightNode = getNode(floorIndex + 1);
-        if (x < leftNode.x || x > rightNode.x) {
-            throw new InterpolationException("X value is outside the interpolation interval");
         }
         return interpolate(x, getNode(floorIndex).x, getNode(floorIndex + 1).x,
                 getNode(floorIndex).y, getNode(floorIndex + 1).y);

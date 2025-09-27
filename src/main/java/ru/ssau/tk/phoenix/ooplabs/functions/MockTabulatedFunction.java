@@ -1,5 +1,7 @@
 package ru.ssau.tk.phoenix.ooplabs.functions;
 
+import java.util.Iterator;
+
 public class MockTabulatedFunction extends AbstractTabulatedFunction{
     double[] xValues;
     double[] yValues;
@@ -99,5 +101,10 @@ public class MockTabulatedFunction extends AbstractTabulatedFunction{
     @Override
     public double rightBound() {
         return xValues[getCount() - 1];
+    }
+
+    @Override
+    public Iterator<Point> iterator() {
+        throw new UnsupportedOperationException();
     }
 }
