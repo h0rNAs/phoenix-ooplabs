@@ -3,6 +3,7 @@ import ru.ssau.tk.phoenix.ooplabs.exceptions.InterpolationException;
 
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements Insertable, Removable {
     private double[] xValues;
@@ -19,6 +20,7 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements
         this.xValues = Arrays.copyOf(xValues, count);
         this.yValues = Arrays.copyOf(yValues, count);
     }
+
     public ArrayTabulatedFunction(MathFunction source, double xFrom, double xTo, int count) {
         if (count < 2) {
             throw new IllegalArgumentException("At least 2 point is required");
@@ -44,10 +46,12 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements
             }
         }
     }
+
     @Override
     public int getCount() {
         return count;
     }
+
     @Override
     public double getX(int index) {
         if (index < 0 || index >= count) {
@@ -55,6 +59,7 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements
         }
         return xValues[index];
     }
+
     @Override
     public double getY(int index) {
         if (index < 0 || index >= count) {
@@ -62,6 +67,7 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements
         }
         return yValues[index];
     }
+
     @Override
     public void setY(int index, double value) {
         if (index < 0 || index >= count) {
@@ -69,6 +75,7 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements
         }
         yValues[index] = value;
     }
+
     @Override
     public int indexOfX(double x) {
         for (int i = 0; i < count; i++) {
@@ -78,6 +85,7 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements
         }
         return -1;
     }
+
     @Override
     public int indexOfY(double y) {
         for (int i = 0; i < count; i++) {
@@ -87,14 +95,17 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements
         }
         return -1;
     }
+
     @Override
     public double leftBound() {
         return xValues[0];
     }
+
     @Override
     public double rightBound() {
         return xValues[count - 1];
     }
+
     @Override
     protected int floorIndexOfX(double x) {
         if (x < xValues[0]) throw new IllegalArgumentException("x out of left bound");
@@ -106,14 +117,17 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements
         }
         return count - 1;
     }
+
     @Override
     protected double extrapolateLeft(double x) {
         return interpolate(x, 0);
     }
+
     @Override
     protected double extrapolateRight(double x) {
         return interpolate(x, count - 2);
     }
+
     @Override
     protected double interpolate(double x, int floorIndex) {
         if (floorIndex < 0 || floorIndex >= count - 1) {
@@ -131,7 +145,7 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements
     public void insert(double x, double y) {
         int index = indexOfX(x);
         if (index != -1) setY(index, y);
-        else{
+        else {
             if (x < xValues[0]) index = 1;
             else index = floorIndexOfX(x) + 1;
 
@@ -149,29 +163,45 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements
             yValues = newYArray;
         }
     }
-        @Override
-        public void remove(int index) {
-            if (index < 0 || index >= count) {
-                throw new IllegalArgumentException("Invalid index");
-            }
-            if (count == 1) {
-                throw new IllegalStateException("Cannot remove the last point from the function");
-            }
-            double[] newXArray = new double[count - 1];
-            double[] newYArray = new double[count - 1];
-            System.arraycopy(xValues, 0, newXArray, 0, index);
-            System.arraycopy(yValues, 0, newYArray, 0, index);
-            System.arraycopy(xValues, index + 1, newXArray, index, count - index - 1);
-            System.arraycopy(yValues, index + 1, newYArray, index, count - index - 1);
-            xValues = newXArray;
-            yValues = newYArray;
-            count--;
+
+    @Override
+    public void remove(int index) {
+        if (index < 0 || index >= count) {
+            throw new IllegalArgumentException("Invalid index");
         }
+        if (count == 1) {
+            throw new IllegalStateException("Cannot remove the last point from the function");
+        }
+        double[] newXArray = new double[count - 1];
+        double[] newYArray = new double[count - 1];
+        System.arraycopy(xValues, 0, newXArray, 0, index);
+        System.arraycopy(yValues, 0, newYArray, 0, index);
+        System.arraycopy(xValues, index + 1, newXArray, index, count - index - 1);
+        System.arraycopy(yValues, index + 1, newYArray, index, count - index - 1);
+        xValues = newXArray;
+        yValues = newYArray;
+        count--;
+    }
 
     @Override
     public Iterator<Point> iterator() {
-        throw new UnsupportedOperationException();
+        return new Iterator<Point>() {
+            private int i = 0;
+
+            @Override
+            public boolean hasNext() {
+                return i < count;
+            }
+
+            @Override
+            public Point next() {
+                if (!hasNext()) {
+                    throw new NoSuchElementException("No more elements in the tabulated function");
+                }
+                Point point = new Point(xValues[i], yValues[i]);
+                i++;
+                return point;
+            }
+        };
     }
 }
-
-

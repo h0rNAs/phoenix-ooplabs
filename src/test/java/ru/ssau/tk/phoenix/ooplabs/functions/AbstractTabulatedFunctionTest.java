@@ -2,6 +2,8 @@ package ru.ssau.tk.phoenix.ooplabs.functions;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.Iterator;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class AbstractTabulatedFunctionTest {
@@ -31,4 +33,32 @@ class AbstractTabulatedFunctionTest {
         assertEquals(17.5, func.apply(250));
         assertEquals(15, func.apply(200));
     }
+    @Test
+    public void testIteratorWithWhileLoop() {
+        double[] xValues = {1.0, 2.0, 3.0};
+        double[] yValues = {10.0, 20.0, 30.0};
+        ArrayTabulatedFunction function = new ArrayTabulatedFunction(xValues, yValues);
+        Iterator<Point> iterator = function.iterator();
+        int index = 0;// Тестирование цикла while
+        while (((Iterator<?>) iterator).hasNext()) {
+            Point point = iterator.next();
+            assertEquals(xValues[index], point.x, 1e-9);
+            assertEquals(yValues[index], point.y, 1e-9);
+            index++;
+        }
+        assertEquals(3, index); // Проверяем, что прошли все 3 элемента
+    }
+
+    @Test
+    public void testIteratorWithForEachLoop() {
+        double[] xValues = {1.0, 2.0, 3.0};
+        double[] yValues = {10.0, 20.0, 30.0};
+        ArrayTabulatedFunction function = new ArrayTabulatedFunction(xValues, yValues);
+        int index = 0; // Тестирование цикла for-each
+        for (Point point : function) {
+            assertEquals(xValues[index], point.x, 1e-9);
+            assertEquals(yValues[index], point.y, 1e-9);
+            index++;
+        }
+        assertEquals(3, index);
 }
