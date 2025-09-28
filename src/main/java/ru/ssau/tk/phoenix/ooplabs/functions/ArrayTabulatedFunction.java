@@ -120,12 +120,12 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements
 
     @Override
     protected double extrapolateLeft(double x) {
-        return interpolate(x, 0);
+        return interpolate(x, xValues[0], xValues[1], yValues[0], yValues[1]);
     }
 
     @Override
     protected double extrapolateRight(double x) {
-        return interpolate(x, count - 2);
+        return interpolate(x, xValues[count-2], xValues[count-1], yValues[count-2], yValues[count-1]);
     }
 
     @Override

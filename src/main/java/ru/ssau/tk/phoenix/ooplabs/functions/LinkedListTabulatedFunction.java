@@ -3,10 +3,12 @@ package ru.ssau.tk.phoenix.ooplabs.functions;
 import ru.ssau.tk.phoenix.ooplabs.exceptions.InterpolationException;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 public class LinkedListTabulatedFunction extends AbstractTabulatedFunction implements Insertable, Removable{
     Node head;
     int count;
+
     public LinkedListTabulatedFunction(double[] xValues, double[] yValues) {
         checkLengthIsTheSame(xValues, yValues);
         if (xValues.length < 2) {
@@ -15,6 +17,34 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
         checkSorted(xValues);
         for (int i = 0; i < xValues.length; i++) {
             addNode(xValues[i], yValues[i]);
+        }
+        for (int i = 1; i < count; i++) {
+            if (xValues[i] <= xValues[i - 1]) {
+                throw new IllegalArgumentException("Values must be ordered");
+            }
+        }
+    }
+
+    public LinkedListTabulatedFunction(MathFunction source, double xFrom, double xTo, int count) {
+        if (count < 2) {
+            throw new IllegalArgumentException("At least 2 point is required");
+        }
+        if (xFrom > xTo) {
+            double temp = xFrom;
+            xFrom = xTo;
+            xTo = temp;
+        }
+        if (xFrom == xTo) {
+            double value = source.apply(xFrom);
+            for (int i = 0; i < count; i++) {
+                addNode(xFrom, value);
+            }
+        } else {
+            double step = (xTo - xFrom) / (count - 1);
+            for (int i = 0; i < count; i++) {
+                double x = xFrom + i * step;
+                addNode(x, source.apply(x));
+            }
         }
     }
 
@@ -139,13 +169,16 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
 
     @Override
     protected double interpolate(double x, int floorIndex) {
-        return 0;
+        if (floorIndex < 0 || floorIndex >= count - 1) {
+            throw new IllegalArgumentException("Invalid index");
+        }
+        return interpolate(x, getNode(floorIndex).x, getNode(floorIndex + 1).x,
+                getNode(floorIndex).y, getNode(floorIndex + 1).y);
     }
 
     private double interpolate(double x, Node floorNode){
         return interpolate(x, floorNode.x, floorNode.next.x, floorNode.y, floorNode.next.y);
     }
-
 
     void addNode(double x, double y){
         Node newNode = new Node(x, y);
@@ -226,6 +259,27 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
         currentNode.next.prev = currentNode.prev;
     }
 
+    @Override
+    public Iterator<Point> iterator() {
+        return new Iterator<Point>() {
+            private Node currentNode = head;
+
+            @Override
+            public boolean hasNext() {
+                return currentNode != null;
+            }
+
+            @Override
+            public Point next() {
+                if (!hasNext()) throw new NoSuchElementException();
+                Point point = new Point(currentNode.x, currentNode.y);
+                currentNode = currentNode == head.prev ? null : currentNode.next;
+                return point;
+            }
+        };
+    }
+
+
     static class Node{
         public Node prev = this, next = this;
         public double x, y;
@@ -235,9 +289,4 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
             this.y = y;
         }
     }
-    @Override
-    public Iterator<Point> iterator() {
-        throw new UnsupportedOperationException();
-    }
 }
-
