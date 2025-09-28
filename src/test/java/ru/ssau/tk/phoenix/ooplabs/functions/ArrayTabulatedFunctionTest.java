@@ -1,5 +1,8 @@
 package ru.ssau.tk.phoenix.ooplabs.functions;
 import org.junit.jupiter.api.Test;
+import ru.ssau.tk.phoenix.ooplabs.exceptions.ArrayIsNotSortedException;
+import ru.ssau.tk.phoenix.ooplabs.exceptions.DifferentLenghtOfArraysException;
+
 import static org.junit.jupiter.api.Assertions.*;
 public class ArrayTabulatedFunctionTest {
     @Test
@@ -98,7 +101,7 @@ public class ArrayTabulatedFunctionTest {
     public void testInvalidArrays() {// Не упорядочены
         double[] xValues = {1.0, 3.0, 2.0};
         double[] yValues = {10.0, 20.0, 30.0};
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        Exception exception = assertThrows(ArrayIsNotSortedException.class, () -> {
             new ArrayTabulatedFunction(xValues, yValues);
         });
         assertEquals("Values must be ordered", exception.getMessage());
@@ -107,7 +110,7 @@ public class ArrayTabulatedFunctionTest {
     public void testDifferentLengthArrays() {//Разное Кол-во элементов
         double[] xValues = {1.0, 2.0, 3.0};
         double[] yValues = {10.0, 20.0};
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        Exception exception = assertThrows(DifferentLenghtOfArraysException.class, () -> {
             new ArrayTabulatedFunction(xValues, yValues);
         });
         assertEquals("Arrays must have the same length", exception.getMessage());

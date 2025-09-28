@@ -15,7 +15,7 @@ class LinkedListTabulatedFunctionTest {
     void constructor_differentLengthArrays() {
         double[] xValues = new double[]{0, 1, 2, 3};
         double[] yValues = new double[]{5, 4, 2};
-        assertThrows(IllegalArgumentException.class, () -> new LinkedListTabulatedFunction(xValues, yValues));
+        assertThrows(DifferentLenghtOfArraysException.class, () -> new LinkedListTabulatedFunction(xValues, yValues));
     }
 
     @Test
