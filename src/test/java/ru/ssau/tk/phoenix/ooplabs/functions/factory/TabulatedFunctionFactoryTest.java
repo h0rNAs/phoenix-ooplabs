@@ -1,14 +1,19 @@
 package ru.ssau.tk.phoenix.ooplabs.functions.factory;
 
 import org.junit.jupiter.api.Test;
-import ru.ssau.tk.phoenix.ooplabs.functions.ArrayTabulatedFunction;
-import ru.ssau.tk.phoenix.ooplabs.functions.LinkedListTabulatedFunction;
-import ru.ssau.tk.phoenix.ooplabs.functions.StrictTabulatedFunction;
-import ru.ssau.tk.phoenix.ooplabs.functions.TabulatedFunction;
+import ru.ssau.tk.phoenix.ooplabs.functions.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class TabulatedFunctionFactoryTest {
+    public interface TabulatedFunctionFactory {
+        TabulatedFunction create(double[] xValues, double[] yValues);
+
+        default TabulatedFunction createUnmodifiable(double[] xValues, double[] yValues) {
+            TabulatedFunction function = create(xValues, yValues);
+            return new UnmodifiableTabulatedFunction(function);
+        }
+    }
 
     @Test
     void create_LinkedList() {
