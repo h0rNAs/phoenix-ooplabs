@@ -79,5 +79,23 @@ public class TabulatedFunctionOperationService {
             }
         });
     }
+
+    public TabulatedFunction multiply(TabulatedFunction a, TabulatedFunction b) {
+        return doOperation(a, b, new BinOperation() {
+            @Override
+            public double apply(double u, double v) {
+                return u * v;
+            }
+        });
+    }
+
+    public TabulatedFunction divide(TabulatedFunction a, TabulatedFunction b) {
+        return doOperation(a, b, new BinOperation() {
+            @Override
+            public double apply(double u, double v) {
+                return u / v;
+            }
+        });
+    }
 }
 
