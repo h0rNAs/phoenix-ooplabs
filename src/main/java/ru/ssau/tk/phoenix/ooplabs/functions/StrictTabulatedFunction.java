@@ -58,7 +58,7 @@ public class StrictTabulatedFunction implements TabulatedFunction{
     @Override
     public double apply(double x) {
         int index = indexOfX(x);
-        if (index != -1) return getX(index);
+        if (index != -1) return getY(index);
         else throw new UnsupportedOperationException();
     }
 }

@@ -12,6 +12,7 @@ class StrictTabulatedFunctionTest {
         double[] yValues = new double[]{5, 4, 2};
         LinkedListTabulatedFunction func = new LinkedListTabulatedFunction(xValues, yValues);
         StrictTabulatedFunction strict = new StrictTabulatedFunction(func);
+        assertEquals(4, strict.apply(1));
         assertEquals(2, strict.apply(2));
         assertThrows(UnsupportedOperationException.class, () -> strict.apply(3));
         assertThrows(UnsupportedOperationException.class, () -> strict.apply(1.5));
