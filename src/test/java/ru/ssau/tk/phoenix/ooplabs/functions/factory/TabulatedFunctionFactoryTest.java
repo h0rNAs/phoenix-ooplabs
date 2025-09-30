@@ -2,6 +2,7 @@ package ru.ssau.tk.phoenix.ooplabs.functions.factory;
 
 import org.junit.jupiter.api.Test;
 import ru.ssau.tk.phoenix.ooplabs.functions.*;
+import ru.ssau.tk.phoenix.ooplabs.functions.UnmodifiableTabulatedFunction;
 
 import static org.junit.jupiter.api.Assertions.*;
 
