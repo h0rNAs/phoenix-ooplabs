@@ -63,4 +63,20 @@ class AbstractTabulatedFunctionTest {
         }
         assertEquals(3, index);
     }
+
+    @Test
+    void toString_LinkedList() {
+        double[] xValues = {0.0, 0.5, 1.0};
+        double[] yValues = {0.0, 0.25, 1.0};
+        TabulatedFunction func = new LinkedListTabulatedFunction(xValues, yValues);
+        assertEquals("LinkedListTabulatedFunction size = 3\n[0.0; 0.0]\n[0.5; 0.25]\n[1.0; 1.0]", func.toString());
+    }
+
+    @Test
+    void toString_Array() {
+        double[] xValues = {1.0, 2.0, 3.0};
+        double[] yValues = {10.0, 20.0, 30.0};
+        TabulatedFunction func = new ArrayTabulatedFunction(xValues, yValues);
+        assertEquals("ArrayTabulatedFunction size = 3\n[1.0; 10.0]\n[2.0; 20.0]\n[3.0; 30.0]", func.toString());
+    }
 }
