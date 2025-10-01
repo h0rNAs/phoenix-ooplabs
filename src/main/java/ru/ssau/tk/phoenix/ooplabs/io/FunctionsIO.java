@@ -61,4 +61,18 @@ public final class FunctionsIO {
             throw new IOException("Error parsing number of points: " + e.getMessage(), e);
         }
     }
+
+    public static TabulatedFunction readTabulatedFunction(BufferedInputStream inputStream, TabulatedFunctionFactory factory) throws IOException {
+        DataInputStream dataStream = new DataInputStream(inputStream);
+        int length = dataStream.readInt();
+        double[] xValues = new double[length];
+        double[] yValues = new double[length];
+
+        for (int i = 0; i < length; i++) {
+            xValues[i] = dataStream.readDouble();
+            yValues[i] = dataStream.readDouble();
+        }
+
+        return factory.create(xValues, yValues);
+    }
 }
