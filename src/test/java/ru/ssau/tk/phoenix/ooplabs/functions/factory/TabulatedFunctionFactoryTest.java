@@ -7,15 +7,6 @@ import ru.ssau.tk.phoenix.ooplabs.functions.UnmodifiableTabulatedFunction;
 import static org.junit.jupiter.api.Assertions.*;
 
 class TabulatedFunctionFactoryTest {
-    public interface TabulatedFunctionFactory {
-        TabulatedFunction create(double[] xValues, double[] yValues);
-
-        default TabulatedFunction createUnmodifiable(double[] xValues, double[] yValues) {
-            TabulatedFunction function = create(xValues, yValues);
-            return new UnmodifiableTabulatedFunction(function);
-        }
-    }
-
     @Test
     void create_LinkedList() {
         double[] xValues = new double[]{0, 1, 2};
@@ -52,5 +43,16 @@ class TabulatedFunctionFactoryTest {
         StrictTabulatedFunction strict = (StrictTabulatedFunction) func;
         assertEquals(4, strict.apply(1));
         assertThrows(UnsupportedOperationException.class, () -> strict.apply(1.5));
+    }
+
+    @Test
+    void createStrictUnmodifiable() {
+        double[] xValues = new double[]{0, 1, 2};
+        double[] yValues = new double[]{5, 4, 2};
+        TabulatedFunction func = new ArrayTabulatedFunctionFactory().createStrictUnmodifiable(xValues, yValues);
+
+        assertThrows(UnsupportedOperationException.class, () -> func.setY(1, 234));
+        assertThrows(UnsupportedOperationException.class, () -> func.apply(1.5));
+        assertEquals(4, func.apply(1));
     }
 }

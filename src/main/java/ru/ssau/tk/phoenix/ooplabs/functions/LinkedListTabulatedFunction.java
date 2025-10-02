@@ -2,10 +2,11 @@ package ru.ssau.tk.phoenix.ooplabs.functions;
 
 import ru.ssau.tk.phoenix.ooplabs.exceptions.InterpolationException;
 
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public class LinkedListTabulatedFunction extends AbstractTabulatedFunction implements Insertable, Removable{
+public class LinkedListTabulatedFunction extends AbstractTabulatedFunction implements Insertable, Removable, Serializable {
     Node head;
     int count;
 
@@ -263,24 +264,26 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
     public Iterator<Point> iterator() {
         return new Iterator<Point>() {
             private Node currentNode = head;
+            private int currentIndex = 0;
 
             @Override
             public boolean hasNext() {
-                return currentNode != null;
+                return currentIndex < count;
             }
 
             @Override
             public Point next() {
                 if (!hasNext()) throw new NoSuchElementException();
                 Point point = new Point(currentNode.x, currentNode.y);
-                currentNode = currentNode == head.prev ? null : currentNode.next;
+                currentNode = currentNode.next;
+                currentIndex++;
                 return point;
             }
         };
     }
 
 
-    static class Node{
+    static class Node implements Serializable{
         public Node prev = this, next = this;
         public double x, y;
 

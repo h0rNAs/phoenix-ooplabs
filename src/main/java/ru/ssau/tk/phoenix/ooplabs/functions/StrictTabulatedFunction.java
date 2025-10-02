@@ -59,6 +59,6 @@ public class StrictTabulatedFunction implements TabulatedFunction{
     public double apply(double x) {
         int index = indexOfX(x);
         if (index != -1) return getY(index);
-        else throw new UnsupportedOperationException();
+        else throw new UnsupportedOperationException("Cannot interpolate strict function");
     }
 }
