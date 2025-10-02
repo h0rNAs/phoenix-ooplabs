@@ -1,11 +1,12 @@
 package ru.ssau.tk.phoenix.ooplabs.functions;
 import ru.ssau.tk.phoenix.ooplabs.exceptions.InterpolationException;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements Insertable, Removable {
+public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements Insertable, Removable, Serializable {
     private double[] xValues;
     private double[] yValues;
     private int count;
