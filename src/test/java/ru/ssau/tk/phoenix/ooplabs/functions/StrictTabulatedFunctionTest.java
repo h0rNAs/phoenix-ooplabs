@@ -28,4 +28,18 @@ class StrictTabulatedFunctionTest {
         assertThrows(UnsupportedOperationException.class, () -> strict.apply(3));
         assertThrows(UnsupportedOperationException.class, () -> strict.apply(1.5));
     }
+
+    @Test
+    void strictToUnmodifiable(){
+        double[] xValues = new double[]{0, 1, 2};
+        double[] yValues = new double[]{5, 4, 2};
+        TabulatedFunction func = new LinkedListTabulatedFunction(xValues, yValues);
+        TabulatedFunction strict = new StrictTabulatedFunction(func);
+        TabulatedFunction strictUnmod = new UnmodifiableTabulatedFunction(strict);
+
+        assertEquals(4, strictUnmod.apply(1));
+        assertThrows(UnsupportedOperationException.class, () -> strictUnmod.apply(1.5));
+        assertThrows(UnsupportedOperationException.class, () -> strictUnmod.apply(-12));
+        assertThrows(UnsupportedOperationException.class, () -> strictUnmod.setY(1, 234));
+    }
 }

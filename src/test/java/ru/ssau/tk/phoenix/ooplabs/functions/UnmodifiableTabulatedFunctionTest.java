@@ -140,4 +140,18 @@ public class UnmodifiableTabulatedFunctionTest {
                 unmodifiable.setY(0, 10.0)
         );
     }
+
+    @Test
+    void unmodifiableToStrict(){
+        double[] xValues = new double[]{0, 1, 2};
+        double[] yValues = new double[]{5, 4, 2};
+        TabulatedFunction func = new LinkedListTabulatedFunction(xValues, yValues);
+        TabulatedFunction unmod = new UnmodifiableTabulatedFunction(func);
+        TabulatedFunction unmodStrict = new StrictTabulatedFunction(unmod);
+
+        assertEquals(4, unmodStrict.apply(1));
+        assertThrows(UnsupportedOperationException.class, () -> unmodStrict.apply(1.5));
+        assertThrows(UnsupportedOperationException.class, () -> unmodStrict.apply(-12));
+        assertThrows(UnsupportedOperationException.class, () -> unmodStrict.setY(1, 234));
+    }
 }
