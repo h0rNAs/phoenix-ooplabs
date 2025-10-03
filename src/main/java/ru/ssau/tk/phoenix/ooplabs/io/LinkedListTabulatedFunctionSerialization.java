@@ -26,8 +26,8 @@ public class LinkedListTabulatedFunctionSerialization {
             e.printStackTrace();
         }
 
-        try (FileInputStream outputStream = new FileInputStream("output/serialized linked list functions.bin");
-             BufferedInputStream bufferedStream = new BufferedInputStream(outputStream))
+        try (FileInputStream inputStream = new FileInputStream("output/serialized linked list functions.bin");
+             BufferedInputStream bufferedStream = new BufferedInputStream(inputStream))
         {
             TabulatedFunction func = FunctionsIO.deserialize(bufferedStream);
             System.out.println(func.toString());
