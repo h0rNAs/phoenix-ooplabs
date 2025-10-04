@@ -1,5 +1,8 @@
 package ru.ssau.tk.phoenix.ooplabs.io;
 
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.security.AnyTypePermission;
+import ru.ssau.tk.phoenix.ooplabs.functions.ArrayTabulatedFunction;
 import ru.ssau.tk.phoenix.ooplabs.functions.Point;
 import ru.ssau.tk.phoenix.ooplabs.functions.TabulatedFunction;
 import ru.ssau.tk.phoenix.ooplabs.functions.factory.TabulatedFunctionFactory;
@@ -75,7 +78,6 @@ public final class FunctionsIO {
 
         return factory.create(xValues, yValues);
     }
-
     public static void serialize(BufferedOutputStream stream, TabulatedFunction function) throws IOException{
         ObjectOutputStream objectOutputStream = new ObjectOutputStream(stream);
         objectOutputStream.writeObject(function);
@@ -85,5 +87,23 @@ public final class FunctionsIO {
     public static TabulatedFunction deserialize(BufferedInputStream stream) throws IOException, ClassNotFoundException {
         ObjectInputStream objectStream = new ObjectInputStream(stream);
         return (TabulatedFunction)objectStream.readObject();
+    }
+    public static void serializeXml(BufferedWriter writer, ArrayTabulatedFunction function) throws IOException {
+        XStream xstream = new XStream();
+        xstream.addPermission(AnyTypePermission.ANY); // Настройка безопасности для XStream
+        String xml = xstream.toXML(function); // Сериализуем функцию в XML строку
+        writer.write(xml);
+        writer.flush();
+    }
+    public static ArrayTabulatedFunction deserializeXml(BufferedReader reader) throws IOException {
+        XStream xstream = new XStream();
+        xstream.addPermission(AnyTypePermission.ANY);
+        StringBuilder xmlBuilder = new StringBuilder();
+        String line;
+        while ((line = reader.readLine()) != null) {
+            xmlBuilder.append(line);
+        }
+        String xml = xmlBuilder.toString();
+        return (ArrayTabulatedFunction) xstream.fromXML(xml);
     }
 }
