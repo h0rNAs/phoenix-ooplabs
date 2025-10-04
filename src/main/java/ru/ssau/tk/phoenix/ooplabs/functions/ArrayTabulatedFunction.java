@@ -1,4 +1,7 @@
 package ru.ssau.tk.phoenix.ooplabs.functions;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import ru.ssau.tk.phoenix.ooplabs.exceptions.InterpolationException;
 
 import java.io.Serializable;
@@ -7,11 +10,16 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements Insertable, Removable, Serializable {
+    @JsonFormat(shape = JsonFormat.Shape.ARRAY)
     private double[] xValues;
+    @JsonFormat(shape = JsonFormat.Shape.ARRAY)
     private double[] yValues;
     private int count;
 
-    public ArrayTabulatedFunction(double[] xValues, double[] yValues) {
+    @JsonCreator
+    public ArrayTabulatedFunction(@JsonProperty(value = "xValues") double[] xValues,
+                                  @JsonProperty(value = "yValues") double[] yValues)
+    {
         checkLengthIsTheSame(xValues, yValues);  // ← НОВОЕ
         if (xValues.length < 2) {
             throw new IllegalArgumentException("At least 2 point is required");

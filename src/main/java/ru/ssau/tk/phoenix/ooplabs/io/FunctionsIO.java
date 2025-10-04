@@ -1,5 +1,7 @@
 package ru.ssau.tk.phoenix.ooplabs.io;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.security.AnyTypePermission;
 import ru.ssau.tk.phoenix.ooplabs.functions.ArrayTabulatedFunction;
@@ -105,5 +107,16 @@ public final class FunctionsIO {
         }
         String xml = xmlBuilder.toString();
         return (ArrayTabulatedFunction) xstream.fromXML(xml);
+    }
+
+    public static void serializeJson(BufferedWriter writer, ArrayTabulatedFunction function) throws IOException {
+        ObjectMapper json = new ObjectMapper();
+        writer.write(json.writeValueAsString(function));
+    }
+
+    public static ArrayTabulatedFunction deserializeJson(BufferedReader reader) throws IOException {
+        ObjectMapper json = new ObjectMapper();
+        var object = json.readerFor(ArrayTabulatedFunction.class);
+        return object.readValue(reader);
     }
 }
