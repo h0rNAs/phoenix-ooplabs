@@ -14,10 +14,10 @@ public class MultiplyingTaskExecutor {
         List<Thread> threads = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             MultiplyingTask task = new MultiplyingTask(function);
-            Thread thread = new Thread(task, "Thread -    " + (i + 1));
+            Thread thread = new Thread(task, "- " + (i + 1));
             threads.add(thread);
         }
-        System.out.println("\nStarted: " + threads.size() + " threads");
+        System.out.println("\nStarted: " + threads.size() + " threads.");
         for (Thread thread : threads) {
             thread.start();
         }
