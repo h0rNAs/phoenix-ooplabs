@@ -16,8 +16,8 @@ class MathFunctionTest {
     }
     @Test
     void testAndThenWithConstantFunctions() {
-        MathFunction zero = new ZeroFunction(0.0);
-        MathFunction unit = new UnitFunction(1.0);
+        MathFunction zero = new ZeroFunction();
+        MathFunction unit = new UnitFunction();
         MathFunction constant = new ConstantFunction(5.0);
         MathFunction zeroThenUnit = zero.andThen(unit);
         assertEquals(zeroThenUnit.apply(10), 1.0, DELTA);
