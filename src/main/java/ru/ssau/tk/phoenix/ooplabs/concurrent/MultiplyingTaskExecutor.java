@@ -12,8 +12,9 @@ public class MultiplyingTaskExecutor {
         UnitFunction unitFunction = new UnitFunction();
         TabulatedFunction function = new LinkedListTabulatedFunction(unitFunction, 1, 1000, 1000);
         List<Thread> threads = new ArrayList<>();
+        Object lock = new Object();
         for (int i = 0; i < 10; i++) {
-            MultiplyingTask task = new MultiplyingTask(function);
+            MultiplyingTask task = new MultiplyingTask(function, lock);
             Thread thread = new Thread(task, "- " + (i + 1));
             threads.add(thread);
         }
@@ -26,6 +27,6 @@ public class MultiplyingTaskExecutor {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        System.out.println("\nResult: " + function.getY(10));
+        System.out.println("\nResult: " + function.toString());
     }
 }
