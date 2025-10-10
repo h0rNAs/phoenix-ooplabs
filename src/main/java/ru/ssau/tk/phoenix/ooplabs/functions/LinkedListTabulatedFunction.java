@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 public class LinkedListTabulatedFunction extends AbstractTabulatedFunction implements Insertable, Removable, Serializable {
+    private static long serialVersionUID;
     Node head;
     int count;
 
@@ -284,6 +285,7 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
 
 
     static class Node implements Serializable{
+        private static long serialVersionUID;
         public Node prev = this, next = this;
         public double x, y;
 

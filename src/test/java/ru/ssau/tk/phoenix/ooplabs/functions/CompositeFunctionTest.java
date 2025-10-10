@@ -38,6 +38,7 @@ class CompositeFunctionTest {
     @Test
     void apply_sqrToSK(){
         RKFunction rk = new RKFunction(0.0, 5.0, 0.5);
-        assertEquals(4, rk.apply(2));
+        CompositeFunction comp = new CompositeFunction(new SqrFunction(), rk);
+        assertEquals(13, comp.apply(2));
     }
 }

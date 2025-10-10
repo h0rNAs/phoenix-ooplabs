@@ -6,10 +6,12 @@ import ru.ssau.tk.phoenix.ooplabs.exceptions.InterpolationException;
 
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements Insertable, Removable, Serializable {
+    private static long serialVersionUID;
     @JsonFormat(shape = JsonFormat.Shape.ARRAY)
     private double[] xValues;
     @JsonFormat(shape = JsonFormat.Shape.ARRAY)
