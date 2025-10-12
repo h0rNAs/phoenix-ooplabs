@@ -1,5 +1,6 @@
 package ru.ssau.tk.phoenix.ooplabs.operations;
 
+import ru.ssau.tk.phoenix.ooplabs.concurrent.SynchronizedTabulatedFunction;
 import ru.ssau.tk.phoenix.ooplabs.functions.Point;
 import ru.ssau.tk.phoenix.ooplabs.functions.TabulatedFunction;
 import ru.ssau.tk.phoenix.ooplabs.functions.factory.ArrayTabulatedFunctionFactory;
@@ -40,5 +41,14 @@ public class TabulatedDifferentialOperator implements DifferentialOperator<Tabul
 
     public void setFactory(TabulatedFunctionFactory factory) {
         this.factory = factory;
+    }
+    public TabulatedFunction deriveSynchronously(TabulatedFunction function){
+        SynchronizedTabulatedFunction syncFunction;
+        if (function instanceof SynchronizedTabulatedFunction) {
+            syncFunction = (SynchronizedTabulatedFunction) function;
+        } else {
+            syncFunction = new SynchronizedTabulatedFunction(function, new Object());
+        }
+        return syncFunction.doSynchronously((SynchronizedTabulatedFunction f) -> this.derive(f));
     }
 }
