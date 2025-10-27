@@ -1,6 +1,8 @@
 package ru.ssau.tk.phoenix.ooplabs.functions;
 
-import ru.ssau.tk.phoenix.ooplabs.exceptions.InterpolationException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import ru.ssau.tk.phoenix.ooplabs.util.GlobalLoggerInitializer;
 
 import java.io.Serializable;
 import java.util.Iterator;
@@ -10,6 +12,8 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
     private static long serialVersionUID;
     Node head;
     int count;
+
+    private static final Logger logger = LogManager.getLogger(LinkedListTabulatedFunction.class);
 
     public LinkedListTabulatedFunction(double[] xValues, double[] yValues) {
         checkLengthIsTheSame(xValues, yValues);
@@ -28,6 +32,7 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
     }
 
     public LinkedListTabulatedFunction(MathFunction source, double xFrom, double xTo, int count) {
+        logger.info("Инициализация точек");
         if (count < 2) {
             throw new IllegalArgumentException("At least 2 point is required");
         }
@@ -48,15 +53,20 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
                 addNode(x, source.apply(x));
             }
         }
+        logger.info("Инициализация точек успешно завершена");
     }
 
     @Override
     public double apply(double x) {
+        logger.info(String.format("Вызов метода apply для x = %.2f", x));
         if (x < leftBound()) {
+            logger.debug("Применена экстраполяция слева");
             return extrapolateLeft(x);
         } else if (x > rightBound()) {
+            logger.debug("Применена экстраполяция справа");
             return extrapolateRight(x);
         } else {
+            logger.debug("Применена интерполяция");
             int index = indexOfX(x);
             if (index != -1) {
                 return getY(index);
@@ -217,6 +227,7 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
     }
     @Override
     public void insert(double x, double y){
+        logger.info(String.format("Добавление точки (%.3f,%.3f)", x, y));
         if (count == 0) {
             addNode(x,y);
             return;
@@ -224,6 +235,7 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
         int ifexistIndex = indexOfX(x);
         if (ifexistIndex != -1) {
             setY(ifexistIndex, y);
+            logger.info(String.format("Точка (%.3f,%.3f) заменила уже существующую", x, y));
             return;
         }
         Node newNode = new Node(x, y); // Вставка в начало.
@@ -234,6 +246,7 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
             head.prev = newNode;
             head = newNode;
             count++;
+            logger.info(String.format("Точка (%.3f,%.3f) добавленна в самое начало", x, y));
             return;
         }
         Node current = head;
@@ -248,10 +261,13 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
         current.next.prev = newNode;
         current.next = newNode;
         count++;
+        logger.info(String.format("Точка (%.3f,%.3f) дабавленна", x, y));
     }
     @Override
     public void remove(int index) {
+        logger.info(String.format("Удаление точки №%d", index));
         if (index < 0 || index >= count) {
+            logger.error(String.format("Точка №%d не найдена", index));
             throw new IllegalArgumentException("Invalid index");
         }
 
@@ -259,6 +275,8 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
         if (currentNode == head) head = currentNode.next;
         currentNode.prev.next = currentNode.next;
         currentNode.next.prev = currentNode.prev;
+        count--;
+        logger.info(String.format("Удаление точки №%d успешно завершено", index));
     }
 
     @Override
@@ -274,9 +292,13 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
 
             @Override
             public Point next() {
-                if (!hasNext()) throw new NoSuchElementException();
+                if (!hasNext()) {
+                    logger.debug("Итератор дошел до конца");
+                    throw new NoSuchElementException();
+                }
                 Point point = new Point(currentNode.x, currentNode.y);
                 currentNode = currentNode.next;
+                logger.info(String.format("Итератор вернул точку №%d", currentIndex));
                 currentIndex++;
                 return point;
             }

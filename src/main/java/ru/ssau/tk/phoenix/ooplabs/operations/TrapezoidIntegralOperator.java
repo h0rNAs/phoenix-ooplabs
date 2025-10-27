@@ -21,23 +21,4 @@ public class TrapezoidIntegralOperator implements IntegralOperator{
         }
         return sum;
     }
-
-    /*private double integrate(int startIndex, int endIndex){
-        double h = (func.getX(endIndex) - func.getX(startIndex)) / (endIndex - startIndex);
-        double sum = 0;
-        for (int i = startIndex; i < endIndex; i++) {
-            sum += (func.getY(i) + func.getY(i+1)) * h / 2;
-        }
-        return sum;
-    }*/
-
-    /*private double recursionCalc(TabulatedFunction func, int startIndex, int endIndex) {
-        int n = endIndex - startIndex;
-        if (n == 1) {
-
-        }
-
-        int middleIndex = (startIndex + endIndex) / 2;
-        return recursionCalc(func, startIndex, middleIndex) + recursionCalc(func, middleIndex, endIndex);
-    }*/
 }

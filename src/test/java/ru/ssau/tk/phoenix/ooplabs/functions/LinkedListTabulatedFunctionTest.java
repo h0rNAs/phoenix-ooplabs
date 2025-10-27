@@ -203,6 +203,19 @@ class LinkedListTabulatedFunctionTest {
     }
 
     @Test
+    void remove(){
+        double[] xValues = {1.0, 3.0, 5.0};
+        double[] yValues = {10.0, 30.0, 50.0};
+        LinkedListTabulatedFunction function = new LinkedListTabulatedFunction(xValues, yValues);
+        function.remove(2);
+        assertEquals(2, function.getCount());
+        assertThrows(IllegalArgumentException.class, () -> function.remove(2));
+        function.remove(0);
+        assertEquals(30, function.getY(0));
+        assertEquals(1, function.getCount());
+    }
+
+    @Test
     void iterator() {
         double[] xValues = new double[]{0, 1, 2, 4, 7, 12};
         double[] yValues = new double[]{5, 4, 2, 5, 5.5, 234};

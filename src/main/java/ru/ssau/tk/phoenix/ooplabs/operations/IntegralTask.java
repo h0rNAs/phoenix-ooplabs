@@ -4,8 +4,8 @@ import java.util.concurrent.RecursiveTask;
 
 public class IntegralTask extends RecursiveTask<Double> {
     private final int THRESHOLD = 2;
-    int startIndex, endIndex;
-    IntegralOperator operator;
+    private int startIndex, endIndex;
+    private IntegralOperator operator;
 
     public IntegralTask(int startIndex, int endIndex, IntegralOperator operator) {
         this.startIndex = startIndex;
