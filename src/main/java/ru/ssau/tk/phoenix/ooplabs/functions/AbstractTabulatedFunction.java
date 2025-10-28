@@ -1,9 +1,12 @@
 package ru.ssau.tk.phoenix.ooplabs.functions;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import ru.ssau.tk.phoenix.ooplabs.exceptions.ArrayIsNotSortedException;
 import ru.ssau.tk.phoenix.ooplabs.exceptions.DifferentLenghtOfArraysException;
 
 public abstract class AbstractTabulatedFunction implements TabulatedFunction {
+    protected Logger logger = LogManager.getLogger(super.getClass());
 
     protected abstract int floorIndexOfX(double x);
     protected abstract double extrapolateLeft(double x);
@@ -16,11 +19,15 @@ public abstract class AbstractTabulatedFunction implements TabulatedFunction {
 
     @Override
     public double apply(double x) {
+        logger.info(String.format("Вызов метода apply для x = %.2f", x));
         if (x < leftBound()) {
+            logger.debug("Применена экстраполяция слева");
             return extrapolateLeft(x);
         } else if (x > rightBound()) {
+            logger.debug("Применена экстраполяция справа");
             return extrapolateRight(x);
         } else {
+            logger.debug("Применена интерполяция");
             int index = indexOfX(x);
             if (index != -1) {
                 return getY(index);

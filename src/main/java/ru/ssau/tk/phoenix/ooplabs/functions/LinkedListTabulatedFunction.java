@@ -2,7 +2,6 @@ package ru.ssau.tk.phoenix.ooplabs.functions;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import ru.ssau.tk.phoenix.ooplabs.util.GlobalLoggerInitializer;
 
 import java.io.Serializable;
 import java.util.Iterator;
@@ -13,11 +12,11 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
     Node head;
     int count;
 
-    private static final Logger logger = LogManager.getLogger(LinkedListTabulatedFunction.class);
-
     public LinkedListTabulatedFunction(double[] xValues, double[] yValues) {
+        logger.info("Инициализация точками...");
         checkLengthIsTheSame(xValues, yValues);
         if (xValues.length < 2) {
+            logger.error("Длина массива с точками меньше 2");
             throw new IllegalArgumentException("At least 2 point is required");
         }
         checkSorted(xValues);
@@ -26,14 +25,17 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
         }
         for (int i = 1; i < count; i++) {
             if (xValues[i] <= xValues[i - 1]) {
+                logger.error("Значения по X не отсортированны");
                 throw new IllegalArgumentException("Values must be ordered");
             }
         }
+        logger.info("Функция успешно инициализирована");
     }
 
     public LinkedListTabulatedFunction(MathFunction source, double xFrom, double xTo, int count) {
-        logger.info("Инициализация точек");
+        logger.info("Инициализация функцией...");
         if (count < 2) {
+            logger.error("Колличество точек меньше 2");
             throw new IllegalArgumentException("At least 2 point is required");
         }
         if (xFrom > xTo) {
@@ -53,7 +55,7 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
                 addNode(x, source.apply(x));
             }
         }
-        logger.info("Инициализация точек успешно завершена");
+        logger.info("Функция успешно инициализирована");
     }
 
     @Override

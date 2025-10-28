@@ -2,6 +2,8 @@ package ru.ssau.tk.phoenix.ooplabs.functions;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import ru.ssau.tk.phoenix.ooplabs.exceptions.InterpolationException;
 
 import java.io.Serializable;
@@ -18,22 +20,29 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements
     private double[] yValues;
     private int count;
 
+    private Logger logger = LogManager.getLogger(ArrayTabulatedFunction.class);
+
     @JsonCreator
     public ArrayTabulatedFunction(@JsonProperty(value = "xValues") double[] xValues,
                                   @JsonProperty(value = "yValues") double[] yValues)
     {
+        logger.info("Инициализация точками...");
         checkLengthIsTheSame(xValues, yValues);  // ← НОВОЕ
         if (xValues.length < 2) {
+            logger.error("Длина массива с точками меньше 2");
             throw new IllegalArgumentException("At least 2 point is required");
         }
         checkSorted(xValues);
         this.count = xValues.length;
         this.xValues = Arrays.copyOf(xValues, count);
         this.yValues = Arrays.copyOf(yValues, count);
+        logger.info("Функция успешно инициализирована");
     }
 
     public ArrayTabulatedFunction(MathFunction source, double xFrom, double xTo, int count) {
+        logger.info("Инициализация функцией...");
         if (count < 2) {
+            logger.error("Колличество точек меньше 2");
             throw new IllegalArgumentException("At least 2 point is required");
         }
         if (xFrom > xTo) {
@@ -56,6 +65,7 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements
                 yValues[i] = source.apply(x);
             }
         }
+        logger.info("Функция успешно инициализирована");
     }
 
     @Override
@@ -154,8 +164,12 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements
 
     @Override
     public void insert(double x, double y) {
+        logger.info(String.format("Добавление точки (%.3f,%.3f)", x, y));
         int index = indexOfX(x);
-        if (index != -1) setY(index, y);
+        if (index != -1) {
+            setY(index, y);
+            logger.info(String.format("Точка (%.3f,%.3f) заменила уже существующую", x, y));
+        }
         else {
             if (x < xValues[0]) index = 1;
             else index = floorIndexOfX(x) + 1;
@@ -172,15 +186,20 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements
 
             xValues = newXArray;
             yValues = newYArray;
+
+            logger.info(String.format("Точка (%.3f,%.3f) дабавленна", x, y));
         }
     }
 
     @Override
     public void remove(int index) {
+        logger.info(String.format("Удаление точки №%d", index));
         if (index < 0 || index >= count) {
+            logger.error(String.format("Точка №%d не найдена", index));
             throw new IllegalArgumentException("Invalid index");
         }
         if (count == 1) {
+            logger.error("Нельзя удалить последнюю точку");
             throw new IllegalStateException("Cannot remove the last point from the function");
         }
         double[] newXArray = new double[count - 1];
@@ -192,6 +211,7 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements
         xValues = newXArray;
         yValues = newYArray;
         count--;
+        logger.info(String.format("Удаление точки №%d успешно завершено", index));
     }
 
     @Override
@@ -207,9 +227,11 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements
             @Override
             public Point next() {
                 if (!hasNext()) {
+                    logger.debug("Итератор дошел до конца");
                     throw new NoSuchElementException("No more elements in the tabulated function");
                 }
                 Point point = new Point(xValues[i], yValues[i]);
+                logger.info(String.format("Итератор вернул точку №%d", i));
                 i++;
                 return point;
             }
