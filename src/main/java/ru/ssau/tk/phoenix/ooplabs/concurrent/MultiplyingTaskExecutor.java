@@ -10,7 +10,7 @@ import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 public class MultiplyingTaskExecutor {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         UnitFunction unitFunction = new UnitFunction();
         TabulatedFunction function = new LinkedListTabulatedFunction(unitFunction, 1, 1000, 1000);
         List<Thread> threads = new ArrayList<>();
@@ -25,12 +25,8 @@ public class MultiplyingTaskExecutor {
         for (Thread thread : threads) {
             thread.start();
         }
-        while (!tasks.isEmpty()) {
-            for (MultiplyingTask task : tasks) {
-                if (task.isCompleted()) {
-                    tasks.remove(task);
-                }
-            }
+        for (Thread thread : threads) {
+            thread.join();
         }
         System.out.println("\nResult: " + function.toString());
     }

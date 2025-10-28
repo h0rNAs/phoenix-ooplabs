@@ -5,7 +5,6 @@ import ru.ssau.tk.phoenix.ooplabs.functions.TabulatedFunction;
 public class MultiplyingTask implements Runnable{
     private final TabulatedFunction function;
     private Object lock;
-    private volatile boolean isCompleted = false;
 
     public MultiplyingTask(TabulatedFunction function, Object lock) {
         this.function = function;
@@ -19,13 +18,7 @@ public class MultiplyingTask implements Runnable{
                 double currentY = function.getY(i);
                 function.setY(i, currentY * 2);
             }
-            
         }
-        isCompleted = true;
         System.out.printf("\nStream " + Thread.currentThread().getName() + " ended successfully.");
     }
-    public boolean isCompleted() {
-        return isCompleted;
-    }
-
 }
