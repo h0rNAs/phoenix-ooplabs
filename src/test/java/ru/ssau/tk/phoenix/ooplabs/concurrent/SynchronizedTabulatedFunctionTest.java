@@ -9,13 +9,6 @@ import ru.ssau.tk.phoenix.ooplabs.functions.TabulatedFunction;
 import static org.junit.jupiter.api.Assertions.*;
 
 class SynchronizedTabulatedFunctionTest {
-    private Object lock;
-
-    @BeforeEach
-    void before(){
-        lock = new Object();
-    }
-
     @Test
     void setY(){
         double[] xValues = {1.0, 2.0, 3.0};
