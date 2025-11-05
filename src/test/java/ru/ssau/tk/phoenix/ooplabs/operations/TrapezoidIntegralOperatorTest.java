@@ -1,8 +1,8 @@
 package ru.ssau.tk.phoenix.ooplabs.operations;
 
 import org.junit.jupiter.api.Test;
+import ru.ssau.tk.phoenix.ooplabs.concurrent.IntegralTask;
 import ru.ssau.tk.phoenix.ooplabs.functions.ArrayTabulatedFunction;
-import ru.ssau.tk.phoenix.ooplabs.functions.ConstantFunction;
 import ru.ssau.tk.phoenix.ooplabs.functions.SqrFunction;
 import ru.ssau.tk.phoenix.ooplabs.functions.TabulatedFunction;
 

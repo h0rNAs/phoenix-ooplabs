@@ -1,6 +1,6 @@
-create table users
+create table IF NOT EXISTS users
 (
-    id       bigint default nextval('user_id_seq'::regclass) not null
+    id       bigserial
         constraint user_pk
             primary key,
     username varchar                                         not null,

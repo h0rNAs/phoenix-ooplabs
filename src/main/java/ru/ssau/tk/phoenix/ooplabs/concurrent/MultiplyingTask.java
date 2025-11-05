@@ -4,17 +4,15 @@ import ru.ssau.tk.phoenix.ooplabs.functions.TabulatedFunction;
 
 public class MultiplyingTask implements Runnable{
     private final TabulatedFunction function;
-    private Object lock;
 
-    public MultiplyingTask(TabulatedFunction function, Object lock) {
+    public MultiplyingTask(TabulatedFunction function) {
         this.function = function;
-        this.lock = lock;
     }
     
     @Override
     public void run() {
         for (int i = 0; i < function.getCount(); i++) {
-            synchronized (lock) {
+            synchronized (function) {
                 double currentY = function.getY(i);
                 function.setY(i, currentY * 2);
             }

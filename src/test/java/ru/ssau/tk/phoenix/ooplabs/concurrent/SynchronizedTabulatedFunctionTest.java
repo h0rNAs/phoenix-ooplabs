@@ -21,18 +21,18 @@ class SynchronizedTabulatedFunctionTest {
         double[] xValues = {1.0, 2.0, 3.0};
         double[] yValues = {10.0, 20.0, 30.0};
         TabulatedFunction func = new LinkedListTabulatedFunction(xValues, yValues);
-        TabulatedFunction syncFunc = new SynchronizedTabulatedFunction(func, lock);
+        TabulatedFunction syncFunc = new SynchronizedTabulatedFunction(func);
 
         syncFunc.setY(2, 50);
         assertEquals(50, syncFunc.apply(3));
     }
 
     @Test
-    void erator(){
+    void iterator(){
         double[] xValues = {1.0, 2.0, 3.0};
         double[] yValues = {10.0, 20.0, 30.0};
         TabulatedFunction func = new LinkedListTabulatedFunction(xValues, yValues);
-        TabulatedFunction syncFunc = new SynchronizedTabulatedFunction(func, lock);
+        TabulatedFunction syncFunc = new SynchronizedTabulatedFunction(func);
 
         var iterator = syncFunc.iterator();
         assertTrue(iterator.hasNext());
@@ -46,7 +46,7 @@ class SynchronizedTabulatedFunctionTest {
         double[] xValues = {1.0, 2.0, 3.0};
         double[] yValues = {10.0, 20.0, 30.0};
         TabulatedFunction func = new LinkedListTabulatedFunction(xValues, yValues);
-        TabulatedFunction syncFunc = new SynchronizedTabulatedFunction(func, lock);
+        TabulatedFunction syncFunc = new SynchronizedTabulatedFunction(func);
 
         assertEquals(syncFunc.getCount(), 3);
         assertEquals(syncFunc.getX(1), 2.0);

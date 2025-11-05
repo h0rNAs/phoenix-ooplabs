@@ -1,4 +1,6 @@
-package ru.ssau.tk.phoenix.ooplabs.operations;
+package ru.ssau.tk.phoenix.ooplabs.concurrent;
+
+import ru.ssau.tk.phoenix.ooplabs.operations.IntegralOperator;
 
 import java.util.concurrent.RecursiveTask;
 
