@@ -14,10 +14,9 @@ public class MultiplyingTaskExecutor {
         UnitFunction unitFunction = new UnitFunction();
         TabulatedFunction function = new LinkedListTabulatedFunction(unitFunction, 1, 1000, 1000);
         List<Thread> threads = new ArrayList<>();
-        Object lock = new Object();
         Set<MultiplyingTask> tasks = new CopyOnWriteArraySet<>();
         for (int i = 0; i < 10; i++) {
-            MultiplyingTask task = new MultiplyingTask(function, lock);
+            MultiplyingTask task = new MultiplyingTask(function);
             Thread thread = new Thread(task, "- " + (i + 1));
             threads.add(thread);
         }

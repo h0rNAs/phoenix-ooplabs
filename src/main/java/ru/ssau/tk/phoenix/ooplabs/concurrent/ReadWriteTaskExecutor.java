@@ -7,11 +7,9 @@ import ru.ssau.tk.phoenix.ooplabs.functions.TabulatedFunction;
 
 public class ReadWriteTaskExecutor {
     public static void main(String[] args) {
-        Object lock = new Object();
-
         TabulatedFunction func = new LinkedListTabulatedFunction(new ConstantFunction(-1), 1, 10000, 10000);
-        Thread read = new Thread(new ReadTask(func, lock));
-        Thread write = new Thread(new WriteTask(func, 0.5, lock));
+        Thread read = new Thread(new ReadTask(func));
+        Thread write = new Thread(new WriteTask(func, 0.5));
 
         write.start();
         read.start();

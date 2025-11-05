@@ -47,7 +47,7 @@ public class TabulatedDifferentialOperator implements DifferentialOperator<Tabul
         if (function instanceof SynchronizedTabulatedFunction) {
             syncFunction = (SynchronizedTabulatedFunction) function;
         } else {
-            syncFunction = new SynchronizedTabulatedFunction(function, new Object());
+            syncFunction = new SynchronizedTabulatedFunction(function);
         }
         return syncFunction.doSynchronously((SynchronizedTabulatedFunction f) -> this.derive(f));
     }

@@ -54,7 +54,7 @@ class TabulatedDifferentialOperatorTest {
         double[] xValues = {0, 1, 2};
         double[] yValues = {0, 1, 4};
         ArrayTabulatedFunction innerFunction = new ArrayTabulatedFunction(xValues, yValues);
-        SynchronizedTabulatedFunction syncFunction = new SynchronizedTabulatedFunction(innerFunction, new Object());
+        SynchronizedTabulatedFunction syncFunction = new SynchronizedTabulatedFunction(innerFunction);
         TabulatedFunction derivative = operator.deriveSynchronously(syncFunction);
         assertEquals(derivative.getCount(), 3);
         assertEquals(derivative.getX(0), 0.0, 1e-9);
