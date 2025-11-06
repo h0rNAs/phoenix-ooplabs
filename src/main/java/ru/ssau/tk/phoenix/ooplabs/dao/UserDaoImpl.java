@@ -11,10 +11,10 @@ public class UserDaoImpl implements UserDao{
     private final Logger logger = LogManager.getLogger(UserService.class);
     private final Connection conn;
 
+
     public UserDaoImpl(Connection connection) {
         conn = connection;
     }
-
 
     @Override
     public Optional<User> findById(Long id) {

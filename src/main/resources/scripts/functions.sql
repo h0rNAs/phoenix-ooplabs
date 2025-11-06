@@ -1,12 +1,18 @@
-create table functions
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'function_type') THEN
+        CREATE TYPE function_type AS ENUM('SIMPLE', 'TABULATED', 'COMPOSITE');
+    END IF;
+END$$;
+
+create table IF NOT EXISTS functions
 (
-    id         bigint default nextval('function_id_seq'::regclass) not null
+    id         bigserial not null
         constraint function_pk
             primary key,
     user_id    bigint                                              not null,
     type       function_type                                       not null,
-    name       varchar                                             not null,
-    defenition json
+    definition json
 );
 
 alter table functions

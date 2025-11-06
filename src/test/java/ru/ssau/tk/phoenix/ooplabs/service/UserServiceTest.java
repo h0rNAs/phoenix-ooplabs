@@ -4,22 +4,13 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import ru.ssau.tk.phoenix.ooplabs.DataBaseManager;
 import ru.ssau.tk.phoenix.ooplabs.dao.User;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class UserServiceTest {
-    private static Connection conn;
-    private static UserService userService;
+    private static UserService userService = DataBaseManager.getUserService();
     private static final Logger logger = LogManager.getLogger(UserServiceTest.class);
 
     @Test
@@ -57,8 +48,8 @@ class UserServiceTest {
         assertEquals(olgaaa.getId() + 1L, userService.findByUsername("jorjo").get().getId());
     }
 
-    @BeforeAll
-    public static void InitDB(){
+    /*@BeforeAll
+    public static void initDB(){
         connectToDB();
 
         try{
@@ -91,5 +82,5 @@ class UserServiceTest {
             logger.error("Ошибка подключения к БД: " + e.getMessage());
             throw new RuntimeException(e);
         }
-    }
+    }*/
 }
