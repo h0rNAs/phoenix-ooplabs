@@ -2,13 +2,12 @@ package ru.ssau.tk.phoenix.ooplabs.dao;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import ru.ssau.tk.phoenix.ooplabs.service.UserService;
 
 import java.sql.*;
 import java.util.Optional;
 
 public class UserDaoImpl implements UserDao{
-    private final Logger logger = LogManager.getLogger(UserService.class);
+    private final Logger logger = LogManager.getLogger(UserDaoImpl.class);
     private final Connection conn;
 
 
@@ -17,7 +16,7 @@ public class UserDaoImpl implements UserDao{
     }
 
     @Override
-    public Optional<User> findById(Long id) {
+    public Optional<User> findById(Long id) throws SQLException {
         String sql = "SELECT id, username, password FROM users WHERE id = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)){
             ps.setLong(1, id);
@@ -33,12 +32,13 @@ public class UserDaoImpl implements UserDao{
             }
         } catch (SQLException e) {
             logger.error(e.getMessage());
+            throw e;
         }
         return Optional.empty();
     }
 
     @Override
-    public Optional<User> findByUsername(String username) {
+    public Optional<User> findByUsername(String username) throws SQLException {
         String sql = "SELECT id, username, password FROM users WHERE username = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)){
             ps.setString(1, username);
@@ -54,12 +54,13 @@ public class UserDaoImpl implements UserDao{
             }
         } catch (SQLException e) {
             logger.error(e.getMessage());
+            throw e;
         }
         return Optional.empty();
     }
 
     @Override
-    public User save(User user) {
+    public User save(User user) throws SQLException {
         String sql = "INSERT INTO users (username, password) VALUES (?, ?) RETURNING id";
         Long id = user.getId();
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -72,13 +73,13 @@ public class UserDaoImpl implements UserDao{
             }
         } catch (SQLException e) {
             logger.error(e.getMessage());
-            throw new RuntimeException(e);
+            throw e;
         }
         return new User(id, user);
     }
 
     @Override
-    public void delete(Long id) {
+    public void delete(Long id) throws SQLException {
         String sql = "DELETE FROM users WHERE id = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setLong(1, id);
@@ -86,7 +87,7 @@ public class UserDaoImpl implements UserDao{
             logger.info("Пользователь id = " + id + " успешно удален");
         } catch (SQLException e) {
             logger.error(e.getMessage());
-            throw new RuntimeException(e);
+            throw e;
         }
     }
 }

@@ -1,3 +1,4 @@
+/*
 package ru.ssau.tk.phoenix.ooplabs.service;
 
 import org.apache.logging.log4j.LogManager;
@@ -48,7 +49,8 @@ class UserServiceTest {
         assertEquals(olgaaa.getId() + 1L, userService.findByUsername("jorjo").get().getId());
     }
 
-    /*@BeforeAll
+    */
+/*@BeforeAll
     public static void initDB(){
         connectToDB();
 
@@ -82,5 +84,6 @@ class UserServiceTest {
             logger.error("Ошибка подключения к БД: " + e.getMessage());
             throw new RuntimeException(e);
         }
-    }*/
-}
+    }*//*
+
+}*/

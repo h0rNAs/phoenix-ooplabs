@@ -1,3 +1,4 @@
+/*
 package ru.ssau.tk.phoenix.ooplabs.service;
 
 import ru.ssau.tk.phoenix.ooplabs.dao.UserDaoImpl;
@@ -39,3 +40,4 @@ public class UserService {
         userDao.delete(id);
     }
 }
+*/

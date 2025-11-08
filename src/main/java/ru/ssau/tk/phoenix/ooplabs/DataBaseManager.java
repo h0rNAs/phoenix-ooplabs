@@ -2,8 +2,8 @@ package ru.ssau.tk.phoenix.ooplabs;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import ru.ssau.tk.phoenix.ooplabs.service.FunctionService;
-import ru.ssau.tk.phoenix.ooplabs.service.UserService;
+import ru.ssau.tk.phoenix.ooplabs.dao.FunctionDaoImpl;
+import ru.ssau.tk.phoenix.ooplabs.dao.UserDaoImpl;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -15,8 +15,12 @@ import java.sql.Statement;
 
 public class DataBaseManager {
     private static Connection conn;
-    private static UserService userService;
-    private static FunctionService functionService;
+    /*private static UserService userService;
+    private static FunctionService functionService;*/
+    private static UserDaoImpl userDao;
+    private static FunctionDaoImpl functionDao;
+
+
     private final static Logger logger = LogManager.getLogger();
 
 
@@ -24,8 +28,10 @@ public class DataBaseManager {
         connectToDB();
         initDB();
 
-        userService = new UserService(conn);
-        functionService = new FunctionService(conn);
+        //userService = new UserService(conn);
+        //functionService = new FunctionService(conn);
+        userDao = new UserDaoImpl(conn);
+        functionDao = new FunctionDaoImpl(conn);
 
         logger.info("БД инициализирована");
     }
@@ -62,11 +68,19 @@ public class DataBaseManager {
         }
     }
 
-    public static UserService getUserService() {
+    /*public static UserService getUserService() {
         return userService;
     }
 
     public static FunctionService getFunctionService() {
         return functionService;
+    }*/
+
+    public static UserDaoImpl getUserDao() {
+        return userDao;
+    }
+
+    public static FunctionDaoImpl getFunctionDao() {
+        return functionDao;
     }
 }
