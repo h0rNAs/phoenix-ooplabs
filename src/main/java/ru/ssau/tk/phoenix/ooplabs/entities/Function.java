@@ -6,17 +6,19 @@ import jakarta.persistence.*;
 @Table(name = "functions")
 public class Function {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
-
+    @Column(name = "function_type")
     private String type;
     private String name;
+
     private String definition;
 
-    public Function(Long id, User user, String type, String name, String defenition) {
+    public Function(User user, String type, String name, String defenition) {
         this.id = id;
         this.user = user;
         this.type = type;
