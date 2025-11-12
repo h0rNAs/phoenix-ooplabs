@@ -19,7 +19,6 @@ public class Function {
     private String definition;
 
     public Function(User user, String type, String name, String defenition) {
-        this.id = id;
         this.user = user;
         this.type = type;
         this.name = name;
@@ -29,8 +28,6 @@ public class Function {
     public Function() {
 
     }
-
-    @JoinColumn(name = "user_id", nullable = false)
 
     public Long getId() {
         return id;
