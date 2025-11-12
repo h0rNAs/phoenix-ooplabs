@@ -1,10 +1,10 @@
 query,manual_duration,framework_duration
-save (User),1351,4539
-findById (User),481,2651
-findByUsername (User),405,2362
-delete (User),977,4687
-save (Function),1357,3869
-findById (Function),538,1771
-findByUserId (Function),4449,13039
-update (Function),1317,5412
-delete (Function),948,4566
+save (User),1350,2767
+findById (User),489,1688
+findByUsername (User),412,1376
+delete (User),917,2103
+save (Function),1077,1821
+findById (Function),674,855
+findByUserId (Function),4334,5737
+update (Function),1245,2071
+delete (Function),843,1480

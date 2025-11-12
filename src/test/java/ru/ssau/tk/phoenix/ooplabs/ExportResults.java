@@ -191,12 +191,4 @@ public class ExportResults {
         String sql = "SELECT EXISTS(SELECT 1 FROM " + tableName + " WHERE query = ?)";
         return jdbc.queryForObject(sql, Boolean.class, query);
     }
-
-    private List<String> generateUniqueNames(String base, int count){
-        List<String> names = new ArrayList<>();
-        for (int i = 0; i < count; i++) {
-            names.add(base + (i+1));
-        }
-        return names;
-    }
 }
