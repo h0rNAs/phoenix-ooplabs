@@ -29,12 +29,12 @@ public class DataBaseManager {
         logger.info("БД инициализирована");
     }
 
-    public static void dropTable(String name) throws SQLException {
-        String sql = "DROP TABLE IF EXISTS " + name;
+    public static void truncateTable(String name) throws SQLException {
+        String sql = "TRUNCATE TABLE " + name + " RESTART IDENTITY";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.executeUpdate();
         }
-        logger.info("Произведен дроп таблицы " + name + " из БД");
+        logger.info("Произведен сброс таблицы БД. name = " + name);
     }
 
     private static void initDB(){

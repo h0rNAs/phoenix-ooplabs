@@ -97,8 +97,8 @@ public class ExportResults {
             }
         });
 
-        DataBaseManager.dropTable("users");
-        //DataBaseManager.dropTable("functions");
+        DataBaseManager.truncateTable("users");
+        DataBaseManager.truncateTable("functions");
     }
 
     private void saveUsers() throws SQLException {
@@ -191,13 +191,5 @@ public class ExportResults {
             }
         }
         return false;
-    }
-
-    private List<String> generateUniqueNames(String base, int count){
-        List<String> names = new ArrayList<>();
-        for (int i = 0; i < count; i++) {
-            names.add(base + (i+1));
-        }
-        return names;
     }
 }
