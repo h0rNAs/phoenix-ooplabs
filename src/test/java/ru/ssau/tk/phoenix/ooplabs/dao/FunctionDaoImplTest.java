@@ -1,5 +1,6 @@
 package ru.ssau.tk.phoenix.ooplabs.dao;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 import ru.ssau.tk.phoenix.ooplabs.DataBaseManager;
 
@@ -10,42 +11,72 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 
 class FunctionDaoImplTest {
-    private FunctionDaoImpl functionDao = DataBaseManager.getFunctionDao();
+    private static Function FUNC_SIMPLE_1 = new Function(1L, Function.FunctionType.SIMPLE, "{}");
+    private static Function FUNC_SIMPLE_3 = new Function(3L, Function.FunctionType.SIMPLE, "{}");
+    private static Function FUNC_COMPOSITE_2 = new Function(2L, Function.FunctionType.SIMPLE, "{}");
+    private static Function FUNC_TABULATED_1 = new Function(1L, Function.FunctionType.COMPOSITE, "{}");
+
+    private static Function func_simple_2;
+
+    private static final FunctionDaoImpl functionDao = DataBaseManager.getFunctionDao();
+
 
     @Test
-    void findById() throws SQLException {
-        Optional<Function> optionalFunction = functionDao.findById(2L);
-        assertTrue(optionalFunction.isPresent());
-        assertEquals(1L, optionalFunction.get().getUserId());
-        assertEquals("{}", optionalFunction.get().getDefinition());
+    void testAll() throws SQLException {
+        // Создание
+        FUNC_SIMPLE_1 = functionDao.save(FUNC_SIMPLE_1);
+        FUNC_SIMPLE_3 = functionDao.save(FUNC_SIMPLE_3);
+        FUNC_COMPOSITE_2 = functionDao.save(FUNC_COMPOSITE_2);
+        FUNC_TABULATED_1 = functionDao.save(FUNC_TABULATED_1);
 
-        assertEquals(Function.FunctionType.SIMPLE, functionDao.findById(4L).get().getType());
 
-        assertTrue(functionDao.findById(2343L).isEmpty());
-    }
+        // Проверка id
+        assertTrue(functionDao.findById(23423L).isEmpty());
+        assertEquals(FUNC_SIMPLE_1.getId(), FUNC_COMPOSITE_2.getId() - 2L);
+        assertEquals(FUNC_SIMPLE_1.getId(), FUNC_TABULATED_1.getId() - 3L);
 
-    @Test
-    void findByUserId() throws SQLException {
+        // Получение функций по userId
         List<Function> functions = functionDao.findByUserId(1L);
         assertEquals(2, functions.size());
-        assertEquals(Function.FunctionType.COMPOSITE, functions.get(1).getType());
+        functions = functionDao.findByUserId(43L);
+        assertTrue(functions.isEmpty());
 
-        assertTrue(functionDao.findByUserId(324L).isEmpty());
-    }
+        // Проверка получения данных
+        assertEquals(FUNC_SIMPLE_1.getType(), functionDao.findById(FUNC_SIMPLE_1.getId()).get().getType());
 
-    @Test
-    void saveAndDelete() throws SQLException {
-        Function simpleFunc = functionDao.save(new Function(3L, Function.FunctionType.SIMPLE, "{}"));
-        Optional<Function> optionalSimpleFunc = functionDao.findById(simpleFunc.getId());
+        // Создал и удалил
+        func_simple_2 = functionDao.save(new Function(2L, Function.FunctionType.SIMPLE, "{}"));
+        Optional<Function> optionalSimpleFunc = functionDao.findById(func_simple_2.getId());
         assertTrue(optionalSimpleFunc.isPresent());
         assertEquals(Function.FunctionType.SIMPLE, optionalSimpleFunc.get().getType());
-        assertEquals("{}", optionalSimpleFunc.get().getDefinition());
 
-        List<Function> functions = functionDao.findByUserId(3L);
-        assertTrue(functions.size() == 2);
+        functions = functionDao.findByUserId(2L);
+        assertEquals(2, functions.size());
 
-        functionDao.delete(simpleFunc.getId());
-        assertTrue(functionDao.findById(simpleFunc.getId()).isEmpty());
-        assertTrue(functionDao.findByUserId(3L).size() == 1);
+        functionDao.delete(func_simple_2.getId());
+        assertTrue(functionDao.findById(func_simple_2.getId()).isEmpty());
+        assertEquals(1, functionDao.findByUserId(2L).size());
+
+
+        // Удаление
+        functionDao.delete(FUNC_SIMPLE_1.getId());
+        functionDao.delete(FUNC_COMPOSITE_2.getId());
+        functionDao.delete(FUNC_SIMPLE_3.getId());
+        functionDao.delete(FUNC_TABULATED_1.getId());
+    }
+
+    @AfterAll
+    static void deleteTestFunctions() throws SQLException {
+        Optional<Function> func_simple_1 = functionDao.findById(FUNC_SIMPLE_1.getId());
+        if (func_simple_1.isPresent()) functionDao.delete(FUNC_SIMPLE_1.getId());
+
+        Optional<Function> func_composite_2 = functionDao.findById(FUNC_COMPOSITE_2.getId());
+        if (func_composite_2.isPresent()) functionDao.delete(FUNC_COMPOSITE_2.getId());
+
+        Optional<Function> func_simple_3 = functionDao.findById(FUNC_SIMPLE_3.getId());
+        if (func_simple_3.isPresent()) functionDao.delete(FUNC_SIMPLE_3.getId());
+
+        Optional<Function> func_tabulated_1 = functionDao.findById(FUNC_TABULATED_1.getId());
+        if (func_tabulated_1.isPresent()) functionDao.delete(FUNC_TABULATED_1.getId());
     }
 }

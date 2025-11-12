@@ -1,0 +1,10 @@
+query,manual_duration
+save (User),1351
+findById (User),481
+findByUsername (User),405
+delete (User),977
+save (Function),1357
+findById (Function),538
+findByUserId (Function),4449
+update (Function),1317
+delete (Function),948

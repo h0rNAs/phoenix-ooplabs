@@ -8,15 +8,10 @@ import ru.ssau.tk.phoenix.ooplabs.dao.UserDaoImpl;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class DataBaseManager {
     private static Connection conn;
-    /*private static UserService userService;
-    private static FunctionService functionService;*/
     private static UserDaoImpl userDao;
     private static FunctionDaoImpl functionDao;
 
@@ -28,12 +23,18 @@ public class DataBaseManager {
         connectToDB();
         initDB();
 
-        //userService = new UserService(conn);
-        //functionService = new FunctionService(conn);
         userDao = new UserDaoImpl(conn);
         functionDao = new FunctionDaoImpl(conn);
 
         logger.info("БД инициализирована");
+    }
+
+    public static void dropTable(String name) throws SQLException {
+        String sql = "DROP TABLE IF EXISTS " + name;
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.executeUpdate();
+        }
+        logger.info("Произведен дроп таблицы " + name + " из БД");
     }
 
     private static void initDB(){
@@ -42,10 +43,13 @@ public class DataBaseManager {
                     Paths.get("src/main/resources/scripts/users.sql")));
             String functionsTable = new String(Files.readAllBytes(
                     Paths.get("src/main/resources/scripts/functions.sql")));
+            String queryTable = new String(Files.readAllBytes(
+                    Paths.get("src/main/resources/scripts/query_performance.sql")));
             logger.info("Таблица загружена");
             try(Statement stmt = conn.createStatement()) {
                 stmt.execute(usersTable);
                 stmt.execute(functionsTable);
+                stmt.execute(queryTable);
                 logger.info("Таблицы sql успешно созданы");
             } catch (SQLException e) {
                 logger.error("Ошибка создания таблицы sql: " + e.getMessage());
@@ -68,19 +72,15 @@ public class DataBaseManager {
         }
     }
 
-    /*public static UserService getUserService() {
-        return userService;
-    }
-
-    public static FunctionService getFunctionService() {
-        return functionService;
-    }*/
-
     public static UserDaoImpl getUserDao() {
         return userDao;
     }
 
     public static FunctionDaoImpl getFunctionDao() {
         return functionDao;
+    }
+
+    public static Connection getConnection() {
+        return conn;
     }
 }

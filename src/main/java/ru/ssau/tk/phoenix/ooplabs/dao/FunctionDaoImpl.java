@@ -46,7 +46,7 @@ public class FunctionDaoImpl implements FunctionDao{
     @Override
     public List<Function> findByUserId(Long userId) throws SQLException {
         List<Function> functions = new ArrayList<>();
-        String sql = "SELECT id, user_id, function_type, definition FROM functions WHERE user_id = ?";
+        String sql = "SELECT * FROM functions WHERE user_id = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)){
             ps.setLong(1, userId);
             ResultSet rs = ps.executeQuery();
