@@ -12,5 +12,9 @@ public interface FunctionRepository extends JpaRepository<Function, Long> {
     List<Function> findByName(String name);
     List<Function> findByType(String type);
     List<Function> findByNameAndType(String name, String type);
+    List<Function> findByUserIdOrderByIdDesc(Long userId); // сначала новые
+    List<Function> findByUserIdOrderByIdAsc(Long userId); // сначала старые
+    List<Function> findByUserIdOrderByNameAsc(Long userId);
+    List<Function> findByUserIdOrderByNameDesc(Long userId);
 
 }
