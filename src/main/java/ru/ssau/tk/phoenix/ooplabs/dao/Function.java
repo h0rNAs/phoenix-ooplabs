@@ -1,13 +1,8 @@
 package ru.ssau.tk.phoenix.ooplabs.dao;
 
-public class Function {
-    public enum FunctionType{
-        SIMPLE, TABULATED, COMPOSITE;
-        public static FunctionType fromString(String str){
-            return FunctionType.valueOf(str);
-        }
-    }
+import ru.ssau.tk.phoenix.ooplabs.util.FunctionType;
 
+public class Function {
     private final Long id;
     private final Long userId;
     private FunctionType type;

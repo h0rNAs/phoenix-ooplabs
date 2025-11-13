@@ -1,9 +1,13 @@
+// TODO: Сделать работу с таблицами через контроллеры
+
+/*
 package ru.ssau.tk.phoenix.ooplabs;
 
 import ru.ssau.tk.phoenix.ooplabs.dao.Function;
 import ru.ssau.tk.phoenix.ooplabs.dao.FunctionDao;
 import ru.ssau.tk.phoenix.ooplabs.dao.User;
 import ru.ssau.tk.phoenix.ooplabs.dao.UserDao;
+import ru.ssau.tk.phoenix.ooplabs.util.FunctionType;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -30,7 +34,7 @@ public class ExportResults {
             User user = new User("user_" + (i + 1), "password");
             export.users.add(user);
             export.functions.add(
-                    new Function((long)i, Function.FunctionType.SIMPLE, "{}"));
+                    new Function((long)i, FunctionType.SIMPLE, "{}"));
         }
 
         export.toCsv("save (User)", () -> {
@@ -193,3 +197,4 @@ public class ExportResults {
         return false;
     }
 }
+*/

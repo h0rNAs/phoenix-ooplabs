@@ -2,6 +2,8 @@ package ru.ssau.tk.phoenix.ooplabs.dao;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import ru.ssau.tk.phoenix.ooplabs.dto.UserRequest;
+import ru.ssau.tk.phoenix.ooplabs.dto.UserResponse;
 
 import java.sql.*;
 import java.util.Optional;
@@ -16,13 +18,13 @@ public class UserDaoImpl implements UserDao{
     }
 
     @Override
-    public Optional<User> findById(Long id) throws SQLException {
+    public Optional<UserResponse> findById(Long id) throws SQLException {
         String sql = "SELECT id, username, password FROM users WHERE id = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)){
             ps.setLong(1, id);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                User user = new User(
+                UserResponse user = new UserResponse(
                         rs.getLong("id"),
                         rs.getString("username"),
                         rs.getString("password")
@@ -38,13 +40,13 @@ public class UserDaoImpl implements UserDao{
     }
 
     @Override
-    public Optional<User> findByUsername(String username) throws SQLException {
+    public Optional<UserResponse> findByUsername(String username) throws SQLException {
         String sql = "SELECT id, username, password FROM users WHERE username = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)){
             ps.setString(1, username);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                User user = new User(
+                UserResponse user = new UserResponse(
                         rs.getLong("id"),
                         rs.getString("username"),
                         rs.getString("password")
@@ -60,9 +62,9 @@ public class UserDaoImpl implements UserDao{
     }
 
     @Override
-    public User save(User user) throws SQLException {
+    public UserResponse save(UserRequest user) throws SQLException {
         String sql = "INSERT INTO users (username, password) VALUES (?, ?) RETURNING id";
-        Long id = user.getId();
+        Long id = 0L;
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, user.getUsername());
             ps.setString(2, user.getPassword());
@@ -75,7 +77,7 @@ public class UserDaoImpl implements UserDao{
             logger.error(e.getMessage());
             throw e;
         }
-        return new User(id, user);
+        return new UserResponse(id, user);
     }
 
     @Override

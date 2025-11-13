@@ -3,6 +3,8 @@ package ru.ssau.tk.phoenix.ooplabs.dao;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.postgresql.util.PGobject;
+import ru.ssau.tk.phoenix.ooplabs.dto.FunctionRequest;
+import ru.ssau.tk.phoenix.ooplabs.dto.FunctionResponse;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -21,15 +23,16 @@ public class FunctionDaoImpl implements FunctionDao{
     }
 
     @Override
-    public Optional<Function> findById(Long id) throws SQLException {
-        String sql = "SELECT id, user_id, function_type, definition FROM functions WHERE id = ?";
+    public Optional<FunctionResponse> findById(Long id) throws SQLException {
+        String sql = "SELECT * FROM functions WHERE id = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)){
             ps.setLong(1, id);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                Function func = new Function(
+                FunctionResponse func = new FunctionResponse(
                         rs.getLong("id"),
                         rs.getLong("user_id"),
+                        rs.getString("name"),
                         rs.getString("function_type"),
                         ((PGobject)rs.getObject("definition")).getValue()
                 );
@@ -44,16 +47,17 @@ public class FunctionDaoImpl implements FunctionDao{
     }
 
     @Override
-    public List<Function> findByUserId(Long userId) throws SQLException {
-        List<Function> functions = new ArrayList<>();
+    public List<FunctionResponse> findByUserId(Long userId) throws SQLException {
+        List<FunctionResponse> functions = new ArrayList<>();
         String sql = "SELECT * FROM functions WHERE user_id = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)){
             ps.setLong(1, userId);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                functions.add(new Function(
+                functions.add(new FunctionResponse(
                         rs.getLong("id"),
                         rs.getLong("user_id"),
+                        rs.getString("name"),
                         rs.getString("function_type"),
                         ((PGobject)rs.getObject("definition")).getValue()
                 ));
@@ -66,27 +70,28 @@ public class FunctionDaoImpl implements FunctionDao{
     }
 
     @Override
-    public Function save(Function func) throws SQLException {
-        String sql = "INSERT INTO functions (user_id, function_type, definition) VALUES (?, ?, ?::jsonb) RETURNING id";
-        Long id = func.getId();
+    public FunctionResponse save(FunctionRequest func) throws SQLException {
+        String sql = "INSERT INTO functions (user_id, name, function_type, definition) VALUES (?, ?, ?, ?::jsonb) RETURNING id";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setLong(1, func.getUserId());
-            ps.setString(2, func.getType().toString());
-            ps.setString(3, func.getDefinition());
+            ps.setString(2, func.getName());
+            ps.setString(3, func.getType().toString());
+            ps.setString(4, func.getDefinition());
             ResultSet rs = ps.executeQuery();
             if (rs.next()){
-                id = rs.getLong("id");
+                Long id = rs.getLong("id");
                 logger.info("Функция успешно добавлена");
+                return new FunctionResponse(id, func);
             }
         } catch (SQLException e) {
             logger.error(e.getMessage());
             throw e;
         }
-        return new Function(id, func);
+        return new FunctionResponse(0L, func);
     }
 
     @Override
-    public Function update(Function func) throws SQLException {
+    public FunctionResponse update(FunctionResponse func) throws SQLException {
         String sql = "UPDATE functions SET definition = ?::jsonb WHERE id = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, func.getDefinition());

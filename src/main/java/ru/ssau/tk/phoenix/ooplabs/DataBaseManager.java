@@ -2,6 +2,8 @@ package ru.ssau.tk.phoenix.ooplabs;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import ru.ssau.tk.phoenix.ooplabs.controllers.FunctionController;
+import ru.ssau.tk.phoenix.ooplabs.controllers.UserController;
 import ru.ssau.tk.phoenix.ooplabs.dao.FunctionDaoImpl;
 import ru.ssau.tk.phoenix.ooplabs.dao.UserDaoImpl;
 
@@ -12,6 +14,8 @@ import java.sql.*;
 
 public class DataBaseManager {
     private static Connection conn;
+    private static UserController userController;
+    private static FunctionController functionController;
     private static UserDaoImpl userDao;
     private static FunctionDaoImpl functionDao;
 
@@ -25,6 +29,9 @@ public class DataBaseManager {
 
         userDao = new UserDaoImpl(conn);
         functionDao = new FunctionDaoImpl(conn);
+
+        userController = new UserController(userDao);
+        functionController = new FunctionController(functionDao);
 
         logger.info("БД инициализирована");
     }
@@ -72,15 +79,25 @@ public class DataBaseManager {
         }
     }
 
+    @Deprecated
     public static UserDaoImpl getUserDao() {
         return userDao;
     }
 
+    @Deprecated
     public static FunctionDaoImpl getFunctionDao() {
         return functionDao;
     }
 
     public static Connection getConnection() {
         return conn;
+    }
+
+    public static UserController getUserController() {
+        return userController;
+    }
+
+    public static FunctionController getFunctionController() {
+        return functionController;
     }
 }
