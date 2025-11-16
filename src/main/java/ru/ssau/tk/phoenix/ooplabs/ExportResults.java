@@ -1,12 +1,15 @@
 // TODO: Сделать работу с таблицами через контроллеры
 
-/*
 package ru.ssau.tk.phoenix.ooplabs;
 
 import ru.ssau.tk.phoenix.ooplabs.dao.Function;
 import ru.ssau.tk.phoenix.ooplabs.dao.FunctionDao;
 import ru.ssau.tk.phoenix.ooplabs.dao.User;
 import ru.ssau.tk.phoenix.ooplabs.dao.UserDao;
+import ru.ssau.tk.phoenix.ooplabs.dto.FunctionRequest;
+import ru.ssau.tk.phoenix.ooplabs.dto.FunctionResponse;
+import ru.ssau.tk.phoenix.ooplabs.dto.UserRequest;
+import ru.ssau.tk.phoenix.ooplabs.dto.UserResponse;
 import ru.ssau.tk.phoenix.ooplabs.util.FunctionType;
 
 import java.sql.Connection;
@@ -17,97 +20,116 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ExportResults {
-    private final String tableName = "query_performance";
-    private final int COUNT = 10000;
+    private final int COUNT;
+
     private final Connection conn = DataBaseManager.getConnection();
     private final UserDao userDao = DataBaseManager.getUserDao();
     private final FunctionDao functionDao = DataBaseManager.getFunctionDao();
 
-    private List<User> users = new ArrayList<>(COUNT);
-    private List<Function> functions = new ArrayList<>(COUNT);
+    private final List<UserResponse> users = new ArrayList<>();
+    private final List<FunctionResponse> functions = new ArrayList<>();
+    private final List<UserRequest> userRequests = new ArrayList<>();
+    private final List<FunctionRequest> functionRequests = new ArrayList<>();
 
 
     public static void main(String[] args) throws SQLException {
-        ExportResults export = new ExportResults();
+        ExportResults export = new ExportResults(10000);
 
-        for (int i = 0; i < export.COUNT; i++) {
-            User user = new User("user_" + (i + 1), "password");
-            export.users.add(user);
-            export.functions.add(
-                    new Function((long)i, FunctionType.SIMPLE, "{}"));
-        }
-
-        export.toCsv("save (User)", () -> {
-            try {
-                export.saveUsers();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        });
-        export.toCsv("findById (User)", () -> {
-            try {
-                export.findUsersById();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        });
-        export.toCsv("findByUsername (User)", () -> {
-            try {
-                export.findUsersByUsername();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        });
-        export.toCsv("delete (User)", () -> {
-            try {
-                export.deleteUsers();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        });
-        export.toCsv("save (Function)", () -> {
-            try {
-                export.saveFunctions();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        });
-        export.toCsv("findById (Function)", () -> {
-            try {
-                export.findFunctionsById();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        });
-        export.toCsv("findByUserId (Function)", () -> {
-            try {
-                export.findFunctionsByUserId();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        });
-        export.toCsv("update (Function)", () -> {
-            try {
-                export.updateFunctions();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        });
-        export.toCsv("delete (Function)", () -> {
-            try {
-                export.deleteFunctions();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        });
+        export.exportQueryResults("query_performance");
+        export.exportSortingResults("");
 
         DataBaseManager.truncateTable("users");
         DataBaseManager.truncateTable("functions");
     }
 
+    public ExportResults(int count) {
+        this.COUNT = count;
+
+        for (int i = 0; i < COUNT; i++) {
+            UserRequest user = new UserRequest("user_" + (i + 1), "password");
+            userRequests.add(user);
+            functionRequests.add(
+                    new FunctionRequest((long)i, "function_" + (i+1), FunctionType.SIMPLE, "{}"));
+        }
+    }
+
+    public void exportSortingResults(String tableName) throws SQLException {
+        saveUsers();
+        saveFunctions();
+    }
+
+    public void exportQueryResults(String tableName) throws SQLException {
+        toCsv(tableName, "save (User)", () -> {
+            try {
+                saveUsers();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        toCsv(tableName, "findById (User)", () -> {
+            try {
+                findUsersById();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        toCsv(tableName, "findByUsername (User)", () -> {
+            try {
+                findUsersByUsername();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        toCsv(tableName, "delete (User)", () -> {
+            try {
+                deleteUsers();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        toCsv(tableName, "save (Function)", () -> {
+            try {
+                saveFunctions();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        toCsv(tableName, "findById (Function)", () -> {
+            try {
+                findFunctionsById();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        toCsv(tableName, "findByUserId (Function)", () -> {
+            try {
+                findFunctionsByUserId();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        toCsv(tableName, "update (Function)", () -> {
+            try {
+                updateFunctions();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        toCsv(tableName, "delete (Function)", () -> {
+            try {
+                deleteFunctions();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
+        users.clear();
+        functions.clear();
+    }
+
     private void saveUsers() throws SQLException {
         for (int i = 0; i < COUNT; i++) {
-            users.set(i, userDao.save(users.get(i)));
+            users.set(i, userDao.save(userRequests.get(i)));
         }
     }
 
@@ -131,7 +153,7 @@ public class ExportResults {
 
     private void saveFunctions() throws SQLException {
         for (int i = 0; i < COUNT; i++) {
-            functions.set(i, functionDao.save(functions.get(i)));
+            functions.set(i, functionDao.save(functionRequests.get(i)));
         }
     }
 
@@ -149,7 +171,7 @@ public class ExportResults {
 
     private void updateFunctions() throws SQLException {
         for (int i = 0; i < COUNT; i++) {
-            Function func = functions.get(i);
+            FunctionResponse func = functions.get(i);
             func.setDefinition("{\"function\": \"x^2\"}");
             functionDao.update(func);
         }
@@ -161,12 +183,12 @@ public class ExportResults {
         }
     }
 
-    private void toCsv(String query, Runnable task) throws SQLException {
+    private void toCsv(String tableName, String query, Runnable task) throws SQLException {
         Long startTime = System.currentTimeMillis();
         task.run();
         Long duration = System.currentTimeMillis() - startTime;
 
-        if (existsInTable(query)){
+        if (existsInTable(tableName, query)){
             String sql = "UPDATE " + tableName + " SET manual_duration = ? WHERE query = ?";
             try (PreparedStatement ps = conn.prepareStatement(sql)){
                 ps.setLong(1, duration);
@@ -184,7 +206,7 @@ public class ExportResults {
         }
     }
 
-    private boolean existsInTable(String query) throws SQLException{
+    private boolean existsInTable(String tableName, String query) throws SQLException{
         String sqlExists = "SELECT EXISTS(SELECT 1 FROM " + tableName + " WHERE query = ?)";
         try(PreparedStatement psExists = conn.prepareStatement(sqlExists)){
             psExists.setString(1, query);
@@ -197,4 +219,3 @@ public class ExportResults {
         return false;
     }
 }
-*/

@@ -5,14 +5,17 @@ import org.apache.logging.log4j.Logger;
 import org.postgresql.util.PGobject;
 import ru.ssau.tk.phoenix.ooplabs.dto.FunctionRequest;
 import ru.ssau.tk.phoenix.ooplabs.dto.FunctionResponse;
+import ru.ssau.tk.phoenix.ooplabs.util.Criteria;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class FunctionDaoImpl implements FunctionDao{
     private final Logger logger = LogManager.getLogger(FunctionDaoImpl.class);
@@ -46,10 +49,49 @@ public class FunctionDaoImpl implements FunctionDao{
         return Optional.empty();
     }
 
+    @Deprecated
     @Override
     public List<FunctionResponse> findByUserId(Long userId) throws SQLException {
-        List<FunctionResponse> functions = new ArrayList<>();
+        return findAndSortWithFilter(userId, new ArrayList<>());
+    }
+
+    @Override
+    public List<FunctionResponse> findAndSortWithFilter(Long userId, List<Criteria> filter) throws SQLException {
         String sql = "SELECT * FROM functions WHERE user_id = ?";
+        logger.info("Поиск функции пользоветля№" +  userId + " с применением фильтра");
+
+        // Поиск по
+        for (Criteria criteria : filter){
+            if (criteria.getColumn().equals("function_type") && criteria.getParams() != null) {
+                String params = Arrays.stream(criteria.getParams())
+                        .map(param -> "'" + param.toString() + "'")
+                        .collect(Collectors.joining(","));
+                sql += " AND " + criteria.getColumn() + " IN (" + params + ")";
+                logger.info("Поиск по " + criteria.getColumn() + " из (" + params + ")");
+            }
+            if (criteria.getColumn().equals("name") && criteria.getParams() != null) {
+                String params = Arrays.stream(criteria.getParams()).map(Object::toString)
+                        .collect(Collectors.joining(","));
+                sql += " AND " + criteria.getColumn() + " IN (" + params + ")";
+                logger.info("Поиск по " + criteria.getColumn() + " из (" + params + ")");
+            }
+        }
+
+        // Фильтрация
+        if (filter.size() > 0) {
+            List<String> order = new ArrayList<>();
+            for (Criteria criteria : filter) {
+                order.add(criteria.getColumn() + " " + criteria.getSortingType());
+            }
+            String orderBy = String.join(",", order);
+            sql += " ORDER BY " + orderBy;
+            logger.info("Сортировки: " + orderBy);
+        }
+
+        logger.debug(sql);
+
+        // Поиск в бд
+        List<FunctionResponse> functions = new ArrayList<>();
         try (PreparedStatement ps = conn.prepareStatement(sql)){
             ps.setLong(1, userId);
             ResultSet rs = ps.executeQuery();
@@ -66,6 +108,7 @@ public class FunctionDaoImpl implements FunctionDao{
             logger.error(e.getMessage());
             throw e;
         }
+
         return functions;
     }
 

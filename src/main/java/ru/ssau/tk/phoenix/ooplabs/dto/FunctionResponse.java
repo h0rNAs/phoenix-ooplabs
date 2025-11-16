@@ -64,4 +64,14 @@ public class FunctionResponse {
     public void setDefinition(String definition) {
         this.definition = definition;
     }
+
+    @Override
+    public String toString() {
+        return "Function{" +
+                "id=" + id +
+                ", userId=" + userId +
+                ", name=" + name +
+                ", type=" + type +
+                '}';
+    }
 }

@@ -4,6 +4,7 @@ import ru.ssau.tk.phoenix.ooplabs.dao.FunctionDao;
 import ru.ssau.tk.phoenix.ooplabs.dto.FunctionRequest;
 import ru.ssau.tk.phoenix.ooplabs.dto.FunctionResponse;
 import ru.ssau.tk.phoenix.ooplabs.dto.UserResponse;
+import ru.ssau.tk.phoenix.ooplabs.util.Criteria;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -29,7 +30,15 @@ public class FunctionController {
     }
 
     public List<FunctionResponse> findByUserId(Long userId) throws SQLException {
-       return functionDao.findByUserId(userId);
+       return functionDao.findAndSortWithFilter(userId, new ArrayList<>());
+    }
+
+    public List<FunctionResponse> findAndSortWithFilter(Long userId, List<Criteria> filter) throws SQLException {
+       return functionDao.findAndSortWithFilter(userId, filter);
+    }
+
+    public FunctionResponse update(FunctionResponse function) throws SQLException {
+        return functionDao.update(function);
     }
 
     public void delete(FunctionResponse function) throws SQLException {
