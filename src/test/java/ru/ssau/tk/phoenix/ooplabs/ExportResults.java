@@ -1,15 +1,10 @@
 package ru.ssau.tk.phoenix.ooplabs;
 
-import jakarta.transaction.Transactional;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.test.annotation.Rollback;
 import ru.ssau.tk.phoenix.ooplabs.entities.Function;
 import ru.ssau.tk.phoenix.ooplabs.entities.User;
 import ru.ssau.tk.phoenix.ooplabs.repositories.FunctionRepository;
@@ -21,7 +16,8 @@ import java.util.List;
 
 @SpringBootTest
 public class ExportResults {
-    private final String tableName = "query_performance";
+    private final String queryResultsTable = "query_performance";
+    private final String sortingResultsTable = "sorting_performance";
     private final int COUNT = 10000;
 
     private List<User> users = new ArrayList<>(COUNT);
@@ -41,63 +37,123 @@ public class ExportResults {
                     new Function(user, "SIMPLE", "function_" + (i+1), "{}"));
         }
 
-        toCsv("save (User)", () -> {
+        toCsv(queryResultsTable, "save (User)", () -> {
             try {
                 saveUsers();
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
         });
-        toCsv("findById (User)", () -> {
+        toCsv(queryResultsTable, "findById (User)", () -> {
             try {
                 findUsersById();
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
         });
-        toCsv("findByUsername (User)", () -> {
+        toCsv(queryResultsTable, "findByUsername (User)", () -> {
             try {
                 findUsersByUsername();
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
         });
-        toCsv("delete (User)", () -> {
+        toCsv(queryResultsTable, "delete (User)", () -> {
             try {
                 deleteUsers();
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
         });
-        toCsv("save (Function)", () -> {
+        toCsv(queryResultsTable, "save (Function)", () -> {
             try {
                 saveFunctions();
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
         });
-        toCsv("findById (Function)", () -> {
+        
+        
+        toCsv(sortingResultsTable, "findByIdAndOrderByName (ASC)", () -> {
+            try {
+                findFunctionByIdAndOrderByName();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        toCsv(sortingResultsTable, "findByIdAndOrderByName (DESC)", () -> {
+            try {
+                findFunctionByIdAndOrderByName();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        toCsv(sortingResultsTable, "findFunctionByIdAndOrderByType (ASC)", () -> {
+            try {
+                findFunctionByIdAndOrderByType();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        toCsv(sortingResultsTable, "findFunctionByIdAndOrderByType (DESC)", () -> {
+            try {
+                findFunctionByIdAndOrderByType();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        toCsv(sortingResultsTable, "findFunctionByIdAndOrderByNameAndType (ASC)", () -> {
+            try {
+                findFunctionByIdAndOrderByNameAndType();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        toCsv(sortingResultsTable, "findFunctionByIdAndOrderByNameAndType (DESC)", () -> {
+            try {
+                findFunctionByIdAndOrderByNameAndType();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        toCsv(sortingResultsTable, "findFunctionByIdAndOrderByNameAndTypeIn (ASC)", () -> {
+            try {
+                findFunctionByIdAndOrderByNameAndTypeIn();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        toCsv(sortingResultsTable, "findFunctionByIdAndOrderByNameAndTypeIn (DESC)", () -> {
+            try {
+                findFunctionByIdAndOrderByNameAndTypeIn();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
+
+        toCsv(queryResultsTable, "findById (Function)", () -> {
             try {
                 findFunctionsById();
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
         });
-        toCsv("findByUserId (Function)", () -> {
+        toCsv(queryResultsTable, "findByUserId (Function)", () -> {
             try {
                 findFunctionsByUserId();
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
         });
-        toCsv("update (Function)", () -> {
+        toCsv(queryResultsTable, "update (Function)", () -> {
             try {
                 updateFunctions();
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
         });
-        toCsv("delete (Function)", () -> {
+        toCsv(queryResultsTable, "delete (Function)", () -> {
             try {
                 deleteFunctions();
             } catch (SQLException e) {
@@ -172,12 +228,32 @@ public class ExportResults {
         }
     }
 
-    private void toCsv(String query, Runnable task) {
+    // TODO: Реализовать какую то логику выбора типа сортировки (либо дублировать функцию)
+    private void findFunctionByIdAndOrderByName() throws SQLException {
+
+    }
+
+    // TODO: Реализовать какую то логику выбора типа сортировки (либо дублировать функцию)
+    private void findFunctionByIdAndOrderByType() throws SQLException {
+
+    }
+
+    // TODO: Реализовать какую то логику выбора типа сортировки (либо дублировать функцию)
+    private void findFunctionByIdAndOrderByNameAndType() throws SQLException {
+
+    }
+    
+    // TODO: Реализовать какую то логику выбора типа сортировки (либо дублировать функцию)
+    private void findFunctionByIdAndOrderByNameAndTypeIn() throws SQLException {
+
+    }
+
+    private void toCsv(String tableName, String query, Runnable task) {
         Long startTime = System.currentTimeMillis();
         task.run();
         Long duration = System.currentTimeMillis() - startTime;
 
-        if (existsInTable(query)){
+        if (existsInTable(tableName, query)){
             String sql = "UPDATE " + tableName + " SET framework_duration = ? WHERE query = ?";
             jdbc.update(sql, duration, query);
         }
@@ -187,7 +263,7 @@ public class ExportResults {
         }
     }
 
-    private boolean existsInTable(String query){
+    private boolean existsInTable(String tableName, String query){
         String sql = "SELECT EXISTS(SELECT 1 FROM " + tableName + " WHERE query = ?)";
         return jdbc.queryForObject(sql, Boolean.class, query);
     }
