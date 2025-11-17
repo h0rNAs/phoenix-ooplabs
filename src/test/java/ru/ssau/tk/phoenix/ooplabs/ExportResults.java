@@ -11,10 +11,7 @@ import ru.ssau.tk.phoenix.ooplabs.repositories.FunctionRepository;
 import ru.ssau.tk.phoenix.ooplabs.repositories.UserRepository;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @SpringBootTest
 public class ExportResults {
@@ -25,9 +22,12 @@ public class ExportResults {
     private List<User> users = new ArrayList<>(COUNT);
     private List<Function> functions = new ArrayList<>(COUNT);
 
-    @Autowired private UserRepository userRepository;
-    @Autowired private FunctionRepository functionRepository;
-    @Autowired private JdbcTemplate jdbc;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private FunctionRepository functionRepository;
+    @Autowired
+    private JdbcTemplate jdbc;
 
 
     @Test
@@ -36,7 +36,7 @@ public class ExportResults {
             User user = new User("user_" + (i + 1), "password");
             users.add(user);
             functions.add(
-                    new Function(user, "SIMPLE", "function_" + (i+1), new HashMap<>()));
+                    new Function(user, "SIMPLE", "function_" + (i + 1), new HashMap<>()));
         }
 
         toCsv(queryResultsTable, "save (User)", () -> {
@@ -74,65 +74,64 @@ public class ExportResults {
                 throw new RuntimeException(e);
             }
         });
-        
-        
-        /*toCsv(sortingResultsTable, "findByIdAndOrderByName (ASC)", () -> {
+
+
+        toCsv(sortingResultsTable, "findByIdAndOrderByName (ASC)", () -> {
             try {
-                findFunctionByIdAndOrderByName();
+                findFunctionByIdAndOrderByNameAsc();
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
         });
         toCsv(sortingResultsTable, "findByIdAndOrderByName (DESC)", () -> {
             try {
-                findFunctionByIdAndOrderByName();
+                findFunctionByIdAndOrderByNameDesc();
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
         });
         toCsv(sortingResultsTable, "findFunctionByIdAndOrderByType (ASC)", () -> {
             try {
-                findFunctionByIdAndOrderByType();
+                findFunctionByIdAndOrderByTypeAsc();
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
         });
         toCsv(sortingResultsTable, "findFunctionByIdAndOrderByType (DESC)", () -> {
             try {
-                findFunctionByIdAndOrderByType();
+                findFunctionByIdAndOrderByTypeDesc();
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
         });
         toCsv(sortingResultsTable, "findFunctionByIdAndOrderByNameAndType (ASC)", () -> {
             try {
-                findFunctionByIdAndOrderByNameAndType();
+                findFunctionByIdAndOrderByNameAndTypeAsc();
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
         });
         toCsv(sortingResultsTable, "findFunctionByIdAndOrderByNameAndType (DESC)", () -> {
             try {
-                findFunctionByIdAndOrderByNameAndType();
+                findFunctionByIdAndOrderByNameAndTypeDesc();
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
         });
         toCsv(sortingResultsTable, "findFunctionByIdAndOrderByNameAndTypeIn (ASC)", () -> {
             try {
-                findFunctionByIdAndOrderByNameAndTypeIn();
+                findFunctionByIdAndOrderByNameAndTypeInAsc();
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
         });
         toCsv(sortingResultsTable, "findFunctionByIdAndOrderByNameAndTypeIn (DESC)", () -> {
             try {
-                findFunctionByIdAndOrderByNameAndTypeIn();
+                findFunctionByIdAndOrderByNameAndTypeInDesc();
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
-        });*/
-
+        });
 
         toCsv(queryResultsTable, "findById (Function)", () -> {
             try {
@@ -165,7 +164,7 @@ public class ExportResults {
     }
 
     @AfterEach
-    void truncateTables(){
+    void truncateTables() {
         String truncateUsers = "TRUNCATE TABLE users RESTART IDENTITY CASCADE";
         String truncateFunctions = "TRUNCATE TABLE functions RESTART IDENTITY CASCADE";
         jdbc.execute(truncateFunctions);
@@ -231,24 +230,64 @@ public class ExportResults {
         }
     }
 
-    // TODO: Реализовать какую то логику выбора типа сортировки (либо дублировать функцию)
-    private void findFunctionByIdAndOrderByName() throws SQLException {
-
+    private void findFunctionByIdAndOrderByNameAsc() throws SQLException {
+        for (int i = 0; i < COUNT; i++) {
+            User user = users.get(i);
+            functionRepository.findByUserIdOrderByNameAsc(user.getId());
+        }
     }
 
-    // TODO: Реализовать какую то логику выбора типа сортировки (либо дублировать функцию)
-    private void findFunctionByIdAndOrderByType() throws SQLException {
-
+    private void findFunctionByIdAndOrderByNameDesc() throws SQLException {
+        for (int i = 0; i < COUNT; i++) {
+            User user = users.get(i);
+            functionRepository.findByUserIdOrderByNameDesc(user.getId());
+        }
     }
 
-    // TODO: Реализовать какую то логику выбора типа сортировки (либо дублировать функцию)
-    private void findFunctionByIdAndOrderByNameAndType() throws SQLException {
-
+    private void findFunctionByIdAndOrderByTypeAsc() throws SQLException {
+        for (int i = 0; i < COUNT; i++) {
+            User user = users.get(i);
+            functionRepository.findByUserIdOrderByTypeAsc(user.getId());
+        }
     }
-    
-    // TODO: Реализовать какую то логику выбора типа сортировки (либо дублировать функцию)
-    private void findFunctionByIdAndOrderByNameAndTypeIn() throws SQLException {
 
+    private void findFunctionByIdAndOrderByTypeDesc() throws SQLException {
+        for (int i = 0; i < COUNT; i++) {
+            User user = users.get(i);
+            functionRepository.findByUserIdOrderByTypeDesc(user.getId());
+        }
+    }
+
+    private void findFunctionByIdAndOrderByNameAndTypeAsc() throws SQLException {
+        for (int i = 0; i < COUNT; i++) {
+            User user = users.get(i);
+            String type = "SIMPLE";
+            functionRepository.findByUserIdAndTypeOrderByNameAscTypeAsc(user.getId(), type);
+        }
+    }
+
+    private void findFunctionByIdAndOrderByNameAndTypeDesc() throws SQLException {
+        for (int i = 0; i < COUNT; i++) {
+            User user = users.get(i);
+            String type = "SIMPLE";
+            functionRepository.findByUserIdAndTypeOrderByNameDescTypeDesc(user.getId(), type);
+        }
+    }
+
+    private void findFunctionByIdAndOrderByNameAndTypeInAsc() throws SQLException {
+        for (int i = 0; i < COUNT; i++) {
+            User user = users.get(i);
+            List<String> types = Arrays.asList("SIMPLE", "TABULATED");
+            functionRepository.findByUserIdAndTypeInOrderByNameAscTypeAsc(user.getId(), types);
+        }
+    }
+
+    private void findFunctionByIdAndOrderByNameAndTypeInDesc() throws SQLException {
+        for (int i = 0; i < COUNT; i++) {
+            User user = users.get(i);
+            List<String> types = Arrays.asList("SIMPLE", "TABULATED");
+            functionRepository.findByUserIdAndTypeInOrderByNameDescTypeDesc(user.getId(), types);
+        }
     }
 
     private void toCsv(String tableName, String query, Runnable task) {
@@ -256,17 +295,16 @@ public class ExportResults {
         task.run();
         Long duration = System.currentTimeMillis() - startTime;
 
-        if (existsInTable(tableName, query)){
+        if (existsInTable(tableName, query)) {
             String sql = "UPDATE " + tableName + " SET framework_duration = ? WHERE query = ?";
             jdbc.update(sql, duration, query);
-        }
-        else {
+        } else {
             String sql = "INSERT INTO " + tableName + " (query, framework_duration) VALUES (?, ?)";
             jdbc.update(sql, query, duration);
         }
     }
 
-    private boolean existsInTable(String tableName, String query){
+    private boolean existsInTable(String tableName, String query) {
         String sql = "SELECT EXISTS(SELECT 1 FROM " + tableName + " WHERE query = ?)";
         return jdbc.queryForObject(sql, Boolean.class, query);
     }

@@ -56,6 +56,7 @@ class FunctionRepositoryTest {
         assertEquals("SIMPLE", foundFunction.get().getType());
         assertEquals(savedUser.getId(), foundFunction.get().getUser().getId());
     }
+
     @Test
     void deleting_a_Function() {
         User user = new User("Daniil_Korotkov", "2281337");
@@ -67,7 +68,6 @@ class FunctionRepositoryTest {
         definition.put("points_count", 100);
         Function function = new Function(savedUser, "SIMPLE", "function_to_delete", definition);
         Function savedFunction = functionRepository.save(function);
-
         Long functionId = savedFunction.getId();
         functionRepository.deleteById(functionId);
         assertFalse(functionRepository.existsById(functionId));

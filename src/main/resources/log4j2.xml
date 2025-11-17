@@ -2,21 +2,25 @@
 <Configuration status="WARN">
     <Appenders>
         <Console name="ConsoleAppender" target="SYSTEM_OUT">
-            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} |  %msg%n"/>
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} | %msg%n"/>
         </Console>
-        <File name="FileAppender" fileName="LOG.log">
-            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} |  %msg%n"/>
+        <File name="FileAppender" fileName="LOG.log" append="true">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} | %msg%n"/>
         </File>
-        <!--
-        <File name="FilePattern" fileName="SYSTEM_OUT" immediateFlush="false" append="true">
-            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
-        </File>
-        -->
     </Appenders>
     <Loggers>
-        <Root level="debug">
+        <!-- Только ваши логи -->
+        <Logger name="ru.ssau.tk.phoenix.ooplabs" level="DEBUG" additivity="false">
             <AppenderRef ref="ConsoleAppender"/>
             <AppenderRef ref="FileAppender"/>
-        </Root>
+        </Logger>
+
+        <!-- Системные логи отключаем -->
+        <Logger name="org.springframework" level="OFF" additivity="false"/>
+        <Logger name="org.hibernate" level="OFF" additivity="false"/>
+        <Logger name="org.apache" level="OFF" additivity="false"/>
+
+        <!-- Корневой логгер отключаем -->
+        <Root level="OFF"/>
     </Loggers>
 </Configuration>
