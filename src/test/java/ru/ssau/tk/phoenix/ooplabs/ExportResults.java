@@ -12,13 +12,15 @@ import ru.ssau.tk.phoenix.ooplabs.repositories.UserRepository;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @SpringBootTest
 public class ExportResults {
     private final String queryResultsTable = "query_performance";
     private final String sortingResultsTable = "sorting_performance";
-    private final int COUNT = 10000;
+    private final int COUNT = 100;
 
     private List<User> users = new ArrayList<>(COUNT);
     private List<Function> functions = new ArrayList<>(COUNT);
@@ -34,7 +36,7 @@ public class ExportResults {
             User user = new User("user_" + (i + 1), "password");
             users.add(user);
             functions.add(
-                    new Function(user, "SIMPLE", "function_" + (i+1), "{}"));
+                    new Function(user, "SIMPLE", "function_" + (i+1), new HashMap<>()));
         }
 
         toCsv(queryResultsTable, "save (User)", () -> {
@@ -74,7 +76,7 @@ public class ExportResults {
         });
         
         
-        toCsv(sortingResultsTable, "findByIdAndOrderByName (ASC)", () -> {
+        /*toCsv(sortingResultsTable, "findByIdAndOrderByName (ASC)", () -> {
             try {
                 findFunctionByIdAndOrderByName();
             } catch (SQLException e) {
@@ -129,7 +131,7 @@ public class ExportResults {
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
-        });
+        });*/
 
 
         toCsv(queryResultsTable, "findById (Function)", () -> {
@@ -215,9 +217,10 @@ public class ExportResults {
     }
 
     private void updateFunctions() throws SQLException {
+        Map<String, Object> definition = Map.of("function", "x^2");
         for (int i = 0; i < COUNT; i++) {
             Function func = functions.get(i);
-            func.setDefinition("{\"function\": \"x^2\"}");
+            func.setDefinition(definition);
             functionRepository.save(func);
         }
     }

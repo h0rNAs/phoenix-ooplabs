@@ -1,6 +1,12 @@
 package ru.ssau.tk.phoenix.ooplabs.entities;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.JdbcType;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.annotations.Type;
+import org.hibernate.type.SqlTypes;
+
+import java.util.Map;
 
 @Entity
 @Table(name = "functions")
@@ -16,13 +22,16 @@ public class Function {
     private String type;
     private String name;
 
-    private String definition;
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(columnDefinition = "jsonb")
+    private Map<String, Object> definition;
 
-    public Function(User user, String type, String name, String defenition) {
+
+    public Function(User user, String type, String name, Map<String, Object> definition) {
         this.user = user;
         this.type = type;
         this.name = name;
-        this.definition = defenition;
+        this.definition = definition;
     }
 
     public Function() {
@@ -61,11 +70,11 @@ public class Function {
         this.name = name;
     }
 
-    public String getDefinition() {
+    public Map<String, Object> getDefinition() {
         return definition;
     }
 
-    public void setDefinition(String defenition) {
+    public void setDefinition(Map<String, Object> defenition) {
         this.definition = defenition;
     }
 

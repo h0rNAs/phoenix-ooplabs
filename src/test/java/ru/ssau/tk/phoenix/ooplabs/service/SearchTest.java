@@ -24,9 +24,9 @@ class SearchTest {
     void searchByUserIdSortedByNameAsc() {
         User user = new User("John_Doe", "password");
         User savedUser = userRepository.save(user);
-        Function function1 = new Function(savedUser, "SIMPLE", "Gamma", "{\"function\": \"x^2\", \"interval\": {\"from\": 0, \"to\": 10}, \"points_count\": 100}");
-        Function function2 = new Function(savedUser, "SIMPLE", "Alpha", "{\"function\": \"x^3\", \"interval\": {\"from\": 0, \"to\": 5}, \"points_count\": 50}");
-        Function function3 = new Function(savedUser, "SIMPLE", "Beta", "{\"function\": \"sin(x)\", \"interval\": {\"from\": 0, \"to\": 10}, \"points_count\": 200}");
+        Function function1 = new Function(savedUser, "SIMPLE", "Gamma", null);
+        Function function2 = new Function(savedUser, "SIMPLE", "Alpha", null);
+        Function function3 = new Function(savedUser, "SIMPLE", "Beta", null);
         functionRepository.save(function1);
         functionRepository.save(function2);
         functionRepository.save(function3);

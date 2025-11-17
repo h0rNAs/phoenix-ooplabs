@@ -9,5 +9,4 @@ import java.util.List;
 public interface FunctionRepository extends JpaRepository<Function, Long> {
     List<Function> findByUserId(Long userId);
     List<Function> findByUserIdOrderByNameAsc(Long userId);
-
 }
