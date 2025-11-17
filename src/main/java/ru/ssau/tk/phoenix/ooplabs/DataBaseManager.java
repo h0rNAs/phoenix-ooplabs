@@ -50,13 +50,13 @@ public class DataBaseManager {
                     Paths.get("src/main/resources/scripts/users.sql")));
             String functionsTable = new String(Files.readAllBytes(
                     Paths.get("src/main/resources/scripts/functions.sql")));
-            String queryTable = new String(Files.readAllBytes(
-                    Paths.get("src/main/resources/scripts/query_performance.sql")));
+            String performancesTable = new String(Files.readAllBytes(
+                    Paths.get("src/main/resources/scripts/performances.sql")));
             logger.info("Таблица загружена");
             try(Statement stmt = conn.createStatement()) {
                 stmt.execute(usersTable);
                 stmt.execute(functionsTable);
-                stmt.execute(queryTable);
+                stmt.execute(performancesTable);
                 logger.info("Таблицы sql успешно созданы");
             } catch (SQLException e) {
                 logger.error("Ошибка создания таблицы sql: " + e.getMessage());
