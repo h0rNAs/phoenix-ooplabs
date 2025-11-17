@@ -17,7 +17,7 @@ import java.util.*;
 public class ExportResults {
     private final String queryResultsTable = "query_performance";
     private final String sortingResultsTable = "sorting_performance";
-    private final int COUNT = 100;
+    private final int COUNT = 10000;
 
     private List<User> users = new ArrayList<>(COUNT);
     private List<Function> functions = new ArrayList<>(COUNT);
@@ -133,6 +133,7 @@ public class ExportResults {
             }
         });
 
+
         toCsv(queryResultsTable, "findById (Function)", () -> {
             try {
                 findFunctionsById();
@@ -233,7 +234,7 @@ public class ExportResults {
     private void findFunctionByIdAndOrderByNameAsc() throws SQLException {
         for (int i = 0; i < COUNT; i++) {
             User user = users.get(i);
-            functionRepository.findByUserIdOrderByNameAsc(user.getId());
+            functionRepository.findByUserIdOrderByNameAsc(user.getId()).size();
         }
     }
 

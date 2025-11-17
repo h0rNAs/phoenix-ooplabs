@@ -1,0 +1,9 @@
+query,manual_duration,framework_duration
+findByIdAndOrderByName (ASC),7521,10577
+findByIdAndOrderByName (DESC),7220,6809
+findFunctionByIdAndOrderByType (ASC),7094,6820
+findFunctionByIdAndOrderByType (DESC),7185,5530
+findFunctionByIdAndOrderByNameAndType (ASC),7550,6557
+findFunctionByIdAndOrderByNameAndType (DESC),7951,6118
+findFunctionByIdAndOrderByNameAndTypeIn (ASC),13963,19182
+findFunctionByIdAndOrderByNameAndTypeIn (DESC),11461,22581
