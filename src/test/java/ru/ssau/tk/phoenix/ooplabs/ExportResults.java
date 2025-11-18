@@ -5,10 +5,16 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
+import ru.ssau.tk.phoenix.ooplabs.dto.FunctionRequest;
+import ru.ssau.tk.phoenix.ooplabs.dto.FunctionResponse;
+import ru.ssau.tk.phoenix.ooplabs.dto.UserRequest;
+import ru.ssau.tk.phoenix.ooplabs.dto.UserResponse;
 import ru.ssau.tk.phoenix.ooplabs.entities.Function;
-import ru.ssau.tk.phoenix.ooplabs.entities.User;
-import ru.ssau.tk.phoenix.ooplabs.repositories.FunctionRepository;
-import ru.ssau.tk.phoenix.ooplabs.repositories.UserRepository;
+import ru.ssau.tk.phoenix.ooplabs.service.FunctionService;
+import ru.ssau.tk.phoenix.ooplabs.service.UserService;
+import ru.ssau.tk.phoenix.ooplabs.util.Criteria;
+import ru.ssau.tk.phoenix.ooplabs.util.FunctionType;
+import ru.ssau.tk.phoenix.ooplabs.util.SortingType;
 
 import java.sql.SQLException;
 import java.util.*;
@@ -19,13 +25,15 @@ public class ExportResults {
     private final String sortingResultsTable = "sorting_performance";
     private final int COUNT = 10000;
 
-    private List<User> users = new ArrayList<>(COUNT);
-    private List<Function> functions = new ArrayList<>(COUNT);
+    private List<UserRequest> userRequests = new ArrayList<>(COUNT);
+    private List<FunctionRequest> functionRequests = new ArrayList<>(COUNT);
+    private List<UserResponse> users = new ArrayList<>(COUNT);
+    private List<FunctionResponse> functions = new ArrayList<>(COUNT);
 
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
     @Autowired
-    private FunctionRepository functionRepository;
+    private FunctionService functionService;
     @Autowired
     private JdbcTemplate jdbc;
 
@@ -33,135 +41,56 @@ public class ExportResults {
     @Test
     public void performance() {
         for (int i = 0; i < COUNT; i++) {
-            User user = new User("user_" + (i + 1), "password");
-            users.add(user);
-            functions.add(
-                    new Function(user, "SIMPLE", "function_" + (i + 1), new HashMap<>()));
+            UserRequest user = new UserRequest("user_" + (i + 1), "password");
+            userRequests.add(user);
+            functionRequests.add(
+                    new FunctionRequest((long) i, "function_" + (i + 1), FunctionType.SIMPLE, "{}"));
         }
 
-        toCsv(queryResultsTable, "save (User)", () -> {
-            try {
-                saveUsers();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        });
-        toCsv(queryResultsTable, "findById (User)", () -> {
-            try {
-                findUsersById();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        });
-        toCsv(queryResultsTable, "findByUsername (User)", () -> {
-            try {
-                findUsersByUsername();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        });
-        toCsv(queryResultsTable, "delete (User)", () -> {
-            try {
-                deleteUsers();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        });
-        toCsv(queryResultsTable, "save (Function)", () -> {
-            try {
-                saveFunctions();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        });
+        toCsv(queryResultsTable, "save (User)", () -> saveUsers());
+        toCsv(queryResultsTable, "findById (User)", () -> findUsersById());
+        toCsv(queryResultsTable, "findByUsername (User)", () -> findUsersByUsername());
+        toCsv(queryResultsTable, "delete (User)", () -> deleteUsers());
+        toCsv(queryResultsTable, "save (Function)", () -> saveFunctions());
 
 
-        toCsv(sortingResultsTable, "findByIdAndOrderByName (ASC)", () -> {
-            try {
-                findFunctionByIdAndOrderByNameAsc();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        });
-        toCsv(sortingResultsTable, "findByIdAndOrderByName (DESC)", () -> {
-            try {
-                findFunctionByIdAndOrderByNameDesc();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        });
-        toCsv(sortingResultsTable, "findFunctionByIdAndOrderByType (ASC)", () -> {
-            try {
-                findFunctionByIdAndOrderByTypeAsc();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        });
-        toCsv(sortingResultsTable, "findFunctionByIdAndOrderByType (DESC)", () -> {
-            try {
-                findFunctionByIdAndOrderByTypeDesc();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        });
-        toCsv(sortingResultsTable, "findFunctionByIdAndOrderByNameAndType (ASC)", () -> {
-            try {
-                findFunctionByIdAndOrderByNameAndTypeAsc();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        });
-        toCsv(sortingResultsTable, "findFunctionByIdAndOrderByNameAndType (DESC)", () -> {
-            try {
-                findFunctionByIdAndOrderByNameAndTypeDesc();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        });
-        toCsv(sortingResultsTable, "findFunctionByIdAndOrderByNameAndTypeIn (ASC)", () -> {
-            try {
-                findFunctionByIdAndOrderByNameAndTypeInAsc();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        });
-        toCsv(sortingResultsTable, "findFunctionByIdAndOrderByNameAndTypeIn (DESC)", () -> {
-            try {
-                findFunctionByIdAndOrderByNameAndTypeInDesc();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        });
+        List<Criteria> filter = new ArrayList<>();
+        filter.add(null);
+        filter.add(new Criteria("name", null, SortingType.ASC));
+        toCsv(sortingResultsTable, "findByIdAndOrderByName (ASC)", () -> findWithFilter(filter));
+
+        filter.set(1, new Criteria("name", null, SortingType.DESC));
+        toCsv(sortingResultsTable, "findByIdAndOrderByName (DESC)", () -> findWithFilter(filter));
+
+        filter.set(1, new Criteria("function_type", null, SortingType.ASC));
+        toCsv(sortingResultsTable, "findFunctionByIdAndOrderByType (ASC)", () -> findWithFilter(filter));
+
+        filter.set(1, new Criteria("function_type", null, SortingType.DESC));
+        toCsv(sortingResultsTable, "findFunctionByIdAndOrderByType (DESC)", () -> findWithFilter(filter));
+
+        filter.set(1, new Criteria("name", null, SortingType.ASC));
+        filter.add(new Criteria("function_type", null, SortingType.ASC));
+        toCsv(sortingResultsTable, "findFunctionByIdAndOrderByNameAndType (ASC)", () -> findWithFilter(filter));
+
+        filter.set(1, new Criteria("name", null, SortingType.DESC));
+        filter.set(2, new Criteria("function_type", null, SortingType.DESC));
+        toCsv(sortingResultsTable, "findFunctionByIdAndOrderByNameAndType (DESC)", () -> findWithFilter(filter));
+
+        filter.set(1, new Criteria("name", null, SortingType.ASC));
+        filter.set(2, new Criteria("function_type",
+                new Object[]{FunctionType.SIMPLE, FunctionType.COMPOSITE}, SortingType.ASC));
+        toCsv(sortingResultsTable, "findFunctionByIdAndOrderByNameAndTypeIn (ASC)", () -> findWithFilter(filter));
+
+        filter.set(1, new Criteria("name", null, SortingType.DESC));
+        filter.set(2, new Criteria("function_type",
+                new Object[]{FunctionType.SIMPLE, FunctionType.COMPOSITE}, SortingType.DESC));
+        toCsv(sortingResultsTable, "findFunctionByIdAndOrderByNameAndTypeIn (DESC)", () -> findWithFilter(filter));
 
 
-        toCsv(queryResultsTable, "findById (Function)", () -> {
-            try {
-                findFunctionsById();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        });
-        toCsv(queryResultsTable, "findByUserId (Function)", () -> {
-            try {
-                findFunctionsByUserId();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        });
-        toCsv(queryResultsTable, "update (Function)", () -> {
-            try {
-                updateFunctions();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        });
-        toCsv(queryResultsTable, "delete (Function)", () -> {
-            try {
-                deleteFunctions();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        });
+        toCsv(queryResultsTable, "findById (Function)", () -> findFunctionsById());
+        toCsv(queryResultsTable, "findByUserId (Function)", () -> findFunctionsByUserId());
+        toCsv(queryResultsTable, "update (Function)", () -> updateFunctions());
+        toCsv(queryResultsTable, "delete (Function)", () -> deleteFunctions());
     }
 
     @AfterEach
@@ -172,122 +101,109 @@ public class ExportResults {
         jdbc.execute(truncateUsers);
     }
 
-    private void saveUsers() throws SQLException {
+    private void saveUsers() {
         for (int i = 0; i < COUNT; i++) {
-            users.set(i, userRepository.save(users.get(i)));
+            users.add(userService.save(userRequests.get(i)));
         }
     }
 
-    private void findUsersById() throws SQLException {
+    private void findUsersById() {
         for (int i = 0; i < COUNT; i++) {
-            userRepository.findById(users.get(i).getId());
+            userService.find(users.get(i).getId());
         }
     }
 
-    private void findUsersByUsername() throws SQLException {
+    private void findUsersByUsername() {
         for (int i = 0; i < COUNT; i++) {
-            userRepository.findByUsername(users.get(i).getUsername());
+            userService.find(users.get(i).getUsername());
         }
     }
 
-    private void deleteUsers() throws SQLException {
+    private void deleteUsers() {
         for (int i = 0; i < COUNT; i++) {
-            userRepository.delete(users.get(i));
+            userService.delete(users.get(i).getId());
         }
     }
 
-    private void saveFunctions() throws SQLException {
+    private void saveFunctions() {
         for (int i = 0; i < COUNT; i++) {
-            Function function = functions.get(i);
-            function.setUser(users.get(i));
-            functions.set(i, functionRepository.save(function));
+            functions.add(functionService.save(functionRequests.get(i)));
         }
     }
 
-    private void findFunctionsById() throws SQLException {
+    private void findFunctionsById() {
         for (int i = 0; i < COUNT; i++) {
-            functionRepository.findById(functions.get(i).getId());
+            functionService.find(functions.get(i).getId());
         }
     }
 
-    private void findFunctionsByUserId() throws SQLException {
+    private void findFunctionsByUserId() {
+        List<Criteria> filter = new ArrayList<>();
+        filter.add(null);
         for (int i = 0; i < COUNT; i++) {
-            functionRepository.findByUserId(functions.get(i).getUser().getId());
+            filter.set(0, new Criteria("user_id", new Object[]{users.get(i).getId()}, null));
+            functionService.findWithFilter(filter);
         }
     }
 
-    private void updateFunctions() throws SQLException {
-        Map<String, Object> definition = Map.of("function", "x^2");
+    private void updateFunctions() {
         for (int i = 0; i < COUNT; i++) {
-            Function func = functions.get(i);
-            func.setDefinition(definition);
-            functionRepository.save(func);
+            FunctionResponse func = functions.get(i);
+            func.setDefinition("{\"function\": \"x^2\"}");
+            functionService.update(func);
         }
     }
 
-    private void deleteFunctions() throws SQLException {
+    private void deleteFunctions() {
         for (int i = 0; i < COUNT; i++) {
-            functionRepository.delete(functions.get(i));
+            functionService.delete(functions.get(i).getId());
         }
     }
 
-    private void findFunctionByIdAndOrderByNameAsc() throws SQLException {
+    /**
+     * @param filter Первым элементом обязательно user_id!
+     */
+    private void findWithFilter(List<Criteria> filter) {
         for (int i = 0; i < COUNT; i++) {
-            User user = users.get(i);
-            functionRepository.findByUserIdOrderByNameAsc(user.getId()).size();
+            filter.set(0, new Criteria("user_id", new Object[]{users.get(i).getId()}, null));
+            functionService.findWithFilter(filter);
         }
     }
 
-    private void findFunctionByIdAndOrderByNameDesc() throws SQLException {
+    private void findFunctionByIdAndOrderByName(SortingType sort) {
+        List<Criteria> filter = new ArrayList<>();
+        filter.add(new Criteria());
+        filter.add(new Criteria("name", null, sort));
+
         for (int i = 0; i < COUNT; i++) {
-            User user = users.get(i);
-            functionRepository.findByUserIdOrderByNameDesc(user.getId());
+            filter.set(0, new Criteria("user_id", new Object[]{users.get(i).getId()}, null));
+            functionService.findWithFilter(filter);
         }
     }
 
-    private void findFunctionByIdAndOrderByTypeAsc() throws SQLException {
+    private void findFunctionByIdAndOrderByType(SortingType sort) {
+        List<Criteria> filter = List.of(new Criteria(), new Criteria("function_type", null, sort));
         for (int i = 0; i < COUNT; i++) {
-            User user = users.get(i);
-            functionRepository.findByUserIdOrderByTypeAsc(user.getId());
+            filter.set(0, new Criteria("user_id", new Object[]{users.get(i).getId()}, null));
+            functionService.findWithFilter(filter);
         }
     }
 
-    private void findFunctionByIdAndOrderByTypeDesc() throws SQLException {
+    private void findFunctionByIdAndOrderByNameAndType(SortingType sort) {
+        List<Criteria> filter = List.of(new Criteria(), new Criteria("name", null, sort),
+                new Criteria("function_type", null, sort));
         for (int i = 0; i < COUNT; i++) {
-            User user = users.get(i);
-            functionRepository.findByUserIdOrderByTypeDesc(user.getId());
+            filter.set(0, new Criteria("user_id", new Object[]{users.get(i).getId()}, null));
+            functionService.findWithFilter(filter);
         }
     }
 
-    private void findFunctionByIdAndOrderByNameAndTypeAsc() throws SQLException {
+    private void findFunctionByIdAndOrderByNameAndTypeIn(SortingType sort, FunctionType[] types) {
+        List<Criteria> filter = List.of(new Criteria(), new Criteria("name", null, sort),
+                new Criteria("function_type", types, sort));
         for (int i = 0; i < COUNT; i++) {
-            User user = users.get(i);
-            String type = "SIMPLE";
-            functionRepository.findByUserIdAndTypeOrderByNameAscTypeAsc(user.getId(), type);
-        }
-    }
-
-    private void findFunctionByIdAndOrderByNameAndTypeDesc() throws SQLException {
-        for (int i = 0; i < COUNT; i++) {
-            User user = users.get(i);
-            String type = "SIMPLE";
-            functionRepository.findByUserIdAndTypeOrderByNameDescTypeDesc(user.getId(), type);
-        }
-    }
-
-    private void findFunctionByIdAndOrderByNameAndTypeInAsc() throws SQLException {
-        for (int i = 0; i < COUNT; i++) {
-            User user = users.get(i);
-            List<String> types = Arrays.asList("SIMPLE", "TABULATED");
-            functionRepository.findByUserIdAndTypeInOrderByNameAscTypeAsc(user.getId(), types);
-        }
-    }
-
-    private void findFunctionByIdAndOrderByNameAndTypeInDesc() throws SQLException {
-        for (int i = 0; i < COUNT; i++) {
-            User user = users.get(i);
-            List<String> types = Arrays.asList("SIMPLE", "TABULATED");
-            functionRepository.findByUserIdAndTypeInOrderByNameDescTypeDesc(user.getId(), types);
+            filter.set(0, new Criteria("user_id", new Object[]{users.get(i).getId()}, null));
+            functionService.findWithFilter(filter);
         }
     }
 

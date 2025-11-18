@@ -1,12 +1,8 @@
 package ru.ssau.tk.phoenix.ooplabs.entities;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.JdbcType;
 import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.annotations.Type;
 import org.hibernate.type.SqlTypes;
-
-import java.util.Map;
 
 @Entity
 @Table(name = "functions")
@@ -14,44 +10,45 @@ public class Function {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @Column(name = "user_id")
+    private Long userId;
     @Column(name = "function_type")
     private String type;
     private String name;
 
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(columnDefinition = "jsonb")
-    private Map<String, Object> definition;
+    private String definition;
 
 
-    public Function(User user, String type, String name, Map<String, Object> definition) {
-        this.user = user;
-        this.type = type;
+
+    public Function(Long id, Long userId, String name, String type, String definition) {
+        this.id = id;
+        this.userId = userId;
         this.name = name;
+        this.type = type;
         this.definition = definition;
     }
 
-    public Function() {
-
+    public Function(Long userId, String name, String type, String definition) {
+        this.userId = userId;
+        this.name = name;
+        this.type = type;
+        this.definition = definition;
     }
+
+    public Function() {}
 
     public Long getId() {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public Long getUserId() {
+        return userId;
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public String getType() {
@@ -70,12 +67,12 @@ public class Function {
         this.name = name;
     }
 
-    public Map<String, Object> getDefinition() {
+    public String getDefinition() {
         return definition;
     }
 
-    public void setDefinition(Map<String, Object> defenition) {
-        this.definition = defenition;
+    public void setDefinition(String definition) {
+        this.definition = definition;
     }
 
 }
