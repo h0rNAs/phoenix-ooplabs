@@ -8,8 +8,10 @@ import org.springframework.stereotype.Service;
 import ru.ssau.tk.phoenix.ooplabs.dto.FunctionRequest;
 import ru.ssau.tk.phoenix.ooplabs.dto.FunctionResponse;
 import ru.ssau.tk.phoenix.ooplabs.entities.Function;
+import ru.ssau.tk.phoenix.ooplabs.entities.User;
 import ru.ssau.tk.phoenix.ooplabs.repositories.FunctionRepository;
 import ru.ssau.tk.phoenix.ooplabs.repositories.FunctionSpecifications;
+import ru.ssau.tk.phoenix.ooplabs.repositories.UserRepository;
 import ru.ssau.tk.phoenix.ooplabs.util.Criteria;
 
 import java.util.ArrayList;
@@ -21,9 +23,11 @@ import java.util.Optional;
 public class FunctionService implements FunctionApiContract{
     private final Logger logger = LogManager.getLogger(FunctionApiContract.class);
     private FunctionRepository functionRepository;
+    private UserRepository userRepository;
 
-    public FunctionService(FunctionRepository functionRepository) {
+    public FunctionService(FunctionRepository functionRepository, UserRepository userRepository) {
         this.functionRepository = functionRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -44,6 +48,17 @@ public class FunctionService implements FunctionApiContract{
     }
 
     @Override
+    public List<FunctionResponse> findByUserId(Long userId){
+        Optional<User> optionalUser = userRepository.findById(userId);
+        if (optionalUser.isEmpty())
+            throw new NoSuchElementException("Пользователь с id= " + userId + " не найден. Отменено создание функции");
+
+        List<FunctionResponse> functions = functionRepository.findByUserId(userId);
+        logger.info("У пользователя id={} найдено {}", userId, functions.size());
+        return functions;
+    }
+
+    @Override
     public List<FunctionResponse> findWithFilter(List<Criteria> filter) {
         Specification<Function> spec = FunctionSpecifications.buildSpecification(filter);
         Sort sort = FunctionSpecifications.buildSort(filter);
@@ -56,15 +71,23 @@ public class FunctionService implements FunctionApiContract{
         return functionResponses;
     }
 
-    // TODO: Покрыть тестами
+    /**
+     * Упрощенная версия поиска по фильтру. Сама добавляет критерий поиска по userId
+     * @param userId Id пользователя
+     */
+    public List<FunctionResponse> findWithFilter(Long userId, List<Criteria> filter){
+        filter.add(0, new Criteria("user_id", new Object[]{userId}, null));
+        return findWithFilter(filter);
+    }
+
     @Override
     public void update(FunctionResponse function) {
         Optional<Function> optionalFunction = functionRepository.findById(function.getId());
         if (optionalFunction.isEmpty())
             throw new NoSuchElementException("Функция с id= " + function.getId() + " не найдена");
 
-        logger.info("Функция id=" + optionalFunction.get().getId() + " обновлена");
         functionRepository.save(mapResponseToEntity(function));
+        logger.info("Функция id=" + optionalFunction.get().getId() + " обновлена");
     }
 
     @Override
@@ -73,8 +96,8 @@ public class FunctionService implements FunctionApiContract{
         if (optionalFunction.isEmpty())
             throw new NoSuchElementException("Функция с id= " + id + " не найдена");
 
-        logger.info("Функция id=" + id + " удалена");
         functionRepository.delete(optionalFunction.get());
+        logger.info("Функция id=" + id + " удалена");
     }
 
     public static Function mapResponseToEntity(FunctionResponse response){
