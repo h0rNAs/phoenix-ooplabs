@@ -3,16 +3,15 @@ package ru.ssau.tk.phoenix.ooplabs.dto;
 public class UserResponse {
     private Long id;
     private String username;
-    private String password;
 
-    public UserResponse(Long id, String username, String password) {
+
+    public UserResponse(Long id, String username) {
         this.id = id;
         this.username = username;
-        this.password = password;
     }
 
     public UserResponse(Long id, UserRequest user){
-        this(id, user.getUsername(), user.getPassword());
+        this(id, user.getUsername());
     }
 
     public Long getId() {
@@ -29,13 +28,5 @@ public class UserResponse {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 }

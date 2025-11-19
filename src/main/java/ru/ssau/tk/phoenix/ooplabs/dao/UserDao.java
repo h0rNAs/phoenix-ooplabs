@@ -10,6 +10,6 @@ public interface UserDao {
     Optional<UserResponse> findById(Long id) throws SQLException;
     Optional<UserResponse> findByUsername(String username) throws SQLException;
     UserResponse save(UserRequest user) throws SQLException;
-    //void update(User user);
+    void update(Long id, String password) throws SQLException;
     void delete(Long id) throws SQLException;
 }

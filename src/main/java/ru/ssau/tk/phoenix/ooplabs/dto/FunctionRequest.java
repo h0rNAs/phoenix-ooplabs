@@ -8,6 +8,7 @@ public class FunctionRequest {
     private FunctionType type;
     private String definition;
 
+
     public FunctionRequest(Long userId, String name, FunctionType type, String definition) {
         this.userId = userId;
         this.name = name;
@@ -45,5 +46,14 @@ public class FunctionRequest {
 
     public void setDefinition(String definition) {
         this.definition = definition;
+    }
+
+    @Override
+    public String toString() {
+        return "FunctionRequest{" +
+                "userId=" + userId +
+                ", name='" + name + '\'' +
+                ", type=" + type +
+                '}';
     }
 }

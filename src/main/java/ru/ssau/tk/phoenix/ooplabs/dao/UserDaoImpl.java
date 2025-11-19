@@ -19,15 +19,14 @@ public class UserDaoImpl implements UserDao{
 
     @Override
     public Optional<UserResponse> findById(Long id) throws SQLException {
-        String sql = "SELECT id, username, password FROM users WHERE id = ?";
+        String sql = "SELECT id, username FROM users WHERE id = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)){
             ps.setLong(1, id);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 UserResponse user = new UserResponse(
                         rs.getLong("id"),
-                        rs.getString("username"),
-                        rs.getString("password")
+                        rs.getString("username")
                 );
                 logger.info("Считанный пользователь: " + user.toString());
                 return Optional.of(user);
@@ -41,15 +40,14 @@ public class UserDaoImpl implements UserDao{
 
     @Override
     public Optional<UserResponse> findByUsername(String username) throws SQLException {
-        String sql = "SELECT id, username, password FROM users WHERE username = ?";
+        String sql = "SELECT id, username FROM users WHERE username = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)){
             ps.setString(1, username);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 UserResponse user = new UserResponse(
                         rs.getLong("id"),
-                        rs.getString("username"),
-                        rs.getString("password")
+                        rs.getString("username")
                 );
                 logger.info("Считанный пользователь: " + user.toString());
                 return Optional.of(user);
@@ -78,6 +76,20 @@ public class UserDaoImpl implements UserDao{
             throw e;
         }
         return new UserResponse(id, user);
+    }
+
+    @Override
+    public void update(Long id, String password) throws SQLException {
+        String sql = "UPDATE users SET password = ? WHERE id = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, password);
+            ps.setLong(2, id);
+            ps.executeUpdate();
+            logger.info("Пользователь id=" + id + " обновлен");
+        } catch (SQLException e) {
+            logger.error(e.getMessage());
+            throw e;
+        }
     }
 
     @Override

@@ -21,7 +21,7 @@ public class FunctionResponse {
         this(id, userId, name, FunctionType.fromString(type), definition);
     }
 
-    public FunctionResponse(Long id, FunctionRequest func){
+    public FunctionResponse(Long id, FunctionRequest func) {
         this(id, func.getUserId(), func.getName(), func.getType(), func.getDefinition());
     }
 

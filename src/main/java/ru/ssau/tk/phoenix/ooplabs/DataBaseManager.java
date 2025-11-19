@@ -2,8 +2,8 @@ package ru.ssau.tk.phoenix.ooplabs;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import ru.ssau.tk.phoenix.ooplabs.controllers.FunctionController;
-import ru.ssau.tk.phoenix.ooplabs.controllers.UserController;
+import ru.ssau.tk.phoenix.ooplabs.service.FunctionService;
+import ru.ssau.tk.phoenix.ooplabs.service.UserService;
 import ru.ssau.tk.phoenix.ooplabs.dao.FunctionDaoImpl;
 import ru.ssau.tk.phoenix.ooplabs.dao.UserDaoImpl;
 
@@ -14,8 +14,8 @@ import java.sql.*;
 
 public class DataBaseManager {
     private static Connection conn;
-    private static UserController userController;
-    private static FunctionController functionController;
+    private static UserService userService;
+    private static FunctionService functionService;
     private static UserDaoImpl userDao;
     private static FunctionDaoImpl functionDao;
 
@@ -30,8 +30,8 @@ public class DataBaseManager {
         userDao = new UserDaoImpl(conn);
         functionDao = new FunctionDaoImpl(conn);
 
-        userController = new UserController(userDao);
-        functionController = new FunctionController(functionDao);
+        userService = new UserService(userDao);
+        functionService = new FunctionService(functionDao);
 
         logger.info("БД инициализирована");
     }
@@ -93,11 +93,11 @@ public class DataBaseManager {
         return conn;
     }
 
-    public static UserController getUserController() {
-        return userController;
+    public static UserService getUserController() {
+        return userService;
     }
 
-    public static FunctionController getFunctionController() {
-        return functionController;
+    public static FunctionService getFunctionController() {
+        return functionService;
     }
 }

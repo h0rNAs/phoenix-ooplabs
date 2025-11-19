@@ -14,14 +14,13 @@ public interface FunctionDao {
 
     /**
      * Функция для поиска функций по user id с дополнительной фильтрацией
-     * @param userId id пользователя
      * @param filter критерии
      * @return
      * @throws SQLException
      */
-    List<FunctionResponse> findAndSortWithFilter(Long userId, List<Criteria> filter) throws SQLException;
+    List<FunctionResponse> findWithFilter(List<Criteria> filter) throws SQLException;
 
     FunctionResponse save(FunctionRequest func) throws SQLException;
-    FunctionResponse update(FunctionResponse func) throws SQLException;
+    void update(FunctionResponse func) throws SQLException;
     void delete(Long id) throws SQLException;
 }
