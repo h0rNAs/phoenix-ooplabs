@@ -9,6 +9,8 @@ import ru.ssau.tk.phoenix.ooplabs.dto.UserResponse;
 import ru.ssau.tk.phoenix.ooplabs.entities.User;
 import ru.ssau.tk.phoenix.ooplabs.repositories.UserRepository;
 
+import java.util.NoSuchElementException;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -64,5 +66,21 @@ class UserServiceTest {
         User saved = userRepository.save(user);
         userService.delete(saved.getId());
         assertFalse(userRepository.existsById(saved.getId()));
+    }
+    @Test
+    void findingNonExistingUserById() {
+        assertThrows(NoSuchElementException.class, () -> userService.find(666L));
+    }
+    @Test
+    void findingNonExistingUserByUsername() {
+        assertThrows(NoSuchElementException.class, () -> userService.find("nonexist"));
+    }
+    @Test
+    void updatingNonExistingUser() {
+        assertThrows(NoSuchElementException.class, () -> userService.update(555L, "password"));
+    }
+    @Test
+    void deletingNonExistingUser() {
+        assertThrows(NoSuchElementException.class, () -> userService.delete(777L));
     }
 }

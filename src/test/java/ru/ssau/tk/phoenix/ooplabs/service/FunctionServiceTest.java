@@ -104,4 +104,19 @@ class FunctionServiceTest {
         functionService.delete(saved.getId());
         assertThrows(NoSuchElementException.class, () -> functionService.find(saved.getId()));
     }
+    @Test
+    void findNonExistingFunction() {
+        assertThrows(NoSuchElementException.class, () -> functionService.find(999L));
+    }
+    @Test
+    void updateNonExistingFunction() {
+        FunctionResponse fake = new FunctionResponse(
+                888L, 1L, "IDK", FunctionType.SIMPLE, "{}"
+        );
+        assertThrows(NoSuchElementException.class, () -> functionService.update(fake));
+    }
+    @Test
+    void deleteNonExistingFunction() {
+        assertThrows(NoSuchElementException.class, () -> functionService.delete(888L));
+    }
 }
