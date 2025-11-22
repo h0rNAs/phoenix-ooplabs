@@ -45,4 +45,100 @@ class UserServiceTest {
         DataBaseManager.getConnection().rollback();
         DataBaseManager.getConnection().setAutoCommit(true);
     }
+
+    @Test
+    void createUser() throws SQLException {
+        DataBaseManager.getConnection().setAutoCommit(false);
+
+        UserResponse user = USER_SERVICE.save(new UserRequest("Alice", "password"));
+
+        assertNotNull(user.getId());
+        assertTrue(user.getId() > 0);
+        assertEquals("Alice", user.getUsername());
+
+        DataBaseManager.getConnection().rollback();
+        DataBaseManager.getConnection().setAutoCommit(true);
+    }
+
+    @Test
+    void findById() throws SQLException {
+        DataBaseManager.getConnection().setAutoCommit(false);
+
+        UserResponse saved = USER_SERVICE.save(new UserRequest("Bob", "password"));
+        UserResponse found = USER_SERVICE.find(saved.getId());
+
+        assertEquals(saved.getId(), found.getId());
+        assertEquals("Bob", found.getUsername());
+
+        DataBaseManager.getConnection().rollback();
+        DataBaseManager.getConnection().setAutoCommit(true);
+    }
+
+    @Test
+    void findByIdNonExistingUser() throws SQLException {
+        DataBaseManager.getConnection().setAutoCommit(false);
+
+        assertThrows(NoSuchElementException.class, () -> USER_SERVICE.find(999L));
+
+        DataBaseManager.getConnection().rollback();
+        DataBaseManager.getConnection().setAutoCommit(true);
+    }
+
+    @Test
+    void findByUsername() throws SQLException {
+        DataBaseManager.getConnection().setAutoCommit(false);
+
+        USER_SERVICE.save(new UserRequest("John_Doe", "password"));
+        UserResponse found = USER_SERVICE.find("John_Doe");
+
+        assertEquals("John_Doe", found.getUsername());
+
+        DataBaseManager.getConnection().rollback();
+        DataBaseManager.getConnection().setAutoCommit(true);
+    }
+
+    @Test
+    void findByUsernameNonExistingUser() throws SQLException {
+        DataBaseManager.getConnection().setAutoCommit(false);
+
+        assertThrows(NoSuchElementException.class, () -> USER_SERVICE.find("nonexist"));
+
+        DataBaseManager.getConnection().rollback();
+        DataBaseManager.getConnection().setAutoCommit(true);
+    }
+
+    @Test
+    void updateNonExistingUser() throws SQLException {
+        DataBaseManager.getConnection().setAutoCommit(false);
+
+        assertThrows(NoSuchElementException.class, () -> USER_SERVICE.update(888L, "password"));
+
+        DataBaseManager.getConnection().rollback();
+        DataBaseManager.getConnection().setAutoCommit(true);
+    }
+
+    @Test
+    void deleteUser() throws SQLException {
+        DataBaseManager.getConnection().setAutoCommit(false);
+
+        UserResponse user = USER_SERVICE.save(new UserRequest("Adam", "password"));
+        Long id = user.getId();
+
+        USER_SERVICE.delete(id);
+
+        assertThrows(NoSuchElementException.class, () -> USER_SERVICE.find(id));
+
+        DataBaseManager.getConnection().rollback();
+        DataBaseManager.getConnection().setAutoCommit(true);
+    }
+
+    @Test
+    void deleteNonExistingUser() throws SQLException {
+        DataBaseManager.getConnection().setAutoCommit(false);
+
+        assertThrows(NoSuchElementException.class, () -> USER_SERVICE.delete(777L));
+
+        DataBaseManager.getConnection().rollback();
+        DataBaseManager.getConnection().setAutoCommit(true);
+    }
 }
