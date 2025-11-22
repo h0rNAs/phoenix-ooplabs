@@ -6,7 +6,9 @@ import ru.ssau.tk.phoenix.ooplabs.dto.FunctionRequest;
 import ru.ssau.tk.phoenix.ooplabs.dto.FunctionResponse;
 import ru.ssau.tk.phoenix.ooplabs.dto.UserRequest;
 import ru.ssau.tk.phoenix.ooplabs.dto.UserResponse;
+import ru.ssau.tk.phoenix.ooplabs.service.FunctionApiContract;
 import ru.ssau.tk.phoenix.ooplabs.service.FunctionService;
+import ru.ssau.tk.phoenix.ooplabs.service.UserApiContract;
 import ru.ssau.tk.phoenix.ooplabs.service.UserService;
 import ru.ssau.tk.phoenix.ooplabs.util.Criteria;
 import ru.ssau.tk.phoenix.ooplabs.util.FunctionType;
@@ -25,8 +27,8 @@ public class ExportResults {
     private final int COUNT = 10000;
 
     private final Connection conn = DataBaseManager.getConnection();
-    private final UserService userService = DataBaseManager.getUserController();
-    private final FunctionService functionService = DataBaseManager.getFunctionController();
+    private final UserApiContract userService = DataBaseManager.getUserService();
+    private final FunctionApiContract functionService = DataBaseManager.getFunctionService();
 
     private final List<UserResponse> users = new ArrayList<>();
     private final List<FunctionResponse> functions = new ArrayList<>();

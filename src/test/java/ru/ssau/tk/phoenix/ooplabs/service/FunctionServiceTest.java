@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import ru.ssau.tk.phoenix.ooplabs.DataBaseManager;
 import ru.ssau.tk.phoenix.ooplabs.dto.FunctionRequest;
 import ru.ssau.tk.phoenix.ooplabs.dto.FunctionResponse;
+import ru.ssau.tk.phoenix.ooplabs.dto.UserRequest;
 import ru.ssau.tk.phoenix.ooplabs.util.Criteria;
 import ru.ssau.tk.phoenix.ooplabs.util.FunctionType;
 import ru.ssau.tk.phoenix.ooplabs.util.SortingType;
@@ -17,15 +18,20 @@ import java.util.NoSuchElementException;
 import static org.junit.jupiter.api.Assertions.*;
 
 class FunctionServiceTest {
-    private static final FunctionService FUNCTION_SERVICE = DataBaseManager.getFunctionController();
+    private static final FunctionApiContract FUNCTION_SERVICE = DataBaseManager.getFunctionService();
+    private static final UserApiContract USER_SERVICE = DataBaseManager.getUserService();
 
     @BeforeAll
     static void before() throws SQLException {
+        DataBaseManager.truncateTable("users");
         DataBaseManager.getConnection().setAutoCommit(false);
     }
 
     @Test
     void testAll() throws SQLException {
+        USER_SERVICE.save(new UserRequest("sasaf", "fsdfds"));
+        USER_SERVICE.save(new UserRequest("sasasdfdf", "fsdfds"));
+
         // Создание
         FunctionResponse funcSimple1 = FUNCTION_SERVICE.save(
                 new FunctionRequest(1L, "x^2", FunctionType.SIMPLE, "{}"));
@@ -43,8 +49,7 @@ class FunctionServiceTest {
         // Получение функций по userId
         List<FunctionResponse> functions = FUNCTION_SERVICE.findByUserId(1L);
         assertEquals(2, functions.size());
-        functions = FUNCTION_SERVICE.findByUserId(43L);
-        assertTrue(functions.isEmpty());
+        assertThrows(NoSuchElementException.class, () -> FUNCTION_SERVICE.findByUserId(43L));
 
         // Проверка получения данных
         assertEquals(funcSimple1.getType(), FUNCTION_SERVICE.find(funcSimple1.getId()).getType());
@@ -74,6 +79,9 @@ class FunctionServiceTest {
     @Test
     void testFilter() throws SQLException {
         DataBaseManager.getConnection().rollback();
+
+        USER_SERVICE.save(new UserRequest("sasaf", "fsdfds"));
+        USER_SERVICE.save(new UserRequest("sasasdfdf", "fsdfds"));
 
         FUNCTION_SERVICE.save(new FunctionRequest(1L, "bac", FunctionType.SIMPLE, "{}"));
         FUNCTION_SERVICE.save(new FunctionRequest(2L, "aac", FunctionType.SIMPLE, "{}"));

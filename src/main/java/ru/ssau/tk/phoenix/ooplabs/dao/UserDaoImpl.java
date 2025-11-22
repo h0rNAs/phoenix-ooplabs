@@ -18,6 +18,41 @@ public class UserDaoImpl implements UserDao{
     }
 
     @Override
+    public UserResponse save(UserRequest user) throws SQLException {
+        String sql = "INSERT INTO users (username, password) VALUES (?, ?) RETURNING id";
+        Long id = 0L;
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, user.getUsername());
+            ps.setString(2, user.getPassword());
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()){
+                id = rs.getLong("id");
+            }
+        } catch (SQLException e) {
+            logger.error(e.getMessage());
+            throw e;
+        }
+        return new UserResponse(id, user);
+    }
+
+    @Override
+    public boolean authenticate(String username, String password) throws SQLException {
+        String sql = "SELECT password FROM users WHERE username = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)){
+            ps.setString(1, username);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                boolean auth = rs.getString(1).equals(password);
+                return auth;
+            }
+        } catch (SQLException e) {
+            logger.error(e.getMessage());
+            throw e;
+        }
+        return false;
+    }
+
+    @Override
     public Optional<UserResponse> findById(Long id) throws SQLException {
         String sql = "SELECT id, username FROM users WHERE id = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)){
@@ -28,7 +63,6 @@ public class UserDaoImpl implements UserDao{
                         rs.getLong("id"),
                         rs.getString("username")
                 );
-                logger.info("Считанный пользователь: " + user.toString());
                 return Optional.of(user);
             }
         } catch (SQLException e) {
@@ -49,7 +83,6 @@ public class UserDaoImpl implements UserDao{
                         rs.getLong("id"),
                         rs.getString("username")
                 );
-                logger.info("Считанный пользователь: " + user.toString());
                 return Optional.of(user);
             }
         } catch (SQLException e) {
@@ -60,32 +93,12 @@ public class UserDaoImpl implements UserDao{
     }
 
     @Override
-    public UserResponse save(UserRequest user) throws SQLException {
-        String sql = "INSERT INTO users (username, password) VALUES (?, ?) RETURNING id";
-        Long id = 0L;
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, user.getUsername());
-            ps.setString(2, user.getPassword());
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()){
-                id = rs.getLong("id");
-                logger.info("Пользователь успешно добавлен");
-            }
-        } catch (SQLException e) {
-            logger.error(e.getMessage());
-            throw e;
-        }
-        return new UserResponse(id, user);
-    }
-
-    @Override
     public void update(Long id, String password) throws SQLException {
         String sql = "UPDATE users SET password = ? WHERE id = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, password);
             ps.setLong(2, id);
             ps.executeUpdate();
-            logger.info("Пользователь id=" + id + " обновлен");
         } catch (SQLException e) {
             logger.error(e.getMessage());
             throw e;
@@ -98,7 +111,6 @@ public class UserDaoImpl implements UserDao{
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setLong(1, id);
             ps.executeUpdate();
-            logger.info("Пользователь id = " + id + " успешно удален");
         } catch (SQLException e) {
             logger.error(e.getMessage());
             throw e;

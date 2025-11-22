@@ -7,9 +7,10 @@ import java.sql.SQLException;
 import java.util.Optional;
 
 public interface UserDao {
+    UserResponse save(UserRequest user) throws SQLException;
+    boolean authenticate(String username, String password) throws SQLException;
     Optional<UserResponse> findById(Long id) throws SQLException;
     Optional<UserResponse> findByUsername(String username) throws SQLException;
-    UserResponse save(UserRequest user) throws SQLException;
     void update(Long id, String password) throws SQLException;
     void delete(Long id) throws SQLException;
 }

@@ -47,7 +47,27 @@ public class FunctionDaoImpl implements FunctionDao{
 
     @Override
     public List<FunctionResponse> findByUserId(Long userId) throws SQLException {
-        return findWithFilter(List.of(new Criteria("user_id", new Object[]{userId}, null)));
+        String sql = "SELECT * FROM functions WHERE user_id = ?";
+        List<FunctionResponse> functions = new ArrayList<>();
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)){
+            ps.setLong(1, userId);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                functions.add(new FunctionResponse(
+                        rs.getLong("id"),
+                        rs.getLong("user_id"),
+                        rs.getString("name"),
+                        rs.getString("function_type"),
+                        ((PGobject)rs.getObject("definition")).getValue()
+                ));
+            }
+        } catch (SQLException e) {
+            logger.error(e.getMessage());
+            throw e;
+        }
+
+        return functions;
     }
 
     @Override

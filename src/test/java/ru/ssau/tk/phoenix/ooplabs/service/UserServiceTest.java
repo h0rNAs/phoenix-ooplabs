@@ -11,7 +11,7 @@ import java.util.NoSuchElementException;
 import static org.junit.jupiter.api.Assertions.*;
 
 class UserServiceTest {
-    private static final UserService USER_SERVICE = DataBaseManager.getUserController();
+    private static final UserApiContract USER_SERVICE = DataBaseManager.getUserService();
 
     @Test
     void testAll() throws SQLException {

@@ -10,6 +10,7 @@ import java.util.List;
 public interface FunctionApiContract {
     FunctionResponse save(FunctionRequest function) throws SQLException;
     FunctionResponse find(Long id) throws SQLException;
+    List<FunctionResponse> findByUserId(Long userId) throws SQLException;
     List<FunctionResponse> findWithFilter(List<Criteria> filter) throws SQLException;
     void update(FunctionResponse function) throws SQLException;
     void delete(Long id) throws SQLException;

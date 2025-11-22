@@ -9,6 +9,10 @@ public class FunctionResponse {
     private FunctionType type;
     private String definition;
 
+
+    public FunctionResponse() {
+    }
+
     public FunctionResponse(Long id, Long userId, String name, FunctionType type, String definition) {
         this.id = id;
         this.userId = userId;
