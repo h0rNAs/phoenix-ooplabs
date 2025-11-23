@@ -1,5 +1,7 @@
 package ru.ssau.tk.phoenix.ooplabs.servlets;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.ssau.tk.phoenix.ooplabs.DataBaseManager;
@@ -16,6 +18,8 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.NoSuchElementException;
 
 public class UserServlet extends HttpServlet {
@@ -59,10 +63,20 @@ public class UserServlet extends HttpServlet {
         else {
             // Неверные данные
         }
+
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            String json = mapper.writeValueAsString(user);
+            resp.getWriter().write(json);
+        } catch (JsonProcessingException e) {
+            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        resp.setContentType("application/json;charset=UTF-8");
+
         String username = req.getParameter("username");
         String password = req.getParameter("password");
 

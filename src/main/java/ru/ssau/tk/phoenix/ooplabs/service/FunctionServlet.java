@@ -44,6 +44,7 @@ public class FunctionServlet extends HttpServlet {
         if (id != null && !id.isEmpty()){
             try {
                 functions.add(functionService.find(Long.valueOf(id)));
+                logger.info("Функция найдена по id={}", id);
             } catch (NoSuchElementException e) {
                 // Функция не найдена
             } catch (SQLException e) {
@@ -52,6 +53,7 @@ public class FunctionServlet extends HttpServlet {
         } else if (userId != null && !userId.isEmpty()) {
             try {
                 functions = functionService.findByUserId(Long.valueOf(userId));
+                logger.info("Функции найдены по userId={}", userId);
             } catch (NoSuchElementException e) {
                 // Функция не найдена
             } catch (SQLException e) {
@@ -60,6 +62,7 @@ public class FunctionServlet extends HttpServlet {
         } else {
             try {
                 functions = getWithFilter(req);
+                logger.info("Функции найдены с использование фильтра");
             } catch (NoSuchElementException e) {
                 // Функция не найдена
             } catch (SQLException e) {
@@ -96,16 +99,13 @@ public class FunctionServlet extends HttpServlet {
         if (functionRequest != null) {
             try {
                 FunctionResponse func = functionService.save(functionRequest);
-                resp.setStatus(HttpServletResponse.SC_CREATED);
-                Map<String, Object> responseBody = new HashMap<>();
-                responseBody.put("id", func.getId());
-                mapper.writeValue(resp.getWriter(), responseBody);
+                logger.info("Функция id={} сохранена", func.getId());
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
         }
         else {
-            sendError(resp, HttpServletResponse.SC_BAD_REQUEST, "Функция не найдена");
+            //sendError(resp, HttpServletResponse.SC_BAD_REQUEST, "Функция не найдена");
         }
     }
 
@@ -118,6 +118,9 @@ public class FunctionServlet extends HttpServlet {
         if (id != null && !id.isEmpty()) {
             try {
                 func = functionService.find(Long.valueOf(id));
+                func.setDefinition(definition);
+                functionService.update(func);
+                logger.info("Функция id={} обновлена", id);
             } catch (NoSuchElementException e) {
                 // Функция не найдена
             } catch (SQLException e) {
@@ -128,7 +131,17 @@ public class FunctionServlet extends HttpServlet {
 
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.doDelete(req, resp);
+        String id = req.getParameter("id");
+        if (id != null && !id.isEmpty()) {
+            try {
+                functionService.delete(Long.valueOf(id));
+                logger.info("Функция id={} удалена", id);
+            } catch (NoSuchElementException e) {
+                // Функция не найдена
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     private void sendError(HttpServletResponse response, int status, String message)

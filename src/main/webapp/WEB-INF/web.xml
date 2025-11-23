@@ -19,6 +19,11 @@
         <servlet-class>ru.ssau.tk.phoenix.ooplabs.servlets.SearchUserServlet</servlet-class>
     </servlet>
 
+    <servlet>
+        <servlet-name>UserServlet</servlet-name>
+        <servlet-class>ru.ssau.tk.phoenix.ooplabs.servlets.UserServlet</servlet-class>
+    </servlet>
+
     <!-- Маппинг URL на сервлет -->
     <servlet-mapping>
         <servlet-name>AuthServlet</servlet-name>
@@ -33,4 +38,8 @@
         <url-pattern>/profile/search</url-pattern>
     </servlet-mapping>
 
+    <servlet-mapping>
+        <servlet-name>UserServlet</servlet-name>
+        <url-pattern>/profile/user</url-pattern>
+    </servlet-mapping>
 </web-app>
