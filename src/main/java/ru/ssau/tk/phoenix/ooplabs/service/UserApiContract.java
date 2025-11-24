@@ -5,8 +5,9 @@ import ru.ssau.tk.phoenix.ooplabs.dto.UserResponse;
 
 public interface UserApiContract {
     UserResponse save(UserRequest request);
+    boolean auth(String username, String password);
     UserResponse find(Long id);
     UserResponse find(String username);
-    void update(Long id, String password);
+    UserResponse update(Long id, String password);
     void delete(Long id);
 }

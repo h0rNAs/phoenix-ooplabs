@@ -25,6 +25,9 @@ public class FunctionResponse {
         this(id, func.getUserId(), func.getName(), func.getType(), func.getDefinition());
     }
 
+    public FunctionResponse() {
+    }
+
     public Long getId() {
         return id;
     }

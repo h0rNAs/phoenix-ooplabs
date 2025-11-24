@@ -26,16 +26,29 @@ public class UserService implements UserApiContract {
 
     @Override
     public UserResponse save(UserRequest request) {
+        Optional<User> optionalUser = userRepository.findByUsername(request.getUsername());
+        if (!optionalUser.isEmpty())
+            throw new IllegalArgumentException("Пользователь с username=" + request.getUsername() + " уже существует");
+
         User user = userRepository.save(mapRequestToEntity(request));
         logger.info("Пользователь id=" + user.getId() + " добавлен");
         return mapEntityToResponse(user);
     }
 
     @Override
+    public boolean auth(String username, String password) {
+        Optional<User> optionalUser = userRepository.findByUsername(username);
+        if (optionalUser.isEmpty())
+            throw new NoSuchElementException("Пользователь с username=" + username + " не найден");
+
+        return password.equals(optionalUser.get().getPassword());
+    }
+
+    @Override
     public UserResponse find(Long id) {
         Optional<User> optionalUser = userRepository.findById(id);
         if (optionalUser.isEmpty())
-            throw new NoSuchElementException("Пользователь с id= " + id + " не найден");
+            throw new NoSuchElementException("Пользователь с id=" + id + " не найден");
 
         logger.info("Пользователь id=" + optionalUser.get().getId() + " найден");
         return mapEntityToResponse(optionalUser.get());
@@ -45,7 +58,7 @@ public class UserService implements UserApiContract {
     public UserResponse find(String username) {
         Optional<User> optionalUser = userRepository.findByUsername(username);
         if (optionalUser.isEmpty())
-            throw new NoSuchElementException("Пользователь с username= " + username + " не найден");
+            throw new NoSuchElementException("Пользователь с username=" + username + " не найден");
 
         logger.info("Пользователь username=" + optionalUser.get().getUsername() + " найден");
         return mapEntityToResponse(optionalUser.get());
@@ -53,23 +66,23 @@ public class UserService implements UserApiContract {
 
     // TODO: Покрыть тестами
     @Override
-    public void update(Long id, String password) {
+    public UserResponse update(Long id, String password) {
         Optional<User> optionalUser = userRepository.findById(id);
         if (optionalUser.isEmpty())
-            throw new NoSuchElementException("Пользователь с id= " + id + " не найден");
+            throw new NoSuchElementException("Пользователь с id=" + id + " не найден");
 
         User user = optionalUser.get();
         user.setPassword(password);
 
         logger.info("Пользователь id=" + optionalUser.get().getId() + " обновлен");
-        userRepository.save(user);
+        return mapEntityToResponse(userRepository.save(user));
     }
 
     @Override
     public void delete(Long id) {
         Optional<User> optionalUser = userRepository.findById(id);
         if (optionalUser.isEmpty())
-            throw new NoSuchElementException("Пользователь с id= " + id + " не найден");
+            throw new NoSuchElementException("Пользователь с id=" + id + " не найден");
 
         logger.info("Пользователь id=" + optionalUser.get().getId() + " удален");
         userRepository.delete(optionalUser.get());

@@ -41,7 +41,7 @@ public class FunctionService implements FunctionApiContract{
     public FunctionResponse find(Long id) {
         Optional<Function> optionalFunction = functionRepository.findById(id);
         if (optionalFunction.isEmpty())
-            throw new NoSuchElementException("Функция с id= " + id + " не найдена");
+            throw new NoSuchElementException("Функция с id=" + id + " не найдена");
 
         logger.info("Считанная функция: " + optionalFunction.get());
         return mapEntityToResponse(optionalFunction.get());
@@ -50,11 +50,17 @@ public class FunctionService implements FunctionApiContract{
     @Override
     public List<FunctionResponse> findByUserId(Long userId){
         Optional<User> optionalUser = userRepository.findById(userId);
+        logger.info("Пользователь {}", optionalUser.isPresent());
         if (optionalUser.isEmpty())
-            throw new NoSuchElementException("Пользователь с id= " + userId + " не найден. Отменено создание функции");
+            throw new NoSuchElementException("Пользователь с id=" + userId + " не найден. Отменено создание функции");
 
-        List<FunctionResponse> functions = functionRepository.findByUserId(userId);
-        logger.info("У пользователя id={} найдено {}", userId, functions.size());
+        List<FunctionResponse> functions = new ArrayList<>();
+        for (Function func : functionRepository.findByUserId(userId)){
+            functions.add(mapEntityToResponse(func));
+        }
+
+        logger.info("У пользователя id={} найдено {}", userId,
+                functions == null ? 0 : functions.size());
         return functions;
     }
 
@@ -71,30 +77,22 @@ public class FunctionService implements FunctionApiContract{
         return functionResponses;
     }
 
-    /**
-     * Упрощенная версия поиска по фильтру. Сама добавляет критерий поиска по userId
-     * @param userId Id пользователя
-     */
-    public List<FunctionResponse> findWithFilter(Long userId, List<Criteria> filter){
-        filter.add(0, new Criteria("user_id", new Object[]{userId}, null));
-        return findWithFilter(filter);
-    }
-
     @Override
-    public void update(FunctionResponse function) {
+    public FunctionResponse update(FunctionResponse function) {
         Optional<Function> optionalFunction = functionRepository.findById(function.getId());
         if (optionalFunction.isEmpty())
-            throw new NoSuchElementException("Функция с id= " + function.getId() + " не найдена");
+            throw new NoSuchElementException("Функция с id=" + function.getId() + " не найдена");
 
-        functionRepository.save(mapResponseToEntity(function));
-        logger.info("Функция id=" + optionalFunction.get().getId() + " обновлена");
+        FunctionResponse func = mapEntityToResponse(functionRepository.save(mapResponseToEntity(function)));
+        logger.info("Функция id=" + func.getId() + " обновлена");
+        return func;
     }
 
     @Override
     public void delete(Long id) {
         Optional<Function> optionalFunction = functionRepository.findById(id);
         if (optionalFunction.isEmpty())
-            throw new NoSuchElementException("Функция с id= " + id + " не найдена");
+            throw new NoSuchElementException("Функция с id=" + id + " не найдена");
 
         functionRepository.delete(optionalFunction.get());
         logger.info("Функция id=" + id + " удалена");

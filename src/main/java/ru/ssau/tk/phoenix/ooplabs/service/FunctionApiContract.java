@@ -11,6 +11,6 @@ public interface FunctionApiContract {
     FunctionResponse find(Long id);
     List<FunctionResponse> findByUserId(Long userId);
     List<FunctionResponse> findWithFilter(List<Criteria> filter);
-    void update(FunctionResponse function);
+    FunctionResponse update(FunctionResponse function);
     void delete(Long id);
 }
