@@ -10,9 +10,6 @@ public class FunctionResponse {
     private String definition;
 
 
-    public FunctionResponse() {
-    }
-
     public FunctionResponse(Long id, Long userId, String name, FunctionType type, String definition) {
         this.id = id;
         this.userId = userId;
@@ -28,6 +25,8 @@ public class FunctionResponse {
     public FunctionResponse(Long id, FunctionRequest func) {
         this(id, func.getUserId(), func.getName(), func.getType(), func.getDefinition());
     }
+
+    public FunctionResponse() {}
 
     public Long getId() {
         return id;

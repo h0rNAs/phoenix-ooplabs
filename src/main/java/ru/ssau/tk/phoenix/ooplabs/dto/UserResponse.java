@@ -14,6 +14,9 @@ public class UserResponse {
         this(id, user.getUsername());
     }
 
+    public UserResponse() {
+    }
+
     public Long getId() {
         return id;
     }

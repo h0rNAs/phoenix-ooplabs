@@ -21,6 +21,6 @@ public interface FunctionDao {
     List<FunctionResponse> findWithFilter(List<Criteria> filter) throws SQLException;
 
     FunctionResponse save(FunctionRequest func) throws SQLException;
-    void update(FunctionResponse func) throws SQLException;
+    FunctionResponse update(FunctionResponse func) throws SQLException;
     void delete(Long id) throws SQLException;
 }

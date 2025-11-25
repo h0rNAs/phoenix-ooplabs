@@ -93,7 +93,7 @@ public class UserDaoImpl implements UserDao{
     }
 
     @Override
-    public void update(Long id, String password) throws SQLException {
+    public UserResponse update(Long id, String password) throws SQLException {
         String sql = "UPDATE users SET password = ? WHERE id = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, password);
@@ -103,6 +103,7 @@ public class UserDaoImpl implements UserDao{
             logger.error(e.getMessage());
             throw e;
         }
+        return findById(id).get();
     }
 
     @Override

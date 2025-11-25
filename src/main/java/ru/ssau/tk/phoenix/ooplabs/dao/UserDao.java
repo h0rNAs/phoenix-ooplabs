@@ -11,6 +11,6 @@ public interface UserDao {
     boolean authenticate(String username, String password) throws SQLException;
     Optional<UserResponse> findById(Long id) throws SQLException;
     Optional<UserResponse> findByUsername(String username) throws SQLException;
-    void update(Long id, String password) throws SQLException;
+    UserResponse update(Long id, String password) throws SQLException;
     void delete(Long id) throws SQLException;
 }

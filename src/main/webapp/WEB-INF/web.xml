@@ -7,39 +7,46 @@
 
     <!-- Регистрация сервлета -->
     <servlet>
-        <servlet-name>AuthServlet</servlet-name>
-        <servlet-class>ru.ssau.tk.phoenix.ooplabs.servlets.AuthServlet</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>ProfileServlet</servlet-name>
-        <servlet-class>ru.ssau.tk.phoenix.ooplabs.servlets.ProfileServlet</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>SearchUserServlet</servlet-name>
-        <servlet-class>ru.ssau.tk.phoenix.ooplabs.servlets.SearchUserServlet</servlet-class>
-    </servlet>
-
-    <servlet>
         <servlet-name>UserServlet</servlet-name>
         <servlet-class>ru.ssau.tk.phoenix.ooplabs.servlets.UserServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UserByIdServlet</servlet-name>
+        <servlet-class>ru.ssau.tk.phoenix.ooplabs.servlets.UserByIdServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UserAuthServlet</servlet-name>
+        <servlet-class>ru.ssau.tk.phoenix.ooplabs.servlets.UserAuthServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>FunctionServet</servlet-name>
+        <servlet-class>ru.ssau.tk.phoenix.ooplabs.servlets.FunctionServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>FunctionByIdServlet</servlet-name>
+        <servlet-class>ru.ssau.tk.phoenix.ooplabs.servlets.FunctionByIdServlet</servlet-class>
     </servlet>
 
     <!-- Маппинг URL на сервлет -->
     <servlet-mapping>
-        <servlet-name>AuthServlet</servlet-name>
-        <url-pattern>/profile/auth</url-pattern>
+        <servlet-name>UserServlet</servlet-name>
+        <url-pattern>/api/users</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>ProfileServlet</servlet-name>
-        <url-pattern>/profile/profile</url-pattern>
+        <servlet-name>UserAuthServlet</servlet-name>
+        <url-pattern>/api/users/auth</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>SearchUserServlet</servlet-name>
-        <url-pattern>/profile/search</url-pattern>
+        <servlet-name>UserByIdServlet</servlet-name>
+        <url-pattern>/api/users/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>FunctionServet</servlet-name>
+        <url-pattern>/api/functions</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>FunctionByIdServlet</servlet-name>
+        <url-pattern>/api/functions/*</url-pattern>
     </servlet-mapping>
 
-    <servlet-mapping>
-        <servlet-name>UserServlet</servlet-name>
-        <url-pattern>/profile/user</url-pattern>
-    </servlet-mapping>
 </web-app>

@@ -16,6 +16,9 @@ public class FunctionRequest {
         this.definition = definition;
     }
 
+    public FunctionRequest() {
+    }
+
     public Long getUserId() {
         return userId;
     }

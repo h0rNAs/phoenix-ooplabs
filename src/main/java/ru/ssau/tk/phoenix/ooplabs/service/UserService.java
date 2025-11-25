@@ -3,6 +3,7 @@ package ru.ssau.tk.phoenix.ooplabs.service;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.ssau.tk.phoenix.ooplabs.dao.UserDao;
+import ru.ssau.tk.phoenix.ooplabs.dto.FunctionResponse;
 import ru.ssau.tk.phoenix.ooplabs.dto.UserRequest;
 import ru.ssau.tk.phoenix.ooplabs.dto.UserResponse;
 
@@ -32,7 +33,7 @@ public class UserService implements UserApiContract {
     }
 
     @Override
-    public boolean authenticate(String username, String password) throws SQLException {
+    public boolean auth(String username, String password) throws SQLException {
         Optional<UserResponse> optionalUser = userDao.findByUsername(username);
         if (optionalUser.isEmpty())
             throw new NoSuchElementException("Пользователь с username=" + username + " не найден");
@@ -63,13 +64,14 @@ public class UserService implements UserApiContract {
     }
 
     @Override
-    public void update(Long id, String password) throws SQLException {
+    public UserResponse update(Long id, String password) throws SQLException {
         Optional<UserResponse> optionalUser = userDao.findById(id);
         if (optionalUser.isEmpty())
             throw new NoSuchElementException("Пользователь с id=" + id + " не найден");
 
-        userDao.update(id, password);
+        UserResponse user = userDao.update(id, password);
         logger.info("Пользователь id=" + optionalUser.get().getId() + " обновлен");
+        return user;
     }
 
     @Override

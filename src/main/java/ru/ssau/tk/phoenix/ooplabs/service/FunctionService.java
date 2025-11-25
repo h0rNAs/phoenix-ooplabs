@@ -62,13 +62,14 @@ public class FunctionService implements FunctionApiContract {
     }
 
     @Override
-    public void update(FunctionResponse function) throws SQLException {
+    public FunctionResponse update(FunctionResponse function) throws SQLException {
         Optional<FunctionResponse> optionalFunction = functionDao.findById(function.getId());
         if (optionalFunction.isEmpty())
             throw new NoSuchElementException("Функция с id= " + function.getId() + " не найдена");
 
-        functionDao.update(function);
+        FunctionResponse newFunction = functionDao.update(function);
         logger.info("Функция id={} обновлена", optionalFunction.get().getId());
+        return newFunction;
     }
 
     @Override

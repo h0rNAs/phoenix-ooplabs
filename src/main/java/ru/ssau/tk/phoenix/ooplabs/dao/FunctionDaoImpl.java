@@ -166,7 +166,7 @@ public class FunctionDaoImpl implements FunctionDao{
     }
 
     @Override
-    public void update(FunctionResponse func) throws SQLException {
+    public FunctionResponse update(FunctionResponse func) throws SQLException {
         String sql = "UPDATE functions SET name = ?, function_type = ?, definition = ?::jsonb WHERE id = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, func.getName());
@@ -178,6 +178,7 @@ public class FunctionDaoImpl implements FunctionDao{
             logger.error(e.getMessage());
             throw e;
         }
+        return func;
     }
 
     @Override

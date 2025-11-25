@@ -15,6 +15,8 @@ public class Criteria {
         this(column, params, null);
     }
 
+    public Criteria() {}
+
     public String getColumn() {
         return column;
     }

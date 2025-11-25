@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.ssau.tk.phoenix.ooplabs.DataBaseManager;
+import ru.ssau.tk.phoenix.ooplabs.dto.ErrorResponse;
 import ru.ssau.tk.phoenix.ooplabs.dto.UserRequest;
 import ru.ssau.tk.phoenix.ooplabs.dto.UserResponse;
 import ru.ssau.tk.phoenix.ooplabs.service.UserApiContract;
@@ -38,38 +39,25 @@ public class UserServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String id = req.getParameter("id");
+        resp.setContentType("application/json;charset=UTF-8");
+
         String username = req.getParameter("username");
 
-        UserResponse user = null;
-        if (id != null && !id.isEmpty()){
+        if (username != null && !username.isEmpty()){
             try {
-                user = userService.find(Long.valueOf(id));
+                ServletUtils.sendAnswer(userService.find(username), resp);
             } catch (NoSuchElementException e) {
-                // Пользователь не найден
+                ErrorResponse error = ErrorResponse.constructNoSuchElementException(e);
+                ServletUtils.sendError(error, resp);
             } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        else if (username != null && !username.isEmpty()){
-            try {
-                user = userService.find(username);
-            } catch (NoSuchElementException e) {
-                // Пользователь не найден
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
+                ErrorResponse error = ErrorResponse.constructException(e);
+                ServletUtils.sendError(error, resp);
             }
         }
         else {
-            // Неверные данные
-        }
-
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            String json = mapper.writeValueAsString(user);
-            resp.getWriter().write(json);
-        } catch (JsonProcessingException e) {
-            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            IllegalArgumentException e = new IllegalArgumentException("Неверные критерии для поиска");
+            ErrorResponse error = ErrorResponse.constructIllegalArgumentException(e);
+            ServletUtils.sendError(error, resp);
         }
     }
 
@@ -77,44 +65,17 @@ public class UserServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("application/json;charset=UTF-8");
 
-        String username = req.getParameter("username");
-        String password = req.getParameter("password");
+        UserRequest userRequest = ServletUtils.parseJson(req, resp, UserRequest.class);
 
         try {
-            UserResponse user = userService.save(new UserRequest(username, password));
+            ServletUtils.sendAnswer(userService.save(userRequest), resp);
         } catch (IllegalArgumentException e) {
-            // Пользователь уже зарегестрирован
+            ErrorResponse error = ErrorResponse.constructIllegalArgumentException(e);
+            ServletUtils.sendError(error, resp);
         }
         catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
-    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String id = req.getParameter("id");
-        String newPassword = req.getParameter("newPassword");
-
-        try {
-            userService.update(Long.valueOf(id), newPassword);
-        } catch (NoSuchElementException e){
-            // Пользователь не найден
-        }
-        catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
-    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String id = req.getParameter("id");
-
-        try {
-            userService.delete(Long.valueOf(id));
-        } catch (NoSuchElementException e) {
-            // Пользователь не найден
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+            ErrorResponse error = ErrorResponse.constructException(e);
+            ServletUtils.sendError(error, resp);
         }
     }
 }

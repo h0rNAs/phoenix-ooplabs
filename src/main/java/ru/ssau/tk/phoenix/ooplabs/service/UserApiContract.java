@@ -7,9 +7,9 @@ import java.sql.SQLException;
 
 public interface UserApiContract {
     UserResponse save(UserRequest request) throws SQLException;
-    boolean authenticate(String username, String password) throws SQLException;
+    boolean auth(String username, String password) throws SQLException;
     UserResponse find(Long id) throws SQLException;
     UserResponse find(String username) throws SQLException;
-    void update(Long id, String password) throws SQLException;
+    UserResponse update(Long id, String password) throws SQLException;
     void delete(Long id) throws SQLException;
 }

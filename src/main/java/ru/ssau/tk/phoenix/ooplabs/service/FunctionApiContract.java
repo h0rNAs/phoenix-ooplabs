@@ -12,6 +12,6 @@ public interface FunctionApiContract {
     FunctionResponse find(Long id) throws SQLException;
     List<FunctionResponse> findByUserId(Long userId) throws SQLException;
     List<FunctionResponse> findWithFilter(List<Criteria> filter) throws SQLException;
-    void update(FunctionResponse function) throws SQLException;
+    FunctionResponse update(FunctionResponse function) throws SQLException;
     void delete(Long id) throws SQLException;
 }
