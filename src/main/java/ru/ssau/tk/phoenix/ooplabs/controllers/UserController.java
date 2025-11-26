@@ -9,7 +9,7 @@ import ru.ssau.tk.phoenix.ooplabs.dto.UserResponse;
 import ru.ssau.tk.phoenix.ooplabs.service.UserService;
 
 @RestController
-@RequestMapping(path = "mathhub/api/users")
+@RequestMapping(path = "${servlet.path}/users")
 public class UserController {
     private final Logger logger;
     private final UserService userService;
@@ -17,6 +17,7 @@ public class UserController {
     public UserController(UserService userService) {
         this.userService = userService;
         this.logger = LogManager.getLogger();
+
     }
 
     @GetMapping(value = {"{id}", ""})

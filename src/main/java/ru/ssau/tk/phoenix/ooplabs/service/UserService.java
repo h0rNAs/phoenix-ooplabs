@@ -64,7 +64,6 @@ public class UserService implements UserApiContract {
         return mapEntityToResponse(optionalUser.get());
     }
 
-    // TODO: Покрыть тестами
     @Override
     public UserResponse update(Long id, String password) {
         Optional<User> optionalUser = userRepository.findById(id);
