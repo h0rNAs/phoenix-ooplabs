@@ -15,6 +15,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.*;
+import java.util.Properties;
 
 public class DataBaseManager {
     private static Connection conn;
@@ -27,9 +28,48 @@ public class DataBaseManager {
 
 
     private static boolean initialized = false;
-
     private static final Object lock = new Object();
 
+    private static Properties config = new Properties();
+    private static String dbUrl;
+    private static String dbUsername;
+    private static String dbPassword;
+    private static String adminUsername;
+    private static String adminPassword;
+
+
+    static {
+        loadConfiguration();
+        ensureInitialized();
+    }
+
+    private static void loadConfiguration() {
+        try (InputStream input = DataBaseManager.class.getClassLoader()
+                .getResourceAsStream("application.properties")) {
+
+            if (input == null) {
+                logger.error("Не удалось найти файл application.properties");
+                throw new RuntimeException("Файл application.properties не найден в classpath");
+            }
+
+            config.load(input);
+
+            dbUrl = config.getProperty("db.url");
+            dbUsername = config.getProperty("db.username");
+            dbPassword = config.getProperty("db.password");
+            adminUsername = config.getProperty("admin.username");
+            adminPassword = config.getProperty("admin.password");
+
+            if (dbUrl == null || dbUsername == null || dbPassword == null) {
+                throw new RuntimeException("Отсутствуют обязательные параметры базы данных в application.properties");
+            }
+
+            logger.info("Конфигурация успешно загружена");
+        } catch (IOException e) {
+            logger.error("Ошибка загрузки конфигурации: {}", e.getMessage());
+            throw new RuntimeException("Не удалось загрузить конфигурацию", e);
+        }
+    }
 
     public static void ensureInitialized() {
         if (!initialized) {
@@ -101,6 +141,18 @@ public class DataBaseManager {
         }
     }
 
+    public static String getAdminUsername() {
+        return adminUsername;
+    }
+
+    public static String getAdminPassword() {
+        return adminPassword;
+    }
+
+    public static Properties getConfig() {
+        return new Properties(config);
+    }
+
     @Deprecated
     public static UserDaoImpl getUserDao() {
         ensureInitialized();
@@ -119,12 +171,12 @@ public class DataBaseManager {
     }
 
     public static UserApiContract getUserService() {
-        ensureInitialized();
+        //ensureInitialized();
         return userService;
     }
 
     public static FunctionApiContract getFunctionService() {
-        ensureInitialized();
+        //ensureInitialized();
         return functionService;
     }
 }

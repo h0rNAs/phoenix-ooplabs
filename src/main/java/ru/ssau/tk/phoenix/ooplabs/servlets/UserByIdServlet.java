@@ -34,6 +34,9 @@ public class UserByIdServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("application/json;charset=UTF-8");
 
+        logger.debug("Пользователь имеет роль user {}", req.isUserInRole("user"));
+        logger.debug("Пользователь имеет роль admin {}", req.isUserInRole("admin"));
+
         Long id = ServletUtils.parsePathToId(req.getPathInfo(), resp);
         if (id == -1L) return;
 

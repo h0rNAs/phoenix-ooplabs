@@ -24,7 +24,7 @@ import java.util.List;
 public class ExportResults {
     private static final String queryResultsTable = "query_performance";
     private static final String sortingResultsTable = "sorting_performance";
-    private final int COUNT = 10000;
+    private final int COUNT = 10;
 
     private final Connection conn = DataBaseManager.getConnection();
     private final UserApiContract userService = DataBaseManager.getUserService();
@@ -235,6 +235,7 @@ public class ExportResults {
         }
     }
 
+    // TODO: исправить херовую генерацию userId в функцию
     private void findFunctionsByUserId() throws SQLException {
         for (int i = 0; i < COUNT; i++) {
             functionService.findByUserId(functions.get(i).getUserId());

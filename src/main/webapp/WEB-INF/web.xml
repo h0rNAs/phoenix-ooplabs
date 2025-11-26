@@ -49,4 +49,48 @@
         <url-pattern>/api/functions/*</url-pattern>
     </servlet-mapping>
 
+
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>Public registration</web-resource-name>
+            <url-pattern>/api/users</url-pattern>
+            <http-method>POST</http-method>
+        </web-resource-collection>
+    </security-constraint>
+
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>Admin delete users</web-resource-name>
+            <url-pattern>/api/users/*</url-pattern>
+            <http-method>DELETE</http-method>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>admin</role-name>
+        </auth-constraint>
+    </security-constraint>
+
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>Authenticated API</web-resource-name>
+            <url-pattern>/api/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>user</role-name>
+            <role-name>admin</role-name>
+        </auth-constraint>
+    </security-constraint>
+
+    <!-- Login configuration -->
+    <login-config>
+        <auth-method>BASIC</auth-method>
+        <realm-name>JDBC Realm</realm-name>
+    </login-config>
+
+    <!-- Security roles -->
+    <security-role>
+        <role-name>admin</role-name>
+    </security-role>
+    <security-role>
+        <role-name>user</role-name>
+    </security-role>
 </web-app>
