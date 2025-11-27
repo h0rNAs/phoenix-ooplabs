@@ -12,8 +12,6 @@ import ru.ssau.tk.phoenix.ooplabs.dao.UserDaoImpl;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.sql.*;
 import java.util.Properties;
 
@@ -30,7 +28,7 @@ public class DataBaseManager {
     private static boolean initialized = false;
     private static final Object lock = new Object();
 
-    private static Properties config = new Properties();
+    private static Properties props = new Properties();
     private static String dbUrl;
     private static String dbUsername;
     private static String dbPassword;
@@ -39,6 +37,11 @@ public class DataBaseManager {
 
 
     static {
+        try {
+            Class.forName("org.postgresql.Driver");
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
         loadConfiguration();
         ensureInitialized();
     }
@@ -52,13 +55,13 @@ public class DataBaseManager {
                 throw new RuntimeException("Файл application.properties не найден в classpath");
             }
 
-            config.load(input);
+            props.load(input);
 
-            dbUrl = config.getProperty("db.url");
-            dbUsername = config.getProperty("db.username");
-            dbPassword = config.getProperty("db.password");
-            adminUsername = config.getProperty("admin.username");
-            adminPassword = config.getProperty("admin.password");
+            dbUrl = getProperty("JDBC_URL", "db.url");
+            dbUsername = getProperty("JDBC_USERNAME", "db.username");
+            dbPassword = getProperty("JDBC_PASSWORD", "db.password");
+            adminUsername = props.getProperty("admin.username");
+            adminPassword = props.getProperty("admin.password");
 
             if (dbUrl == null || dbUsername == null || dbPassword == null) {
                 throw new RuntimeException("Отсутствуют обязательные параметры базы данных в application.properties");
@@ -123,8 +126,7 @@ public class DataBaseManager {
 
     private static void connectToDB() {
         try {
-            String url = "jdbc:postgresql://localhost:5432/postgres";
-            conn = DriverManager.getConnection(url, "postgres", "postgres");
+            conn = DriverManager.getConnection(dbUrl, dbUsername, dbPassword);
             logger.info("БД успешно подключена");
         } catch (SQLException e) {
             logger.error("Ошибка подключения к БД: " + e.getMessage());
@@ -149,34 +151,43 @@ public class DataBaseManager {
         return adminPassword;
     }
 
-    public static Properties getConfig() {
-        return new Properties(config);
+    public static Properties getProps() {
+        return new Properties(props);
     }
 
     @Deprecated
     public static UserDaoImpl getUserDao() {
-        ensureInitialized();
         return userDao;
     }
 
     @Deprecated
     public static FunctionDaoImpl getFunctionDao() {
-        ensureInitialized();
         return functionDao;
     }
 
     public static Connection getConnection() {
-        ensureInitialized();
         return conn;
     }
 
     public static UserApiContract getUserService() {
-        //ensureInitialized();
         return userService;
     }
 
     public static FunctionApiContract getFunctionService() {
-        //ensureInitialized();
         return functionService;
+    }
+
+    public static String getProperty(String envVar, String propKey) {
+        String value = System.getenv(envVar);
+        if (value != null && !value.trim().isEmpty()) {
+            return value;
+        }
+
+        value = props.getProperty(propKey);
+        if (value != null && !value.trim().isEmpty()) {
+            return value;
+        }
+
+        return "";
     }
 }

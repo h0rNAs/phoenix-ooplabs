@@ -24,7 +24,7 @@ import java.util.List;
 public class ExportResults {
     private static final String queryResultsTable = "query_performance";
     private static final String sortingResultsTable = "sorting_performance";
-    private final int COUNT = 10;
+    private final int COUNT = 10000;
 
     private final Connection conn = DataBaseManager.getConnection();
     private final UserApiContract userService = DataBaseManager.getUserService();
@@ -56,13 +56,6 @@ public class ExportResults {
         export.toCsv(queryResultsTable, "findByUsername (User)", () -> {
             try {
                 export.findUsersByUsername();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        });
-        export.toCsv(queryResultsTable, "delete (User)", () -> {
-            try {
-                export.deleteUsers();
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -185,6 +178,13 @@ public class ExportResults {
                 throw new RuntimeException(e);
             }
         });
+        export.toCsv(queryResultsTable, "delete (User)", () -> {
+            try {
+                export.deleteUsers();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        });
 
         DataBaseManager.truncateTable("users");
         DataBaseManager.truncateTable("functions");
@@ -195,7 +195,7 @@ public class ExportResults {
             UserRequest user = new UserRequest("user_" + (i + 1), "password");
             userRequests.add(user);
             functionRequests.add(
-                    new FunctionRequest((long)i, "function_" + (i+1), FunctionType.SIMPLE, "{}"));
+                    new FunctionRequest(0L, "function_" + (i+1), FunctionType.SIMPLE, "{}"));
         }
     }
 
@@ -225,7 +225,9 @@ public class ExportResults {
 
     private void saveFunctions() throws SQLException {
         for (int i = 0; i < COUNT; i++) {
-            functions.add(functionService.save(functionRequests.get(i)));
+            FunctionRequest func = functionRequests.get(i);
+            func.setUserId(users.get(i).getId());
+            functions.add(functionService.save(func));
         }
     }
 
