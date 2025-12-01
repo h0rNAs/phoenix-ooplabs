@@ -6,10 +6,10 @@ public class FunctionRequest {
     private Long userId;
     private String name;
     private FunctionType type;
-    private String definition;
+    private FunctionDefinition definition;
 
 
-    public FunctionRequest(Long userId, String name, FunctionType type, String definition) {
+    public FunctionRequest(Long userId, String name, FunctionType type, FunctionDefinition definition) {
         this.userId = userId;
         this.name = name;
         this.type = type;
@@ -40,11 +40,11 @@ public class FunctionRequest {
         this.type = type;
     }
 
-    public String getDefinition() {
+    public FunctionDefinition getDefinition() {
         return definition;
     }
 
-    public void setDefinition(String definition) {
+    public void setDefinition(FunctionDefinition definition) {
         this.definition = definition;
     }
 
@@ -57,3 +57,16 @@ public class FunctionRequest {
                 '}';
     }
 }
+
+
+
+/*
+{
+    "userId": 1,
+    "name": "func",
+    "type": "TABULATED",
+    "definition": {
+        "edits": []
+    }
+}
+ */

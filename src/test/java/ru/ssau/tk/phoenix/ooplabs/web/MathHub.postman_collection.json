@@ -933,7 +933,7 @@
 										"header": [],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n    \"userId\": {{id}},\r\n    \"name\" : \"{{fName}}\",\r\n    \"type\" : \"SIMPLE\",\r\n    \"definition\": \"{\\\"interval\\\": {\\\"from\\\": -10, \\\"to\\\": {{$randomInt}} },\\\"points_count\\\": 100}\"\r\n}",
+											"raw": "{\r\n    \"userId\": {{id}},\r\n    \"name\" : \"{{fName}}\",\r\n    \"type\" : \"SIMPLE\",\r\n    \"definition\": {\r\n        \"type\": \"SIMPLE\",\r\n        \"xFrom\": -10, \r\n        \"xTo\": {{$randomInt}}, \r\n        \"pointsCount\": 100\r\n        }\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -994,7 +994,7 @@
 										"header": [],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n    \"userId\": {{id}},\r\n    \"name\" : \"{{fName}}\",\r\n    \"type\" : \"SIMPLE\",\r\n    \"definition\": \"{\\\"interval\\\": {\\\"from\\\": -10, \\\"to\\\": {{$randomInt}} },\\\"points_count\\\": 100}\"\r\n}",
+											"raw": "{\r\n    \"userId\": {{id}},\r\n    \"name\" : \"{{fName}}\",\r\n    \"type\" : \"SIMPLE\",\r\n    \"definition\": {\r\n        \"type\": \"SIMPLE\",\r\n        \"xFrom\": -10, \r\n        \"xTo\": {{$randomInt}}, \r\n        \"pointsCount\": 100\r\n        }\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -1057,7 +1057,7 @@
 										"header": [],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n    \"userId\": {{id}},\r\n    \"name\" : \"{{fName}}\",\r\n    \"type\" : \"SIMPLE\",\r\n    \"definition\": \"{\\\"interval\\\": {\\\"from\\\": -10, \\\"to\\\": {{$randomInt}} },\\\"points_count\\\": 100}\"\r\n}",
+											"raw": "{\r\n    \"userId\": {{id}},\r\n    \"name\" : \"{{fName}}\",\r\n    \"type\" : \"SIMPLE\",\r\n    \"definition\": {\r\n        \"type\": \"SIMPLE\",\r\n        \"xFrom\": -10, \r\n        \"xTo\": {{$randomInt}}, \r\n        \"pointsCount\": 100\r\n        }\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -1119,7 +1119,7 @@
 										"header": [],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n    \"userId\": {{id}},\r\n    \"name\" : \"{{fName}}\",\r\n    \"type\" : \"SIMPLE\",\r\n    \"definition\": \"{\\\"interval\\\": {\\\"from\\\": -10, \\\"to\\\": {{$randomInt}} },\\\"points_count\\\": 100}\"\r\n}",
+											"raw": "{\r\n    \"userId\": {{id}},\r\n    \"name\" : \"{{fName}}\",\r\n    \"type\" : \"SIMPLE\",\r\n    \"definition\": {\r\n        \"type\": \"SIMPLE\",\r\n        \"xFrom\": -10, \r\n        \"xTo\": {{$randomInt}}, \r\n        \"pointsCount\": 100\r\n        }\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -1672,6 +1672,17 @@
 								"packages": {},
 								"requests": {}
 							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
 						}
 					],
 					"request": {
@@ -1679,7 +1690,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"userId\": {{id}},\r\n    \"name\" : \"func{{$randomInt}}\",\r\n    \"type\" : \"SIMPLE\",\r\n    \"definition\": \"{\\\"interval\\\": {\\\"from\\\": -10, \\\"to\\\": {{$randomInt}} },\\\"points_count\\\": 100}\"\r\n}",
+							"raw": "{\r\n    \"userId\": {{id}},\r\n    \"name\" : \"func{{$randomInt}}\",\r\n    \"type\" : \"SIMPLE\",\r\n    \"definition\": {\r\n        \"type\": \"SIMPLE\",\r\n        \"xFrom\": -10, \r\n        \"xTo\": {{$randomInt}}, \r\n        \"pointsCount\": 100\r\n        }\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1758,8 +1769,8 @@
 									"\r",
 									"pm.test(\"Проверка данных\", function () {\r",
 									"    pm.expect(json0.name).to.equal(pm.variables.get(\"fName\"));\r",
-									"    const definition = JSON.parse(json0.definition);\r",
-									"    pm.expect(definition.points_count).to.equal(100)\r",
+									"    const definition = json0.definition;\r",
+									"    pm.expect(definition.pointsCount).to.equal(100)\r",
 									"});"
 								],
 								"type": "text/javascript",
@@ -1812,7 +1823,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"id\": {{fId}},\r\n    \"userId\": {{id}},\r\n    \"name\" : \"{{fName}}\",\r\n    \"type\" : \"SIMPLE\",\r\n    \"definition\": \"{}\"\r\n}",
+							"raw": "{\r\n    \"id\": {{fId}},\r\n    \"userId\": {{id}},\r\n    \"name\" : \"{{fName}}\",\r\n    \"type\" : \"SIMPLE\",\r\n    \"definition\": {\r\n        \"type\": \"SIMPLE\",\r\n        \"xFrom\": 0, \r\n        \"xTo\": 10, \r\n        \"pointsCount\": 11\r\n        }\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1832,7 +1843,7 @@
 					"response": []
 				},
 				{
-					"name": "Get Function By UserId- 200",
+					"name": "Get Function By UserId - 200",
 					"event": [
 						{
 							"listen": "test",
@@ -1854,8 +1865,8 @@
 									"\r",
 									"pm.test(\"Проверка данных\", function () {\r",
 									"    pm.expect(json0.name).to.equal(pm.variables.get(\"fName\"));\r",
-									"    const definition = JSON.parse(json0.definition);\r",
-									"    pm.expect(definition).to.empty;\r",
+									"    const definition = json0.definition;\r",
+									"    pm.expect(definition.pointsCount).to.equal(11);\r",
 									"});"
 								],
 								"type": "text/javascript",
@@ -1886,7 +1897,7 @@
 					"response": []
 				},
 				{
-					"name": "Delete Functions",
+					"name": "Delete Function",
 					"event": [
 						{
 							"listen": "test",

@@ -50,7 +50,7 @@ public class FunctionService implements FunctionApiContract{
     @Override
     public List<FunctionResponse> findByUserId(Long userId){
         Optional<User> optionalUser = userRepository.findById(userId);
-        logger.info("Пользователь {}", optionalUser.isPresent());
+        logger.info("Пользователь  {}", optionalUser.isPresent());
         if (optionalUser.isEmpty())
             throw new NoSuchElementException("Пользователь с id=" + userId + " не найден. Отменено создание функции");
 
@@ -59,8 +59,7 @@ public class FunctionService implements FunctionApiContract{
             functions.add(mapEntityToResponse(func));
         }
 
-        logger.info("У пользователя id={} найдено {}", userId,
-                functions == null ? 0 : functions.size());
+        logger.info("У пользователя id={} найдено {}", userId, functions.size());
         return functions;
     }
 

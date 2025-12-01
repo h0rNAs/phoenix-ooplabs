@@ -2,7 +2,9 @@ package ru.ssau.tk.phoenix.ooplabs.entities;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.annotations.Type;
 import org.hibernate.type.SqlTypes;
+import ru.ssau.tk.phoenix.ooplabs.dto.FunctionDefinition;
 
 @Entity
 @Table(name = "functions")
@@ -18,11 +20,11 @@ public class Function {
 
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(columnDefinition = "jsonb")
-    private String definition;
+    private FunctionDefinition definition;
 
 
 
-    public Function(Long id, Long userId, String name, String type, String definition) {
+    public Function(Long id, Long userId, String name, String type, FunctionDefinition definition) {
         this.id = id;
         this.userId = userId;
         this.name = name;
@@ -30,7 +32,7 @@ public class Function {
         this.definition = definition;
     }
 
-    public Function(Long userId, String name, String type, String definition) {
+    public Function(Long userId, String name, String type, FunctionDefinition definition) {
         this.userId = userId;
         this.name = name;
         this.type = type;
@@ -67,11 +69,11 @@ public class Function {
         this.name = name;
     }
 
-    public String getDefinition() {
+    public FunctionDefinition getDefinition() {
         return definition;
     }
 
-    public void setDefinition(String definition) {
+    public void setDefinition(FunctionDefinition definition) {
         this.definition = definition;
     }
 

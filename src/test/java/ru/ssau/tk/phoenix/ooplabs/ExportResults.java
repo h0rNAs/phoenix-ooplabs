@@ -5,10 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
-import ru.ssau.tk.phoenix.ooplabs.dto.FunctionRequest;
-import ru.ssau.tk.phoenix.ooplabs.dto.FunctionResponse;
-import ru.ssau.tk.phoenix.ooplabs.dto.UserRequest;
-import ru.ssau.tk.phoenix.ooplabs.dto.UserResponse;
+import ru.ssau.tk.phoenix.ooplabs.dto.*;
 import ru.ssau.tk.phoenix.ooplabs.entities.Function;
 import ru.ssau.tk.phoenix.ooplabs.service.FunctionService;
 import ru.ssau.tk.phoenix.ooplabs.service.UserService;
@@ -37,14 +34,18 @@ public class ExportResults {
     @Autowired
     private JdbcTemplate jdbc;
 
+    private FunctionDefinition newDefinition = new SimpleFunction("x^3", 11, -5, 5, null);
+
 
     @Test
     public void performance() {
+        FunctionDefinition simpleDefinition = new SimpleFunction("x^2", 11, 0, 10, null);
+
         for (int i = 0; i < COUNT; i++) {
             UserRequest user = new UserRequest("user_" + (i + 1), "password");
             userRequests.add(user);
             functionRequests.add(
-                    new FunctionRequest((long) i, "function_" + (i + 1), FunctionType.SIMPLE, "{}"));
+                    new FunctionRequest((long) i, "function_" + (i + 1), FunctionType.SIMPLE, simpleDefinition));
         }
 
         toCsv(queryResultsTable, "save (User)", () -> saveUsers());
@@ -149,7 +150,7 @@ public class ExportResults {
     private void updateFunctions() {
         for (int i = 0; i < COUNT; i++) {
             FunctionResponse func = functions.get(i);
-            func.setDefinition("{\"function\": \"x^2\"}");
+            func.setDefinition(newDefinition);
             functionService.update(func);
         }
     }
@@ -160,9 +161,10 @@ public class ExportResults {
         }
     }
 
-    /**
+/**
      * @param filter Первым элементом обязательно user_id!
      */
+
     private void findWithFilter(List<Criteria> filter) {
         for (int i = 0; i < COUNT; i++) {
             filter.set(0, new Criteria("user_id", new Object[]{users.get(i).getId()}, null));
