@@ -1,8 +1,11 @@
 package ru.ssau.tk.phoenix.ooplabs.dao;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.postgresql.util.PGobject;
+import ru.ssau.tk.phoenix.ooplabs.dto.FunctionDefinition;
 import ru.ssau.tk.phoenix.ooplabs.dto.FunctionRequest;
 import ru.ssau.tk.phoenix.ooplabs.dto.FunctionResponse;
 import ru.ssau.tk.phoenix.ooplabs.util.Criteria;
@@ -17,6 +20,7 @@ import java.util.stream.Collectors;
 public class FunctionDaoImpl implements FunctionDao{
     private final Logger logger = LogManager.getLogger(FunctionDaoImpl.class);
     private final Connection conn;
+    private final ObjectMapper mapper = new ObjectMapper();
 
     public FunctionDaoImpl(Connection conn) {
         this.conn = conn;
@@ -34,13 +38,16 @@ public class FunctionDaoImpl implements FunctionDao{
                         rs.getLong("user_id"),
                         rs.getString("name"),
                         rs.getString("function_type"),
-                        ((PGobject)rs.getObject("definition")).getValue()
+                        parseDefinitionToClass(rs.getString("definition"))
                 );
                 return Optional.of(func);
             }
         } catch (SQLException e) {
             logger.error(e.getMessage());
             throw e;
+        } catch (JsonProcessingException e) {
+            logger.error(e.getMessage());
+            throw new RuntimeException(e);
         }
         return Optional.empty();
     }
@@ -59,12 +66,15 @@ public class FunctionDaoImpl implements FunctionDao{
                         rs.getLong("user_id"),
                         rs.getString("name"),
                         rs.getString("function_type"),
-                        ((PGobject)rs.getObject("definition")).getValue()
+                        parseDefinitionToClass(rs.getString("definition"))
                 ));
             }
         } catch (SQLException e) {
             logger.error(e.getMessage());
             throw e;
+        } catch (JsonProcessingException e) {
+            logger.error(e.getMessage());
+            throw new RuntimeException(e);
         }
 
         return functions;
@@ -133,13 +143,16 @@ public class FunctionDaoImpl implements FunctionDao{
                             rs.getLong("user_id"),
                             rs.getString("name"),
                             rs.getString("function_type"),
-                            ((PGobject) rs.getObject("definition")).getValue()
+                            parseDefinitionToClass(rs.getString("definition"))
                     ));
                 }
             }
         } catch (SQLException e) {
             logger.error("Ошибка выполнения запроса: {}", e.getMessage());
             throw e;
+        } catch (JsonProcessingException e) {
+            logger.error(e.getMessage());
+            throw new RuntimeException(e);
         }
 
         return functions;
@@ -152,7 +165,7 @@ public class FunctionDaoImpl implements FunctionDao{
             ps.setLong(1, func.getUserId());
             ps.setString(2, func.getName());
             ps.setString(3, func.getType().toString());
-            ps.setString(4, func.getDefinition());
+            ps.setString(4, parseDefinitionToString(func.getDefinition()));
             ResultSet rs = ps.executeQuery();
             if (rs.next()){
                 Long id = rs.getLong("id");
@@ -161,6 +174,9 @@ public class FunctionDaoImpl implements FunctionDao{
         } catch (SQLException e) {
             logger.error(e.getMessage());
             throw e;
+        } catch (JsonProcessingException e) {
+            logger.error(e.getMessage());
+            throw new RuntimeException(e);
         }
         return new FunctionResponse(0L, func);
     }
@@ -171,12 +187,15 @@ public class FunctionDaoImpl implements FunctionDao{
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, func.getName());
             ps.setString(2, func.getType().toString());
-            ps.setString(3, func.getDefinition());
+            ps.setString(3, parseDefinitionToString(func.getDefinition()));
             ps.setLong(4, func.getId());
             ps.executeUpdate();
         } catch (SQLException e) {
             logger.error(e.getMessage());
             throw e;
+        } catch (JsonProcessingException e) {
+            logger.error(e.getMessage());
+            throw new RuntimeException(e);
         }
         return func;
     }
@@ -195,5 +214,13 @@ public class FunctionDaoImpl implements FunctionDao{
 
     private boolean isValidColumn(String column) {
         return Set.of("user_id", "function_type", "name").contains(column);
+    }
+
+    private FunctionDefinition parseDefinitionToClass(String jsonb) throws JsonProcessingException {
+        return mapper.readValue(jsonb, FunctionDefinition.class);
+    }
+
+    private String parseDefinitionToString(FunctionDefinition definition) throws JsonProcessingException {
+        return mapper.writeValueAsString(definition);
     }
 }

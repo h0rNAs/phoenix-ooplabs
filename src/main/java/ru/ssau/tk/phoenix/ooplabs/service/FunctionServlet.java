@@ -109,7 +109,7 @@ public class FunctionServlet extends HttpServlet {
         }
     }
 
-    @Override
+    /*@Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String id = req.getParameter("id");
         String definition = req.getParameter("definition");
@@ -127,7 +127,7 @@ public class FunctionServlet extends HttpServlet {
                 throw new RuntimeException(e);
             }
         }
-    }
+    }*/
 
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

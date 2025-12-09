@@ -2,10 +2,7 @@
 
 package ru.ssau.tk.phoenix.ooplabs;
 
-import ru.ssau.tk.phoenix.ooplabs.dto.FunctionRequest;
-import ru.ssau.tk.phoenix.ooplabs.dto.FunctionResponse;
-import ru.ssau.tk.phoenix.ooplabs.dto.UserRequest;
-import ru.ssau.tk.phoenix.ooplabs.dto.UserResponse;
+import ru.ssau.tk.phoenix.ooplabs.dto.*;
 import ru.ssau.tk.phoenix.ooplabs.service.FunctionApiContract;
 import ru.ssau.tk.phoenix.ooplabs.service.FunctionService;
 import ru.ssau.tk.phoenix.ooplabs.service.UserApiContract;
@@ -34,6 +31,9 @@ public class ExportResults {
     private final List<FunctionResponse> functions = new ArrayList<>();
     private final List<UserRequest> userRequests = new ArrayList<>();
     private final List<FunctionRequest> functionRequests = new ArrayList<>();
+
+    private final FunctionDefinition simpleDefinition = new SimpleFunction("x^2", 11, 0, 10, null);
+    private final FunctionDefinition newDefinition = new SimpleFunction("x^2", 21, -10, 10, null);
 
 
     public static void main(String[] args) throws SQLException {
@@ -195,7 +195,7 @@ public class ExportResults {
             UserRequest user = new UserRequest("user_" + (i + 1), "password");
             userRequests.add(user);
             functionRequests.add(
-                    new FunctionRequest(0L, "function_" + (i+1), FunctionType.SIMPLE, "{}"));
+                    new FunctionRequest(0L, "function_" + (i+1), FunctionType.SIMPLE, simpleDefinition));
         }
     }
 
@@ -247,7 +247,7 @@ public class ExportResults {
     private void updateFunctions() throws SQLException {
         for (int i = 0; i < COUNT; i++) {
             FunctionResponse func = functions.get(i);
-            func.setDefinition("{\"function\": \"x^2\"}");
+            func.setDefinition(newDefinition);
             functionService.update(func);
         }
     }

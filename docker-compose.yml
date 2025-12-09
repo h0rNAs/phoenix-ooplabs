@@ -1,5 +1,7 @@
 name: mathhub-manual
 
+name: mathhub-framework
+
 version: '3.8'
 services:
   app:

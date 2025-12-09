@@ -7,10 +7,9 @@ public class FunctionResponse {
     private Long userId;
     private String name;
     private FunctionType type;
-    private String definition;
+    private FunctionDefinition definition;
 
-
-    public FunctionResponse(Long id, Long userId, String name, FunctionType type, String definition) {
+    public FunctionResponse(Long id, Long userId, String name, FunctionType type, FunctionDefinition definition) {
         this.id = id;
         this.userId = userId;
         this.name = name;
@@ -18,7 +17,7 @@ public class FunctionResponse {
         this.definition = definition;
     }
 
-    public FunctionResponse(Long id, Long userId, String name, String type, String definition) {
+    public FunctionResponse(Long id, Long userId, String name, String type, FunctionDefinition definition) {
         this(id, userId, name, FunctionType.fromString(type), definition);
     }
 
@@ -26,7 +25,8 @@ public class FunctionResponse {
         this(id, func.getUserId(), func.getName(), func.getType(), func.getDefinition());
     }
 
-    public FunctionResponse() {}
+    public FunctionResponse() {
+    }
 
     public Long getId() {
         return id;
@@ -60,11 +60,11 @@ public class FunctionResponse {
         this.type = type;
     }
 
-    public String getDefinition() {
+    public FunctionDefinition getDefinition() {
         return definition;
     }
 
-    public void setDefinition(String definition) {
+    public void setDefinition(FunctionDefinition definition) {
         this.definition = definition;
     }
 
