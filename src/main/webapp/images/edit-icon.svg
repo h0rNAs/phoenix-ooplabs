@@ -1,0 +1,24 @@
+<!-- pencil-45-icon.svg -->
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="Pencil 45 degrees Icon">
+  <title>Pencil 45° Icon</title>
+
+  <!-- Группа с поворотом на 45° вокруг центра -->
+  <g transform="rotate(-45 256 256)">
+
+    <!-- Корпус карандаша -->
+    <rect x="96" y="224" width="280" height="64" rx="32" fill="#ffa500"></rect>
+
+    <!-- Металлическое кольцо -->
+    <rect x="376" y="224" width="32" height="64" rx="8" fill="none" stroke="#ffa500" stroke-width="16"></rect>
+
+    <!-- Ластик -->
+    <rect x="408" y="224" width="48" height="64" rx="16" fill="#ffa500"></rect>
+
+    <!-- Деревянный наконечник -->
+    <polygon points="96,224 48,256 96,288" fill="none" stroke="#ffa500" stroke-width="16" stroke-linejoin="round"></polygon>
+
+    <!-- Грифель -->
+    <polygon points="48,256 24,256 48,272" fill="#ffa500"></polygon>
+
+  </g>
+</svg>

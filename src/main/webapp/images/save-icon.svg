@@ -1,0 +1,15 @@
+<!-- upload-icon.svg -->
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="Upload Icon">
+  <title>Upload Icon</title>
+
+  <!-- Верхний контейнер -->
+  <path d="M96 352
+           C96 384, 128 416, 160 416
+           H352
+           C384 416, 416 384, 416 352" fill="none" stroke="#ffa500" stroke-width="32" stroke-linecap="round"></path>
+
+  <!-- Стрелка вверх -->
+  <line x1="256" y1="288" x2="256" y2="96" stroke="#ffa500" stroke-width="32" stroke-linecap="round"></line>
+
+  <path d="M192 160 L256 96 L320 160" fill="none" stroke="#ffa500" stroke-width="32" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>

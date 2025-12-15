@@ -72,7 +72,7 @@ class FunctionServiceTest {
         assertEquals(user1.getId(), found.getUserId());
 
         assertInstanceOf(TabulatedFunction.class, found.getDefinition());
-        assertEquals(saved.getDefinition().getPoints(), found.getDefinition().getPoints());
+        assertEquals(saved.getDefinition().getEdits(), found.getDefinition().getEdits());
     }
 
     @Test
@@ -117,7 +117,7 @@ class FunctionServiceTest {
         assertEquals("newName", afterUpdate.getName());
         assertEquals(FunctionType.TABULATED, afterUpdate.getType());
         assertInstanceOf(TabulatedFunction.class, afterUpdate.getDefinition());
-        assertEquals(updatedDto.getDefinition().getPoints(), afterUpdate.getDefinition().getPoints());
+        assertEquals(updatedDto.getDefinition().getEdits(), afterUpdate.getDefinition().getEdits());
     }
 
     @Test

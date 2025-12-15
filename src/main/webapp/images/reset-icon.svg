@@ -1,0 +1,16 @@
+<!-- reset-square-icon.svg -->
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="Square Reset Icon">
+  <title>Square Reset Icon</title>
+
+  <!-- Основная круговая дуга (более квадратная форма) -->
+  <path d="
+    M160 128
+    H352
+    A80 80 0 0 1 352 384
+    H160
+    A80 80 0 0 1 160 128
+  " fill="none" stroke="#ffa500" stroke-width="32" stroke-linecap="round"></path>
+
+  <!-- Стрелка -->
+  <path d="M144 160 L144 224 L208 224" fill="none" stroke="#ffa500" stroke-width="32" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
