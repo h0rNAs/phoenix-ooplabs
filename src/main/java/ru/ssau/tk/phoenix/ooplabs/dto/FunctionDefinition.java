@@ -18,13 +18,13 @@ import java.io.Serializable;
 })
 public abstract class FunctionDefinition implements Serializable {
     private static long serialVersionUID;
-    protected Point[] points;
+    protected Point[] edits;
 
-    public Point[] getPoints() {
-        return points;
+    public Point[] getEdits() {
+        return edits;
     }
 
-    public void setPoints(Point[] points) {
-        this.points = points;
+    public void setEdits(Point[] edits) {
+        this.edits = edits;
     }
 }

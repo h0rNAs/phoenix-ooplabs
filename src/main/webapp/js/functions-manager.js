@@ -522,8 +522,10 @@ window.saveCompositeFunction = async function(id, functionId) {
         }
     }
 
+    console.info(functionData);
     const savedFunction = await saveFunctionToDB(functionId, functionData);
-    if (savedFunction === undefined){
+    console.info(savedFunction);
+    if (!savedFunction){
         console.info('null при сохранении');
         return;
     }
@@ -818,6 +820,7 @@ function updateFilledCount(functionId) {
 }
 
 async function saveFunctionToDB(functionId, functionData) {
+    console.info(functionId, functionData);
     const url = 'http://localhost:8080/mathhub/api/functions';
     const method = functionId === '-1' ? 'POST' : 'PUT';
 
@@ -832,6 +835,7 @@ async function saveFunctionToDB(functionId, functionData) {
             },
             body: JSON.stringify(functionData)
         });
+        console.info(response);
         functionData = await response.json();
         return functionData;
     } catch (error) {

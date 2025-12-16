@@ -14,7 +14,7 @@ public class SimpleFunction extends FunctionDefinition{
         this.pointsCount = pointsCount;
         this.xFrom = xFrom;
         this.xTo = xTo;
-        this.points = edits;
+        this.edits = edits;
     }
 
     public SimpleFunction() {
