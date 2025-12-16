@@ -1,0 +1,8 @@
+<!-- check-icon.svg -->
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="Check Icon">
+  <title>Check Icon</title>
+
+  <path d="M128 272
+           L224 368
+           L384 160" fill="none" stroke="#ffa500" stroke-width="56" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>

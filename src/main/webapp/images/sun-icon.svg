@@ -1,0 +1,22 @@
+<!-- lighttheme-icon.svg -->
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="Orange sun icon">
+  <title>Orange sun</title>
+
+  <!-- Лучи -->
+  <g fill="#ffa500">
+    <rect x="246" y="20" width="20" height="90" rx="10"></rect>
+    <rect x="246" y="402" width="20" height="90" rx="10"></rect>
+
+    <rect x="20" y="246" width="90" height="20" rx="10"></rect>
+    <rect x="402" y="246" width="90" height="20" rx="10"></rect>
+
+    <rect x="90" y="90" width="20" height="90" rx="10" transform="rotate(-45 100 135)"></rect>
+    <rect x="402" y="90" width="20" height="90" rx="10" transform="rotate(45 412 135)"></rect>
+
+    <rect x="90" y="332" width="20" height="90" rx="10" transform="rotate(45 100 377)"></rect>
+    <rect x="402" y="332" width="20" height="90" rx="10" transform="rotate(-45 412 377)"></rect>
+  </g>
+
+  <!-- Центральный круг -->
+  <circle cx="256" cy="256" r="120" fill="#ffa500"></circle>
+</svg>

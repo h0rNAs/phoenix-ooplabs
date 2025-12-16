@@ -1,0 +1,20 @@
+<!-- delete-icon.svg -->
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="Delete Icon">
+  <title>Delete Icon</title>
+
+  <!-- Крышка -->
+  <rect x="160" y="96" width="192" height="48" rx="24" fill="none" stroke="#ffa500" stroke-width="32"></rect>
+
+  <!-- Ручка крышки -->
+  <rect x="224" y="48" width="64" height="48" rx="16" fill="none" stroke="#ffa500" stroke-width="32"></rect>
+
+  <!-- Корпус корзины -->
+  <rect x="144" y="144" width="224" height="288" rx="32" fill="none" stroke="#ffa500" stroke-width="32"></rect>
+
+  <!-- Вертикальные линии внутри -->
+  <line x1="208" y1="192" x2="208" y2="400" stroke="#ffa500" stroke-width="32" stroke-linecap="round"></line>
+
+  <line x1="256" y1="192" x2="256" y2="400" stroke="#ffa500" stroke-width="32" stroke-linecap="round"></line>
+
+  <line x1="304" y1="192" x2="304" y2="400" stroke="#ffa500" stroke-width="32" stroke-linecap="round"></line>
+</svg>

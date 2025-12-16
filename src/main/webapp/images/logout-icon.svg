@@ -1,0 +1,13 @@
+<!-- logout-icon.svg -->
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="Logout Icon">
+  <title>Logout Icon</title>
+
+  <!-- Дверь -->
+  <rect x="80" y="96" width="200" height="320" rx="24" ry="24" fill="none" stroke="#ffa500" stroke-width="32"></rect>
+
+  <!-- Стрелка выхода -->
+  <path d="M320 176 L432 256 L320 336" fill="none" stroke="#ffa500" stroke-width="32" stroke-linecap="round" stroke-linejoin="round"></path>
+
+  <!-- Линия стрелки -->
+  <line x1="208" y1="256" x2="416" y2="256" stroke="#ffa500" stroke-width="32" stroke-linecap="round"></line>
+</svg>

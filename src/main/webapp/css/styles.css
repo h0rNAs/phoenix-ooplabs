@@ -1,0 +1,1704 @@
+/* Основные стили */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    overflow: hidden;
+    height: 100vh;
+}
+
+:root {
+    --orange-accent: #FFA500;
+    --orange-hover: #FF8C00;
+    --delete-red: #ff4444;
+    --delete-red-hover: #cc0000;
+    --hover-light: rgba(255, 165, 0, 0.1);
+    --hover-dark: rgba(255, 165, 0, 0.1);
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    transition: background-color 0.3s ease;
+    background: inherit;
+    height: 60px;
+    box-sizing: border-box;
+}
+
+.logo {
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+}
+
+.math-text {
+    font-weight: bold;
+}
+
+.hub-button {
+    background-color: var(--orange-accent);
+    padding: 2px 8px;
+    margin-left: 5px;
+    text-decoration: none;
+    border: none;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+    .hub-button:hover {
+        background-color: var(--orange-hover);
+        transform: translateY(-1px);
+    }
+
+.hub-text {
+    color: white;
+    font-weight: bold;
+}
+
+.right-corner {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.account-icon-button, .logout-icon-button {
+    background: none;
+    border: none;
+    padding: 6px;
+    cursor: pointer;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.account-icon, .logout-icon {
+    width: 20px;
+    height: 20px;
+}
+
+.user-name {
+    margin-left: 6px;
+    font-size: 14px;
+    font-weight: normal;
+}
+
+.theme-button {
+    background: none;
+    border: none;
+    padding: 6px;
+    cursor: pointer;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.theme-icon {
+    width: 20px;
+    height: 20px;
+}
+
+.light-theme .moon-icon {
+    display: block;
+}
+
+.light-theme .sun-icon {
+    display: none;
+}
+
+.dark-theme .sun-icon {
+    display: block;
+}
+
+.dark-theme .moon-icon {
+    display: none;
+}
+
+.light-theme .account-icon-button:hover,
+.light-theme .logout-icon-button:hover,
+.light-theme .theme-button:hover,
+.light-theme .menu-btn:hover,
+.light-theme .close-btn:hover,
+.light-theme .type-option:hover {
+    background-color: var(--hover-light);
+    transform: translateY(-1px);
+}
+
+.dark-theme .account-icon-button:hover,
+.dark-theme .logout-icon-button:hover,
+.dark-theme .theme-button:hover,
+.dark-theme .menu-btn:hover,
+.dark-theme .close-btn:hover,
+.dark-theme .type-option:hover {
+    background-color: var(--hover-dark);
+    transform: translateY(-1px);
+}
+
+.light-theme .account-icon,
+.light-theme .logout-icon {
+    color: var(--orange-accent);
+}
+
+.dark-theme .account-icon,
+.dark-theme .logout-icon {
+    color: white;
+}
+
+.calculator-main {
+    height: calc(100vh - 60px);
+    position: relative;
+    overflow: hidden;
+}
+
+.graph-panel {
+    width: 100%;
+    height: 100%;
+    background: #e9eef6;
+    transition: background-color 0.3s ease;
+}
+
+#graphCanvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.control-panel {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.menu-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+    .menu-btn img {
+        width: 42px;
+        height: 42px;
+        transition: transform 0.2s ease;
+    }
+
+    .menu-btn:hover img {
+        transform: scale(1.05);
+    }
+
+.action-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.action-btn {
+    border: 2px solid var(--orange-accent);
+    border-radius: 20px;
+    padding: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    width: 44px;
+    height: 44px;
+}
+
+.btn-icon {
+    width: 24px;
+    height: 24px;
+    transition: transform 0.2s ease;
+}
+
+.action-btn:hover .btn-icon {
+    transform: scale(1.05);
+}
+
+/* Светлая тема - кнопки с фоном как у графического поля */
+.light-theme .action-btn {
+    background: #e9eef6;
+    color: var(--orange-accent);
+    border-color: var(--orange-accent);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+    .light-theme .action-btn:hover {
+        background: var(--orange-accent);
+        color: #FFFFFF;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(255, 165, 0, 0.3);
+    }
+
+/* Темная тема - кнопки с фоном как у графического поля */
+.dark-theme .action-btn {
+    background: #2d3748;
+    color: var(--orange-accent);
+    border-color: var(--orange-accent);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+    .dark-theme .action-btn:hover {
+        background: var(--orange-accent);
+        color: #000000;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(255, 140, 0, 0.6);
+    }
+
+/* Иконки в светлой теме - оранжевые */
+.light-theme .btn-icon {
+    filter: invert(55%) sepia(98%) saturate(1574%) hue-rotate(1deg) brightness(105%) contrast(106%);
+}
+
+/* При наведении в светлой теме иконки становятся белыми */
+.light-theme .action-btn:hover .btn-icon {
+    filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(288deg) brightness(102%) contrast(102%);
+}
+
+/* Иконки в темной теме - оранжевые */
+.dark-theme .btn-icon {
+    filter: invert(55%) sepia(98%) saturate(1574%) hue-rotate(1deg) brightness(105%) contrast(106%);
+}
+
+/* При наведении в темной теме иконки становятся черными */
+.dark-theme .action-btn:hover .btn-icon {
+    filter: invert(0%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(0%) contrast(100%);
+}
+
+/* Увеличиваем меню функций */
+.functions-menu {
+    position: fixed;
+    top: 0;
+    left: -420px;
+    width: 400px;
+    height: 100vh;
+    background: white;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+    transition: left 0.3s ease;
+    z-index: 1000;
+    overflow-y: auto;
+}
+
+    .functions-menu.active {
+        left: 0;
+    }
+
+.menu-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid #e0e0e0;
+    height: 70px;
+    box-sizing: border-box;
+}
+
+    .menu-header h3 {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 600;
+    }
+
+.close-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+    .close-btn img {
+        width: 20px;
+        height: 20px;
+        transition: transform 0.2s ease;
+    }
+
+    .close-btn:hover img {
+        transform: scale(1.05);
+    }
+
+.menu-content {
+    padding: 25px;
+    height: calc(100vh - 70px);
+    overflow-y: auto;
+    box-sizing: border-box;
+}
+
+.add-function-btn {
+    width: 100%;
+    background: var(--orange-accent);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 16px;
+    cursor: pointer;
+    margin-bottom: 25px;
+    font-weight: 600;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+    .add-function-btn:hover {
+        background: var(--orange-hover);
+        transform: translateY(-2px);
+    }
+
+.function-type-selector {
+    display: none;
+    margin-bottom: 25px;
+}
+
+.type-option {
+    width: 100%;
+    background: #f5f5f5;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    padding: 18px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    color: var(--orange-accent);
+}
+
+/* Темная тема для кнопок выбора типа */
+.dark-theme .type-option {
+    background: #4a5568;
+    border-color: #718096;
+    color: var(--orange-accent);
+}
+
+/* Эффект при наведении */
+.light-theme .type-option:hover {
+    background: #ffa50015;
+    border-color: var(--orange-accent);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(255, 165, 0, 0.1);
+}
+
+.dark-theme .type-option:hover {
+    background: rgba(255, 165, 0, 0.1);
+    border-color: var(--orange-accent);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(255, 165, 0, 0.2);
+}
+
+.functions-list {
+    border-top: 1px solid #e0e0e0;
+    padding-top: 20px;
+}
+
+input[type="text"], input[type="password"] {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    transition: border-color 0.3s ease;
+}
+
+    input[type="text"]:hover, input[type="password"]:hover {
+        border-color: var(--orange-accent);
+    }
+
+button[type="submit"] {
+    background: var(--orange-accent);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+    button[type="submit"]:hover {
+        background: var(--orange-hover);
+        transform: translateY(-1px);
+    }
+
+body.dark-theme {
+    background-color: rgb(50, 50, 52);
+    color: white;
+}
+
+.dark-theme header {
+    background-color: rgb(50, 50, 52);
+}
+
+.dark-theme .math-text {
+    color: #FFFFFF;
+}
+
+.dark-theme .hub-text {
+    color: #000000;
+}
+
+.dark-theme .graph-panel {
+    background: #2d3748;
+}
+
+.dark-theme .functions-menu {
+    background: #2d3748;
+    color: white;
+}
+
+.dark-theme .menu-header {
+    border-bottom-color: #4a5568;
+}
+
+.dark-theme .functions-list {
+    border-top-color: #4a5568;
+}
+
+/* Стили для кнопок в темной теме */
+.dark-theme .menu-btn img {
+    filter: invert(55%) sepia(98%) saturate(1574%) hue-rotate(1deg) brightness(105%) contrast(106%);
+}
+
+.dark-theme .menu-btn:hover img {
+    filter: invert(70%) sepia(98%) saturate(1574%) hue-rotate(1deg) brightness(105%) contrast(106%);
+}
+
+.dark-theme .close-btn img {
+    filter: invert(55%) sepia(98%) saturate(1574%) hue-rotate(1deg) brightness(105%) contrast(106%);
+}
+
+.dark-theme .close-btn:hover img {
+    filter: invert(70%) sepia(98%) saturate(1574%) hue-rotate(1deg) brightness(105%) contrast(106%);
+}
+
+.dark-theme .add-function-btn {
+    background: var(--orange-accent);
+    color: #000000;
+}
+
+    .dark-theme .add-function-btn:hover {
+        background: var(--orange-hover);
+        color: #000000;
+    }
+
+body.light-theme {
+    background-color: #FFFFFF;
+    color: black;
+}
+
+.light-theme header {
+    background-color: #FFFFFF;
+}
+
+.light-theme .math-text {
+    color: #000000;
+}
+
+.light-theme .hub-text {
+    color: #FFFFFF;
+}
+
+.light-theme .graph-panel {
+    background: #e9eef6;
+}
+
+.light-theme .functions-menu {
+    background: white;
+    color: black;
+}
+
+.light-theme .menu-header {
+    border-bottom-color: #e0e0e0;
+}
+
+/* ========== МИНИМАЛИСТИЧНЫЕ КНОПКИ УПРАВЛЕНИЯ ФУНКЦИЯМИ ========== */
+/* Без текста, только иконки как у action-btn */
+
+.function-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.function-controls {
+    display: flex;
+    gap: 8px;
+}
+
+/* Круглые минималистичные кнопки управления */
+.function-edit-btn, .function-delete-btn {
+    border: 2px solid var(--orange-accent);
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+/* Кнопка сохранения/редактирования (оранжевая) */
+.function-edit-btn {
+    background: var(--orange-accent);
+    border-color: var(--orange-accent);
+}
+
+    .function-edit-btn:hover {
+        background: var(--orange-hover);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(255, 140, 0, 0.3);
+    }
+
+/* Кнопка удаления/отмены (красная) */
+.function-delete-btn {
+    background: #ff4444;
+    border-color: #ff4444;
+}
+
+    .function-delete-btn:hover {
+        background: #cc0000;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(255, 0, 0, 0.3);
+    }
+
+    /* Иконки в кнопках управления */
+    .function-edit-btn img, .function-delete-btn img {
+        width: 20px;
+        height: 20px;
+        transition: transform 0.2s ease;
+    }
+
+    .function-edit-btn:hover img, .function-delete-btn:hover img {
+        transform: scale(1.05);
+    }
+
+/* Темная тема для кнопок управления */
+.dark-theme .function-edit-btn {
+    background: var(--orange-accent);
+    border-color: var(--orange-accent);
+}
+
+    .dark-theme .function-edit-btn:hover {
+        background: var(--orange-hover);
+    }
+
+.dark-theme .function-delete-btn {
+    background: #ff4444;
+    border-color: #ff4444;
+}
+
+    .dark-theme .function-delete-btn:hover {
+        background: #cc0000;
+    }
+
+/* Иконки в темной теме - белые в оранжевой кнопке, белые в красной кнопке */
+.dark-theme .function-edit-btn img {
+    filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(288deg) brightness(102%) contrast(102%);
+}
+
+.dark-theme .function-delete-btn img {
+    filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(288deg) brightness(102%) contrast(102%);
+}
+
+/* Иконки в светлой теме */
+.light-theme .function-edit-btn img {
+    filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(288deg) brightness(102%) contrast(102%);
+}
+
+.light-theme .function-delete-btn img {
+    filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(288deg) brightness(102%) contrast(102%);
+}
+
+/* ========== СТИЛИ ДЛЯ РЕДАКТОРОВ ФУНКЦИЙ ========== */
+/* Увеличенные поля редактирования */
+
+.function-editor {
+    background: #f9f9f9;
+    border: 2px solid #ddd;
+    border-radius: 12px;
+    padding: 25px;
+    margin-bottom: 20px;
+}
+
+.dark-theme .function-editor {
+    background: #4a5568;
+    border-color: #718096;
+}
+
+.function-item {
+    background: #f9f9f9;
+    border: 2px solid #ddd;
+    border-radius: 12px;
+    padding: 25px;
+    margin-bottom: 15px;
+}
+
+.dark-theme .function-item {
+    background: #4a5568;
+    border-color: #718096;
+    color: white;
+}
+
+.function-type {
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.dark-theme .function-type {
+    color: #a0aec0;
+}
+
+.function-name {
+    font-weight: 600;
+    font-size: 16px;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.dark-theme .function-name {
+    color: white;
+}
+
+.function-expression {
+    font-size: 14px;
+    color: #444;
+    font-family: 'Courier New', monospace;
+    margin-top: 10px;
+    padding: 10px;
+    background: rgba(0,0,0,0.05);
+    border-radius: 6px;
+}
+
+.dark-theme .function-expression {
+    color: #e2e8f0;
+    background: rgba(255,255,255,0.05);
+}
+
+/* ========== ИСПРАВЛЕННОЕ ПОЛЕ ДЛЯ ИМЕНИ ФУНКЦИИ ========== */
+/* Теперь поле не налезает на границы */
+
+.function-name-input {
+    width: 100%;
+    padding: 12px 14px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 15px;
+    margin-bottom: 20px;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+    line-height: 1.4;
+    height: 48px;
+}
+
+    .function-name-input:focus {
+        border-color: var(--orange-accent);
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(255, 165, 0, 0.1);
+    }
+
+.dark-theme .function-name-input {
+    background: #2d3748;
+    border-color: #4a5568;
+    color: white;
+}
+
+/* Увеличенные элементы ввода */
+.function-editor select,
+.function-editor input[type="text"],
+.function-editor input[type="number"] {
+    width: 100%;
+    padding: 14px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 15px;
+    margin-bottom: 15px;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+}
+
+    .function-editor select:focus,
+    .function-editor input[type="text"]:focus,
+    .function-editor input[type="number"]:focus {
+        border-color: var(--orange-accent);
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(255, 165, 0, 0.1);
+    }
+
+.dark-theme .function-editor select,
+.dark-theme .function-editor input[type="text"],
+.dark-theme .function-editor input[type="number"] {
+    background: #2d3748;
+    border-color: #4a5568;
+    color: white;
+}
+
+/* ========== ИСПРАВЛЕННЫЕ СТИЛИ ДЛЯ ТАБЛИЦЫ ТОЧЕК ========== */
+/* Теперь точки не будут налезать друг на друга */
+
+.tabulated-table-container {
+    max-height: 350px;
+    overflow-y: auto;
+    margin: 20px 0;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    background: white;
+}
+
+.dark-theme .tabulated-table-container {
+    background: #2d3748;
+    border-color: #4a5568;
+}
+
+.tabulated-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 14px;
+}
+
+    .tabulated-table th {
+        background: #f8f9fa;
+        padding: 16px 12px;
+        text-align: left;
+        border-bottom: 2px solid #dee2e6;
+        font-weight: 600;
+        color: #495057;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+    }
+
+.dark-theme .tabulated-table th {
+    background: #4a5568;
+    color: #e2e8f0;
+    border-bottom-color: #718096;
+}
+
+.tabulated-table td {
+    padding: 14px 12px;
+    border-bottom: 1px solid #e9ecef;
+    vertical-align: middle;
+}
+
+.dark-theme .tabulated-table td {
+    border-bottom-color: #718096;
+}
+
+/* Убедимся, что строки имеют достаточную высоту */
+.tabulated-table tr {
+    height: 60px;
+}
+
+/* Увеличиваем высоту ячеек с инпутами */
+.tabulated-table td:nth-child(2),
+.tabulated-table td:nth-child(3) {
+    min-width: 140px;
+}
+
+.tabulated-input {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+    text-align: center;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+    height: 44px;
+}
+
+    .tabulated-input:focus {
+        border-color: var(--orange-accent);
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(255, 165, 0, 0.1);
+    }
+
+.dark-theme .tabulated-input {
+    background: #2d3748;
+    border-color: #4a5568;
+    color: white;
+}
+
+/* Стили для обязательных и необязательных ячеек */
+.tabulated-table td:first-child {
+    font-weight: 600;
+    text-align: center;
+    width: 70px;
+    padding: 14px 8px;
+}
+
+.tabulated-table td:last-child {
+    width: 120px;
+    padding: 14px 8px;
+}
+
+/* Кнопка удаления в таблице */
+.tabulated-delete-btn {
+    background: #ff4444;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 14px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+    transition: all 0.3s;
+    width: 100%;
+    white-space: nowrap;
+    height: 44px;
+    box-sizing: border-box;
+}
+
+    .tabulated-delete-btn:hover {
+        background: #cc0000;
+        transform: translateY(-1px);
+    }
+
+/* Информационный блок */
+.function-info {
+    background: #e8f4fd;
+    padding: 20px;
+    border-radius: 10px;
+    border: 2px solid #cce5ff;
+    font-size: 14px;
+    color: #004085;
+    line-height: 1.5;
+    margin: 20px 0;
+}
+
+.dark-theme .function-info {
+    background: rgba(255, 165, 0, 0.1);
+    border-color: rgba(255, 165, 0, 0.3);
+    color: #ffd8a8;
+}
+
+.function-info-title {
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+/* Кнопки действий внутри редактора */
+.function-action-btn {
+    padding: 14px 24px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.add-point-btn {
+    background: var(--orange-accent);
+    color: white;
+}
+
+    .add-point-btn:hover {
+        background: var(--orange-hover);
+        transform: translateY(-2px);
+    }
+
+.sort-points-btn {
+    background: #45B7D1;
+    color: white;
+}
+
+    .sort-points-btn:hover {
+        background: #3a9bb3;
+        transform: translateY(-2px);
+    }
+
+/* Счетчик точек */
+.points-counter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 15px 0;
+    padding: 16px;
+    background: #f8f9fa;
+    border-radius: 10px;
+    font-weight: 600;
+}
+
+.dark-theme .points-counter {
+    background: #4a5568;
+}
+
+.points-count {
+    color: #ff4444;
+    font-size: 15px;
+}
+
+    .points-count.valid {
+        color: #4CAF50;
+    }
+
+.points-requirement {
+    color: #666;
+    font-size: 13px;
+}
+
+.dark-theme .points-requirement {
+    color: #a0aec0;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .functions-menu {
+        width: 340px !important;
+        left: -340px !important;
+    }
+
+    .function-editor,
+    .function-item {
+        padding: 20px;
+    }
+
+    .function-edit-btn,
+    .function-delete-btn {
+        width: 40px;
+        height: 40px;
+    }
+
+        .function-edit-btn img,
+        .function-delete-btn img {
+            width: 18px;
+            height: 18px;
+        }
+
+    .action-btn {
+        width: 40px;
+        height: 40px;
+    }
+
+    .btn-icon {
+        width: 20px;
+        height: 20px;
+    }
+
+    .tabulated-table-container {
+        max-height: 300px;
+    }
+
+    .tabulated-table th,
+    .tabulated-table td {
+        padding: 12px 8px;
+        font-size: 13px;
+    }
+
+    .tabulated-input {
+        padding: 10px;
+        font-size: 13px;
+        height: 40px;
+    }
+
+    .function-name-input {
+        padding: 10px 12px;
+        font-size: 14px;
+        height: 44px;
+    }
+
+    .tabulated-delete-btn {
+        padding: 8px 10px;
+        font-size: 11px;
+        height: 40px;
+    }
+}
+
+@media (max-width: 480px) {
+    .functions-menu {
+        width: 300px !important;
+        left: -300px !important;
+    }
+
+    .menu-btn img {
+        width: 36px !important;
+        height: 36px !important;
+    }
+
+    .menu-content {
+        padding: 20px;
+    }
+
+    .function-header span {
+        font-size: 14px !important;
+    }
+
+    .function-controls {
+        gap: 6px;
+    }
+
+    .function-edit-btn,
+    .function-delete-btn {
+        width: 36px;
+        height: 36px;
+    }
+
+        .function-edit-btn img,
+        .function-delete-btn img {
+            width: 16px;
+            height: 16px;
+        }
+
+    .tabulated-table-container {
+        max-height: 250px;
+    }
+
+    .tabulated-table th,
+    .tabulated-table td {
+        padding: 10px 6px;
+        font-size: 12px;
+    }
+
+        .tabulated-table td:first-child,
+        .tabulated-table td:last-child {
+            width: 60px;
+        }
+
+    .tabulated-input {
+        padding: 8px;
+        font-size: 12px;
+        height: 36px;
+    }
+
+    .function-name-input {
+        padding: 8px 10px;
+        font-size: 13px;
+        height: 40px;
+    }
+
+    .tabulated-delete-btn {
+        padding: 6px 8px;
+        font-size: 10px;
+        height: 36px;
+    }
+}
+
+/* Уведомления */
+.custom-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #4CAF50;
+    color: white;
+    padding: 16px 24px;
+    border-radius: 10px;
+    z-index: 10000;
+    font-weight: 500;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    max-width: 350px;
+    animation: slideIn 0.3s ease-out;
+}
+
+    .custom-notification.error {
+        background: #ff4444;
+    }
+
+    .custom-notification.warning {
+        background: #ff9800;
+    }
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Поле выбора функции в простом редакторе */
+.function-select-container {
+    margin-bottom: 20px;
+}
+
+    .function-select-container select {
+        width: 100%;
+        padding: 14px;
+        border: 2px solid #ddd;
+        border-radius: 8px;
+        font-size: 15px;
+        background: white;
+        cursor: pointer;
+        height: 48px;
+        box-sizing: border-box;
+    }
+
+        .function-select-container select:focus {
+            border-color: var(--orange-accent);
+            outline: none;
+        }
+
+.dark-theme .function-select-container select {
+    background: #2d3748;
+    border-color: #4a5568;
+    color: white;
+}
+
+/* ========== АДАПТИРОВАННАЯ ЛЕГЕНДА ФУНКЦИЙ ДЛЯ ТЕМНОЙ ТЕМЫ ========== */
+/* Полная поддержка темной темы */
+
+.graph-legend {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(255, 255, 255, 0.95);
+    border: 2px solid var(--orange-accent);
+    border-radius: 10px;
+    padding: 15px;
+    z-index: 100;
+    max-width: 220px;
+    max-height: 320px;
+    overflow-y: auto;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    backdrop-filter: blur(5px);
+    transition: all 0.3s ease;
+}
+
+/* Темная тема для легенды */
+.dark-theme .graph-legend {
+    background: rgba(45, 55, 72, 0.95);
+    border-color: var(--orange-accent);
+    color: white;
+}
+
+.legend-title {
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: var(--orange-accent);
+    font-size: 15px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(255, 165, 0, 0.3);
+}
+
+.dark-theme .legend-title {
+    color: var(--orange-accent);
+    border-bottom-color: rgba(255, 165, 0, 0.3);
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    padding: 8px 10px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+    .legend-item:hover {
+        background: rgba(255, 165, 0, 0.1);
+    }
+
+.dark-theme .legend-item:hover {
+    background: rgba(255, 165, 0, 0.2);
+}
+
+.legend-color {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.dark-theme .legend-color {
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.legend-name {
+    font-size: 13px;
+    color: #333;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex: 1;
+    font-weight: 500;
+}
+
+.dark-theme .legend-name {
+    color: #e2e8f0;
+}
+
+/* Состояние без функций */
+.legend-empty {
+    color: #666;
+    font-size: 12px;
+    text-align: center;
+    padding: 15px 0;
+    font-style: italic;
+}
+
+.dark-theme .legend-empty {
+    color: #a0aec0;
+}
+
+/* Прокрутка легенды */
+.graph-legend::-webkit-scrollbar {
+    width: 6px;
+}
+
+.graph-legend::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 3px;
+}
+
+.graph-legend::-webkit-scrollbar-thumb {
+    background: var(--orange-accent);
+    border-radius: 3px;
+}
+
+.dark-theme .graph-legend::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.dark-theme .graph-legend::-webkit-scrollbar-thumb {
+    background: var(--orange-hover);
+}
+
+/* Адаптивность для легенды */
+@media (max-width: 768px) {
+    .graph-legend {
+        max-width: 180px;
+        max-height: 280px;
+        padding: 12px;
+        top: 15px;
+        right: 15px;
+    }
+
+    .legend-title {
+        font-size: 14px;
+        margin-bottom: 10px;
+    }
+
+    .legend-item {
+        gap: 8px;
+        margin-bottom: 8px;
+        padding: 6px 8px;
+    }
+
+    .legend-color {
+        width: 12px;
+        height: 12px;
+    }
+
+    .legend-name {
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .graph-legend {
+        max-width: 150px;
+        max-height: 240px;
+        padding: 10px;
+        top: 10px;
+        right: 10px;
+    }
+
+    .legend-title {
+        font-size: 13px;
+        margin-bottom: 8px;
+    }
+
+    .legend-item {
+        gap: 6px;
+        margin-bottom: 6px;
+        padding: 5px 6px;
+    }
+
+    .legend-color {
+        width: 10px;
+        height: 10px;
+    }
+
+    .legend-name {
+        font-size: 11px;
+    }
+}
+
+/* ========== СТИЛИ ДЛЯ КОМПОЗИТНЫХ ФУНКЦИЙ ========== */
+
+.composite-controls {
+    margin: 20px 0;
+}
+
+    .composite-controls select {
+        width: 100%;
+        padding: 12px;
+        border: 2px solid #ddd;
+        border-radius: 6px;
+        font-size: 14px;
+        margin-bottom: 15px;
+        background: white;
+        color: #333;
+        transition: all 0.3s ease;
+        box-sizing: border-box;
+    }
+
+.dark-theme .composite-controls select {
+    background: #4a5568;
+    border-color: #718096;
+    color: white;
+}
+
+.composite-controls select:focus {
+    border-color: var(--orange-accent);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(255, 165, 0, 0.1);
+}
+
+.composite-controls label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: var(--orange-accent);
+    font-size: 14px;
+}
+
+.preview {
+    margin-top: 20px;
+    padding: 15px;
+    background: rgba(255, 165, 0, 0.1);
+    border-radius: 8px;
+    border: 2px solid rgba(255, 165, 0, 0.3);
+}
+
+.dark-theme .preview {
+    background: rgba(255, 165, 0, 0.1);
+    border-color: rgba(255, 165, 0, 0.4);
+}
+
+.preview div:first-child {
+    font-weight: 600;
+    color: var(--orange-accent);
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.preview div:last-child {
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    color: #333;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 6px;
+    word-break: break-all;
+}
+
+.dark-theme .preview div:last-child {
+    color: white;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Стили для отображения композитных функций */
+.function-item .composite-info {
+    font-size: 12px;
+    color: #666;
+    margin-top: 10px;
+    padding: 10px;
+    background: rgba(255, 165, 0, 0.1);
+    border-radius: 6px;
+    border-left: 3px solid var(--orange-accent);
+}
+
+.dark-theme .function-item .composite-info {
+    color: #a0aec0;
+    background: rgba(255, 165, 0, 0.15);
+}
+
+.composite-operation {
+    display: inline-block;
+    padding: 4px 8px;
+    background: var(--orange-accent);
+    color: white;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    margin-right: 8px;
+}
+
+@media (max-width: 768px) {
+    .composite-controls select {
+        padding: 10px;
+        font-size: 13px;
+    }
+
+    .preview {
+        padding: 12px;
+    }
+
+        .preview div:last-child {
+            font-size: 13px;
+            padding: 8px;
+        }
+}
+
+@media (max-width: 480px) {
+    .composite-controls select {
+        padding: 8px;
+        font-size: 12px;
+    }
+
+    .composite-controls label {
+        font-size: 13px;
+    }
+
+    .preview {
+        padding: 10px;
+    }
+
+        .preview div:last-child {
+            font-size: 12px;
+            padding: 6px;
+        }
+}
+
+/* Стили для настроек интервала */
+.interval-settings {
+    margin-top: 20px;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 10px;
+    border: 2px solid #e0e0e0;
+}
+
+.dark-theme .interval-settings {
+    background: #4a5568;
+    border-color: #718096;
+}
+
+.interval-input, .points-input {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+}
+
+.dark-theme .interval-input,
+.dark-theme .points-input {
+    background: #2d3748;
+    border-color: #4a5568;
+    color: white;
+}
+
+.interval-input:focus,
+.points-input:focus {
+    border-color: var(--orange-accent);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(255, 165, 0, 0.1);
+}
+
+.interval-settings label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 13px;
+    color: #666;
+    font-weight: 500;
+}
+
+.dark-theme .interval-settings label {
+    color: #a0aec0;
+}
+
+.interval-settings .function-info-title {
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--orange-accent);
+    font-size: 14px;
+}
+
+/* Стиль для кнопки редактирования по точкам */
+.function-points-btn {
+    border: 2px solid #4ECDC4;
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    background: #4ECDC4;
+}
+
+    .function-points-btn:hover {
+        background: #45B7D1;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(69, 183, 209, 0.3);
+    }
+
+    .function-points-btn img {
+        width: 20px;
+        height: 20px;
+        transition: transform 0.2s ease;
+    }
+
+    .function-points-btn:hover img {
+        transform: scale(1.05);
+    }
+
+/* Иконки в светлой теме */
+.light-theme .function-points-btn img {
+    filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(288deg) brightness(102%) contrast(102%);
+}
+
+/* Иконки в темной теме */
+.dark-theme .function-points-btn img {
+    filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(288deg) brightness(102%) contrast(102%);
+}
+
+/* Дополнительные кнопки действий */
+.function-action-btn {
+    padding: 14px 24px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+    .function-action-btn:hover {
+        transform: translateY(-2px);
+    }
+
+/* ========== ИСПРАВЛЕННЫЕ СТИЛИ ДЛЯ КНОПКИ СКАЧИВАНИЯ В ЛЕГЕНДЕ ========== */
+
+.legend-item-content {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+}
+
+.legend-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.legend-download-btn {
+    width: 28px;
+    height: 28px;
+    border: 2px solid var(--orange-accent);
+    border-radius: 50%;
+    background: white;
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.dark-theme .legend-download-btn {
+    background: #4a5568;
+    border-color: var(--orange-accent);
+}
+
+.legend-download-btn img {
+    width: 14px;
+    height: 14px;
+    transition: transform 0.2s ease;
+}
+
+/* Иконка скачивания в светлой теме */
+.light-theme .legend-download-btn img {
+    filter: invert(55%) sepia(98%) saturate(1574%) hue-rotate(1deg) brightness(105%) contrast(106%);
+}
+
+/* Иконка скачивания в темной теме */
+.dark-theme .legend-download-btn img {
+    filter: invert(55%) sepia(98%) saturate(1574%) hue-rotate(1deg) brightness(105%) contrast(106%);
+}
+
+/* Эффекты при наведении */
+.legend-download-btn:hover {
+    background: var(--orange-accent);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 6px rgba(255, 165, 0, 0.3);
+}
+
+.light-theme .legend-download-btn:hover img {
+    filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(288deg) brightness(102%) contrast(102%);
+}
+
+.dark-theme .legend-download-btn:hover img {
+    filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(288deg) brightness(102%) contrast(102%);
+}
+
+/* Адаптивность для кнопки скачивания */
+@media (max-width: 768px) {
+    .legend-download-btn {
+        width: 26px;
+        height: 26px;
+        padding: 3px;
+    }
+
+        .legend-download-btn img {
+            width: 13px;
+            height: 13px;
+        }
+}
+
+@media (max-width: 480px) {
+    .legend-download-btn {
+        width: 24px;
+        height: 24px;
+        padding: 2px;
+    }
+
+        .legend-download-btn img {
+            width: 12px;
+            height: 12px;
+        }
+}

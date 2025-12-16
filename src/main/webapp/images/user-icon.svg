@@ -1,0 +1,12 @@
+<!-- profile-icon.svg -->
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="Profile icon">
+  <title>Profile Icon</title>
+
+  <!-- Голова -->
+  <circle cx="256" cy="176" r="80" fill="#ffa500"></circle>
+
+  <!-- Тело -->
+  <path d="M96 416
+       C96 320, 416 320, 416 416
+       Z" fill="#ffa500"></path>
+</svg>
