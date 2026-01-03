@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "mathhub/api/functions")
+@RequestMapping(path = "${servlet.path}/functions")
 public class FunctionController {
     private final Logger logger;
     private final FunctionService functionService;
