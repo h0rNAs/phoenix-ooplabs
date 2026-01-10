@@ -30,6 +30,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MathHub - Графический калькулятор</title>
     <link rel="stylesheet" href="css/styles.css">
+    <script>window.API_BASE = '<%= application.getAttribute("apiBase") %>';</script>
     <script src="js/script.js" defer></script>
     <script src="js/graph-calculator.js" defer></script>
     <script src="js/functions-manager.js" defer></script>
@@ -369,7 +370,6 @@
     <div class="modal-content">
         <div class="modal-header">
             <h3>Авторизация в MathHub</h3>
-            <button class="close-modal" onclick="closeAuthModal()">×</button>
         </div>
 
         <div class="auth-tabs">
@@ -395,11 +395,6 @@
         <% } else if ("register".equals(action)) { %>
         <div class="error-message">Пароли не совпадают!</div>
         <% } %>
-
-        <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #e0e0e0; text-align: center; font-size: 14px; color: #666;">
-            <div>Для тестирования можете использовать:</div>
-            <div style="margin-top: 5px; font-weight: 600;">Логин: test | Пароль: test</div>
-        </div>
     </div>
 </div>
 <% } %>
@@ -428,9 +423,9 @@
     async function login(){
         const username = document.getElementById('loginUsername').value;
         const password = document.getElementById('loginPassword').value;
-        const authUrl = 'http://localhost:8080/mathhub/api/users/auth?username=' +
+        const authUrl = `${API_BASE}/mathhub/api/users/auth?username=` +
             username + '&password=' + password;
-        const userUrl = 'http://localhost:8080/mathhub/api/users?username=' + username;
+        const userUrl = `${API_BASE}/mathhub/api/users?username=` + username;
 
         try {
             const auth = await fetch(authUrl, {
@@ -461,7 +456,7 @@
         const username = document.getElementById('regUsername').value;
         const password = document.getElementById('regPassword').value;
         const confirmPassword = document.getElementById('regConfirmPassword').value;
-        const url = 'http://localhost:8080/mathhub/api/users';
+        const url = `${API_BASE}/mathhub/api/users`;
 
         if (password === confirmPassword) {
             const userData = {
@@ -486,6 +481,9 @@
             } catch (error) {
                 window.location.reload();
             }
+        }
+        else {
+            window.location.href = 'index.jsp?action=register';
         }
     }
 

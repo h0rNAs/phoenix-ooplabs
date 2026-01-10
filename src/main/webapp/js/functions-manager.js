@@ -9,6 +9,8 @@ window.conversionCache = {};
 
 let userId = getCookie("userId");
 
+const API_BASE = window.API_BASE || '';
+
 // Управление функциями
 document.addEventListener('DOMContentLoaded', async function() {
     const menuBtn = document.getElementById('menuBtn');
@@ -95,7 +97,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 });
 
 async function loadAllFunctionsFromDB(){
-    const url = 'http://localhost:8080/mathhub/api/functions?userId=' + userId;
+    const url = `${API_BASE}/mathhub/api/functions?userId=` + userId;
     try {
         const responses = await fetch(url, {
             method: 'GET',
@@ -818,7 +820,7 @@ function updateFilledCount(functionId) {
 }
 
 async function saveFunctionToDB(functionId, functionData) {
-    const url = 'http://localhost:8080/mathhub/api/functions';
+    const url = `${API_BASE}/mathhub/api/functions`;
     const method = functionId === '-1' ? 'POST' : 'PUT';
 
     if (method === 'PUT') functionData.id = parseInt(functionId, 10);
@@ -1043,7 +1045,7 @@ window.cancelEdit = function(functionId) {
 window.deleteFunction = function(id, functionId, withoutConfirm=false) {
     if (withoutConfirm || confirm('Удалить эту функцию?')) {
         if (functionId !== undefined) {
-            const url = 'http://localhost:8080/mathhub/api/functions/' + functionId;
+            const url = `${API_BASE}/mathhub/api/functions/` + functionId;
             fetch(url, {
                 method: 'DELETE'
             }).then(r => {});

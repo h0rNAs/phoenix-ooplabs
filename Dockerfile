@@ -1,22 +1,19 @@
-# ---- Stage 1: Build ----
+# ---- Build ----
 FROM maven:3.9.0-eclipse-temurin-17 AS build
 WORKDIR /app
 
-# Копируем файлы проекта
 COPY pom.xml .
 COPY src ./src
 
-# Собираем приложение (skip тесты для ускорения)
 RUN mvn clean package -DskipTests
 
-# ---- Stage 2: Run ----
-FROM eclipse-temurin:17-jdk
-WORKDIR /app
+# ---- Run ----
+FROM tomcat:10.1-jdk17
 
-# Копируем готовый jar из build stage
-COPY --from=build /app/target/*.jar app.jar
+# Удаляем дефолтные приложения
+RUN rm -rf /usr/local/tomcat/webapps/*
+
+# Копируем WAR как ROOT
+COPY --from=build /app/target/*.war /usr/local/tomcat/webapps/mathhub.war
 
 EXPOSE 8080
-
-# Запуск приложения
-ENTRYPOINT ["java", "-jar", "app.jar"]

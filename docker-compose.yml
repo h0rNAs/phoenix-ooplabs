@@ -1,19 +1,19 @@
 name: mathhub-framework
 
-version: '3.8'
 services:
   app:
     build: .
     ports:
       - "8080:8080"
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/postgres
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db-primary:5432/postgres
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=postgres
+      - API_BASE=https://hornas.ru
     depends_on:
-      - db
+      - db-primary
 
-  db:
+  db-primary:
     image: postgres:13-alpine
     environment:
       - POSTGRES_DB=postgres
@@ -22,7 +22,59 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - db_primary_data:/var/lib/postgresql/data
+      - ./postgres/primary/postgresql.conf:/etc/postgresql/postgresql.conf
+      - ./postgres/primary/pg_hba.conf:/etc/postgresql/pg_hba.conf
+      - ./postgres/primary/init-replication.sql:/docker-entrypoint-initdb.d/init-replication.sql
+      - ./postgres/primary/init:/docker-entrypoint-initdb.d
+    command: >
+      postgres -c config_file=/etc/postgresql/postgresql.conf
+
+  db-replica:
+    image: postgres:13-alpine
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - PRIMARY_HOST=db-primary
+      - PRIMARY_PORT=5432
+      - REPL_USER=replicator
+      - REPL_PASSWORD=replica_pass
+    volumes:
+      - db_replica_data:/var/lib/postgresql/data
+      - ./postgres/replica/postgresql.conf:/etc/postgresql/postgresql.conf
+      - ./postgres/replica/replica_init.sh:/usr/local/bin/replica_init.sh
+    ports:
+      - "5433:5432"
+    command: ["sh", "/usr/local/bin/replica_init.sh"]
+    depends_on:
+      - db-primary
+
+  superset:
+    build:
+      context: .
+      dockerfile: Dockerfile.superset
+    image: apache/superset:latest
+    depends_on:
+      - db-replica
+    ports:
+      - "8088:8088"
+    volumes:
+      - superset_home:/app/superset_home
+    environment:
+      SUPERSET_SECRET_KEY: secretofmathhub
+
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    restart: unless-stopped
+    command: tunnel --no-autoupdate --protocol http run --token eyJhIjoiZjRhZTdhNzE1MThiZjNhOTk4OTg0YmI1NzE4OWUxNmUiLCJ0IjoiMWVkZTRhZGEtNTk3NS00Y2E5LWE2YmMtYjJmYjJiYmFkYzQyIiwicyI6Ik5URXhPVFZtTkRNdE1EQmxPUzAwWkRreUxUazNPR1F0T1RsaE1tRXhaakZoWmpneSJ9
+    environment:
+      - TUNNEL_METRICS=0.0.0.0:2000
+      - TUNNEL_METRICS_UPDATE_INTERVAL=5s
+    depends_on:
+      - app
 
 volumes:
-  postgres_data:
+  db_primary_data:
+  db_replica_data:
+  superset_home:

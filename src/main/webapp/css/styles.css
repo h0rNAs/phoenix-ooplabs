@@ -181,26 +181,28 @@ header {
 }
 
 .menu-btn {
-    background: none;
-    border: none;
+    border: 2px solid var(--orange-accent);
+    border-radius: 20px;
     cursor: pointer;
-    padding: 8px;
+    padding: 3px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 4px;
     transition: all 0.3s ease;
+    width: 44px;
+    height: 44px;
 }
 
-    .menu-btn img {
-        width: 42px;
-        height: 42px;
-        transition: transform 0.2s ease;
-    }
+.menu-btn .btn-icon {
+    margin-top: 3px;
+    width: 35px;
+    height: 35px;
+    transition: transform 0.2s ease;
+}
 
-    .menu-btn:hover img {
-        transform: scale(1.05);
-    }
+.action-btn:hover .btn-icon {
+    transform: scale(1.05);
+}
 
 .action-buttons {
     display: flex;
@@ -247,6 +249,20 @@ header {
         box-shadow: 0 4px 8px rgba(255, 165, 0, 0.3);
     }
 
+.light-theme .menu-btn {
+    background: #e9eef6;
+    color: var(--orange-accent);
+    border-color: var(--orange-accent);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+    .light-theme .menu-btn:hover {
+        background: var(--orange-accent);
+        color: #FFFFFF;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(255, 165, 0, 0.3);
+    }
+
 /* Темная тема - кнопки с фоном как у графического поля */
 .dark-theme .action-btn {
     background: #2d3748;
@@ -256,6 +272,20 @@ header {
 }
 
     .dark-theme .action-btn:hover {
+        background: var(--orange-accent);
+        color: #000000;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(255, 140, 0, 0.6);
+    }
+
+.dark-theme .menu-btn {
+    background: #2d3748;
+    color: var(--orange-accent);
+    border-color: var(--orange-accent);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+    .dark-theme .menu-btn:hover {
         background: var(--orange-accent);
         color: #000000;
         transform: translateY(-2px);
@@ -272,6 +302,10 @@ header {
     filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(288deg) brightness(102%) contrast(102%);
 }
 
+.light-theme .menu-btn:hover .btn-icon {
+    filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(288deg) brightness(102%) contrast(102%);
+}
+
 /* Иконки в темной теме - оранжевые */
 .dark-theme .btn-icon {
     filter: invert(55%) sepia(98%) saturate(1574%) hue-rotate(1deg) brightness(105%) contrast(106%);
@@ -279,6 +313,11 @@ header {
 
 /* При наведении в темной теме иконки становятся черными */
 .dark-theme .action-btn:hover .btn-icon {
+    filter: invert(0%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(0%) contrast(100%);
+}
+
+/* При наведении в темной теме иконки становятся черными */
+.dark-theme .menu-btn:hover .btn-icon {
     filter: invert(0%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(0%) contrast(100%);
 }
 

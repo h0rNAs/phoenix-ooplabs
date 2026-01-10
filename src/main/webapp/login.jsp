@@ -210,10 +210,6 @@
 <body>
 <jsp:include page="header.jsp" />
 <main style="max-width: 500px; margin: 0 auto; padding: 20px; position: relative;">
-    <!-- Кнопка закрытия -->
-    <a href="index.jsp" class="close-button" title="Вернуться к калькулятору">
-        ×
-    </a>
 
     <h2 style="text-align: center; margin-top: 20px; margin-bottom: 30px; color: var(--orange-accent);">Информация об аккаунте</h2>
 
